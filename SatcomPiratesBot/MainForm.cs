@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telegram.Bot;
 
 namespace SatcomPiratesBot
 {
@@ -28,26 +29,8 @@ namespace SatcomPiratesBot
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadCameras();
-            LoadOcrSettings();
+            LoadSettings();
             ToggleOcrSettings();
-        }
-
-        private void LoadOcrSettings()
-        {
-            try
-            {
-                var config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));
-                h1.Value = config.StartHSV.H;
-                s1.Value = config.StartHSV.S;
-                v1.Value = config.StartHSV.V;
-                h2.Value = config.EndHSV.H;
-                s2.Value = config.EndHSV.S;
-                v2.Value = config.EndHSV.V;
-            }
-            catch
-            {
-                // use default values
-            }
         }
 
         private void LoadCameras()
@@ -136,38 +119,90 @@ namespace SatcomPiratesBot
                     await capturing;
                 }
                 closingHack = false;
-                SaveOcrSettings();
+                SaveSettings();
                 Close();
             }
         }
 
-        private void SaveOcrSettings()
+        #region Settings
+        internal static ConfigModel Config { get; private set; }
+
+        private void LoadSettings()
         {
             try
             {
-                var config = new ConfigModel();
-                config.StartHSV.H = Convert.ToInt32(h1.Value);
-                config.StartHSV.S = Convert.ToInt32(s1.Value);
-                config.StartHSV.V = Convert.ToInt32(v1.Value);
-                config.EndHSV.H = Convert.ToInt32(h2.Value);
-                config.EndHSV.S = Convert.ToInt32(s2.Value);
-                config.EndHSV.V = Convert.ToInt32(v2.Value);
-                File.WriteAllText("preferences.json", JsonConvert.SerializeObject(config));                
+                Config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));
+                h1.Value = Config.StartHSV.H;
+                s1.Value = Config.StartHSV.S;
+                v1.Value = Config.StartHSV.V;
+                h2.Value = Config.EndHSV.H;
+                s2.Value = Config.EndHSV.S;
+                v2.Value = Config.EndHSV.V;
+                telegramTokenBox.Text = Config.TelegramToken;
+                n2yoApiKeyBox.Text = Config.N2YOApiKey;
+                sstvPathBox.Text = Config.SSTVPath;
+            }
+            catch
+            {
+                // use default values
+            }
+        }
+        private void SaveSettings()
+        {
+            try
+            {
+                Config.StartHSV.H = Convert.ToInt32(h1.Value);
+                Config.StartHSV.S = Convert.ToInt32(s1.Value);
+                Config.StartHSV.V = Convert.ToInt32(v1.Value);
+                Config.EndHSV.H = Convert.ToInt32(h2.Value);
+                Config.EndHSV.S = Convert.ToInt32(s2.Value);
+                Config.EndHSV.V = Convert.ToInt32(v2.Value);
+                Config.TelegramToken = telegramTokenBox.Text;
+                Config.N2YOApiKey = n2yoApiKeyBox.Text;
+                Config.SSTVPath = sstvPathBox.Text;
+                File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }
             catch
             {
                 // No problem
             }
         }
-
+        #endregion
         private void ocrSettings_Click(object sender, EventArgs e) => ToggleOcrSettings();
 
         private bool ocrDebug = true;
+
         private void ToggleOcrSettings()
         {
             ocrDebug = !ocrDebug;
             mask1.Enabled = ocrDebug;
             mask2.Enabled = ocrDebug;
+        }
+
+        private void apiKeysSaveButton_Click(object sender, EventArgs e) => SaveSettings();
+
+        private void setSstvPathButton_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog.SelectedPath = sstvPathBox.Text;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                sstvPathBox.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
+
+        private async void testTelegramButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var bot = new TelegramBotClient(telegramTokenBox.Text);
+                var user = await bot.GetMeAsync();
+                MessageBox.Show($"Success: Username:{user.Username}");
+                SaveSettings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

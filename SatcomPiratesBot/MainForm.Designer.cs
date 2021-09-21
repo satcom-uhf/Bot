@@ -52,7 +52,17 @@ namespace SatcomPiratesBot
             this.startWebCam = new System.Windows.Forms.Button();
             this.refreshCameras = new System.Windows.Forms.Button();
             this.camerasDropDown = new System.Windows.Forms.ComboBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.settingsPage = new System.Windows.Forms.TabPage();
+            this.setSstvPathButton = new System.Windows.Forms.Button();
+            this.sstvPathBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.apiKeysSaveButton = new System.Windows.Forms.Button();
+            this.n2yoApiKeyBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.telegramTokenBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.testTelegramButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.webcamPage.SuspendLayout();
@@ -65,6 +75,7 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.h1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.v1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maskBox)).BeginInit();
+            this.settingsPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // cameraBox
@@ -80,7 +91,7 @@ namespace SatcomPiratesBot
             // tabs
             // 
             this.tabs.Controls.Add(this.webcamPage);
-            this.tabs.Controls.Add(this.tabPage2);
+            this.tabs.Controls.Add(this.settingsPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
@@ -339,15 +350,103 @@ namespace SatcomPiratesBot
             this.camerasDropDown.Size = new System.Drawing.Size(166, 23);
             this.camerasDropDown.TabIndex = 1;
             // 
-            // tabPage2
+            // settingsPage
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(616, 371);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.settingsPage.Controls.Add(this.testTelegramButton);
+            this.settingsPage.Controls.Add(this.setSstvPathButton);
+            this.settingsPage.Controls.Add(this.sstvPathBox);
+            this.settingsPage.Controls.Add(this.label9);
+            this.settingsPage.Controls.Add(this.apiKeysSaveButton);
+            this.settingsPage.Controls.Add(this.n2yoApiKeyBox);
+            this.settingsPage.Controls.Add(this.label8);
+            this.settingsPage.Controls.Add(this.telegramTokenBox);
+            this.settingsPage.Controls.Add(this.label1);
+            this.settingsPage.Location = new System.Drawing.Point(4, 24);
+            this.settingsPage.Name = "settingsPage";
+            this.settingsPage.Padding = new System.Windows.Forms.Padding(3);
+            this.settingsPage.Size = new System.Drawing.Size(616, 371);
+            this.settingsPage.TabIndex = 1;
+            this.settingsPage.Text = "Settings";
+            this.settingsPage.UseVisualStyleBackColor = true;
+            // 
+            // setSstvPathButton
+            // 
+            this.setSstvPathButton.Location = new System.Drawing.Point(471, 110);
+            this.setSstvPathButton.Name = "setSstvPathButton";
+            this.setSstvPathButton.Size = new System.Drawing.Size(75, 23);
+            this.setSstvPathButton.TabIndex = 7;
+            this.setSstvPathButton.Text = "...";
+            this.setSstvPathButton.UseVisualStyleBackColor = true;
+            this.setSstvPathButton.Click += new System.EventHandler(this.setSstvPathButton_Click);
+            // 
+            // sstvPathBox
+            // 
+            this.sstvPathBox.Enabled = false;
+            this.sstvPathBox.Location = new System.Drawing.Point(143, 110);
+            this.sstvPathBox.Name = "sstvPathBox";
+            this.sstvPathBox.Size = new System.Drawing.Size(322, 23);
+            this.sstvPathBox.TabIndex = 6;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(68, 113);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(60, 15);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "SSTV Path";
+            // 
+            // apiKeysSaveButton
+            // 
+            this.apiKeysSaveButton.Location = new System.Drawing.Point(390, 230);
+            this.apiKeysSaveButton.Name = "apiKeysSaveButton";
+            this.apiKeysSaveButton.Size = new System.Drawing.Size(75, 23);
+            this.apiKeysSaveButton.TabIndex = 4;
+            this.apiKeysSaveButton.Text = "Apply";
+            this.apiKeysSaveButton.UseVisualStyleBackColor = true;
+            this.apiKeysSaveButton.Click += new System.EventHandler(this.apiKeysSaveButton_Click);
+            // 
+            // n2yoApiKeyBox
+            // 
+            this.n2yoApiKeyBox.Location = new System.Drawing.Point(143, 63);
+            this.n2yoApiKeyBox.Name = "n2yoApiKeyBox";
+            this.n2yoApiKeyBox.Size = new System.Drawing.Size(322, 23);
+            this.n2yoApiKeyBox.TabIndex = 3;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(47, 66);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(81, 15);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "N2YO API Key";
+            // 
+            // telegramTokenBox
+            // 
+            this.telegramTokenBox.Location = new System.Drawing.Point(143, 22);
+            this.telegramTokenBox.Name = "telegramTokenBox";
+            this.telegramTokenBox.Size = new System.Drawing.Size(322, 23);
+            this.telegramTokenBox.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(114, 15);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Telegram Bot Token";
+            // 
+            // testTelegramButton
+            // 
+            this.testTelegramButton.Location = new System.Drawing.Point(471, 22);
+            this.testTelegramButton.Name = "testTelegramButton";
+            this.testTelegramButton.Size = new System.Drawing.Size(75, 23);
+            this.testTelegramButton.TabIndex = 8;
+            this.testTelegramButton.Text = "Test";
+            this.testTelegramButton.UseVisualStyleBackColor = true;
+            this.testTelegramButton.Click += new System.EventHandler(this.testTelegramButton_Click);
             // 
             // MainForm
             // 
@@ -376,6 +475,8 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.h1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.v1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maskBox)).EndInit();
+            this.settingsPage.ResumeLayout(false);
+            this.settingsPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -385,7 +486,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.PictureBox cameraBox;
         private System.Windows.Forms.TabControl tabs;
         private System.Windows.Forms.TabPage webcamPage;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage settingsPage;
         private System.Windows.Forms.ComboBox camerasDropDown;
         private System.Windows.Forms.Button refreshCameras;
         private System.Windows.Forms.Button startWebCam;
@@ -405,6 +506,16 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox mask1;
         private System.Windows.Forms.Button ocrSettings;
+        private System.Windows.Forms.TextBox telegramTokenBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox n2yoApiKeyBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button apiKeysSaveButton;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.TextBox sstvPathBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button setSstvPathButton;
+        private System.Windows.Forms.Button testTelegramButton;
     }
 }
 
