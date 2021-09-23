@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Serilog;
 using System;
 using System.Data;
 using System.IO;
@@ -18,8 +19,10 @@ namespace SatcomPiratesBot
         VideoCapture videoCapture = new VideoCapture();
         CancellationTokenSource cts = new CancellationTokenSource();
         Task capturing;
-        static Mat CurrentFrame = new Mat();
-        static Mat Mask = new Mat();
+        public static Mat CurrentFrame = new Mat();
+        public static Mat Mask = new Mat();
+        public static DateTime LastActivity;
+        public static int PttClickCounter;
 
         public MainForm()
         {
@@ -141,6 +144,7 @@ namespace SatcomPiratesBot
                 telegramTokenBox.Text = Config.TelegramToken;
                 n2yoApiKeyBox.Text = Config.N2YOApiKey;
                 sstvPathBox.Text = Config.SSTVPath;
+                ocrSpaceKeyBox.Text = Config.OcrSpaceKey;
             }
             catch
             {
@@ -160,6 +164,7 @@ namespace SatcomPiratesBot
                 Config.TelegramToken = telegramTokenBox.Text;
                 Config.N2YOApiKey = n2yoApiKeyBox.Text;
                 Config.SSTVPath = sstvPathBox.Text;
+                Config.OcrSpaceKey = ocrSpaceKeyBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }
             catch
@@ -203,6 +208,13 @@ namespace SatcomPiratesBot
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async void runTelegramButton_Click(object sender, EventArgs e)
+        {
+            await Telegram.Start(Config.TelegramToken, cts.Token);
+            runTelegramButton.Text = "Started";
+            runTelegramButton.Enabled = false;
         }
     }
 }

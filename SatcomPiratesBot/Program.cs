@@ -1,3 +1,5 @@
+using Serilog;
+using Serilog.Sinks.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,10 @@ namespace SatcomPiratesBot
         [STAThread]
         static void Main()
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteToGridView()
+                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -12,6 +12,7 @@
         public HSV EndHSV { get; set; } = new HSV { H = 70, S = 255, V = 255 };
         public string TelegramToken { get; set; }
         public string N2YOApiKey { get; set; }
+        public string OcrSpaceKey { get; set; }
         public string SSTVPath { get; set; } = @"C:\RX-SSTV\History";
     }
 }

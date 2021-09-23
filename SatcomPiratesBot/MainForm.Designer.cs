@@ -53,6 +53,7 @@ namespace SatcomPiratesBot
             this.refreshCameras = new System.Windows.Forms.Button();
             this.camerasDropDown = new System.Windows.Forms.ComboBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
+            this.testTelegramButton = new System.Windows.Forms.Button();
             this.setSstvPathButton = new System.Windows.Forms.Button();
             this.sstvPathBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -61,8 +62,12 @@ namespace SatcomPiratesBot
             this.label8 = new System.Windows.Forms.Label();
             this.telegramTokenBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.logPage = new System.Windows.Forms.TabPage();
+            this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.testTelegramButton = new System.Windows.Forms.Button();
+            this.runTelegramButton = new System.Windows.Forms.Button();
+            this.ocrSpaceKeyBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.webcamPage.SuspendLayout();
@@ -76,6 +81,7 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.v1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maskBox)).BeginInit();
             this.settingsPage.SuspendLayout();
+            this.logPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // cameraBox
@@ -92,6 +98,7 @@ namespace SatcomPiratesBot
             // 
             this.tabs.Controls.Add(this.webcamPage);
             this.tabs.Controls.Add(this.settingsPage);
+            this.tabs.Controls.Add(this.logPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
@@ -352,6 +359,8 @@ namespace SatcomPiratesBot
             // 
             // settingsPage
             // 
+            this.settingsPage.Controls.Add(this.ocrSpaceKeyBox);
+            this.settingsPage.Controls.Add(this.label10);
             this.settingsPage.Controls.Add(this.testTelegramButton);
             this.settingsPage.Controls.Add(this.setSstvPathButton);
             this.settingsPage.Controls.Add(this.sstvPathBox);
@@ -368,6 +377,16 @@ namespace SatcomPiratesBot
             this.settingsPage.TabIndex = 1;
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
+            // 
+            // testTelegramButton
+            // 
+            this.testTelegramButton.Location = new System.Drawing.Point(471, 22);
+            this.testTelegramButton.Name = "testTelegramButton";
+            this.testTelegramButton.Size = new System.Drawing.Size(75, 23);
+            this.testTelegramButton.TabIndex = 8;
+            this.testTelegramButton.Text = "Test";
+            this.testTelegramButton.UseVisualStyleBackColor = true;
+            this.testTelegramButton.Click += new System.EventHandler(this.testTelegramButton_Click);
             // 
             // setSstvPathButton
             // 
@@ -438,21 +457,57 @@ namespace SatcomPiratesBot
             this.label1.TabIndex = 0;
             this.label1.Text = "Telegram Bot Token";
             // 
-            // testTelegramButton
+            // logPage
             // 
-            this.testTelegramButton.Location = new System.Drawing.Point(471, 22);
-            this.testTelegramButton.Name = "testTelegramButton";
-            this.testTelegramButton.Size = new System.Drawing.Size(75, 23);
-            this.testTelegramButton.TabIndex = 8;
-            this.testTelegramButton.Text = "Test";
-            this.testTelegramButton.UseVisualStyleBackColor = true;
-            this.testTelegramButton.Click += new System.EventHandler(this.testTelegramButton_Click);
+            this.logPage.Controls.Add(this.gridLog1);
+            this.logPage.Location = new System.Drawing.Point(4, 24);
+            this.logPage.Name = "logPage";
+            this.logPage.Size = new System.Drawing.Size(616, 371);
+            this.logPage.TabIndex = 2;
+            this.logPage.Text = "Log";
+            this.logPage.UseVisualStyleBackColor = true;
+            // 
+            // gridLog1
+            // 
+            this.gridLog1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridLog1.Location = new System.Drawing.Point(0, 0);
+            this.gridLog1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gridLog1.Name = "gridLog1";
+            this.gridLog1.Size = new System.Drawing.Size(616, 371);
+            this.gridLog1.TabIndex = 0;
+            // 
+            // runTelegramButton
+            // 
+            this.runTelegramButton.Location = new System.Drawing.Point(448, 406);
+            this.runTelegramButton.Name = "runTelegramButton";
+            this.runTelegramButton.Size = new System.Drawing.Size(75, 23);
+            this.runTelegramButton.TabIndex = 2;
+            this.runTelegramButton.Text = "Start bot";
+            this.runTelegramButton.UseVisualStyleBackColor = true;
+            this.runTelegramButton.Click += new System.EventHandler(this.runTelegramButton_Click);
+            // 
+            // ocrSpaceKeyBox
+            // 
+            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 158);
+            this.ocrSpaceKeyBox.Name = "ocrSpaceKeyBox";
+            this.ocrSpaceKeyBox.Size = new System.Drawing.Size(322, 23);
+            this.ocrSpaceKeyBox.TabIndex = 10;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(20, 161);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(108, 15);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "OCR.Space API Key";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
+            this.Controls.Add(this.runTelegramButton);
             this.Controls.Add(this.tabs);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -477,6 +532,7 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.maskBox)).EndInit();
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
+            this.logPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -516,6 +572,11 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button setSstvPathButton;
         private System.Windows.Forms.Button testTelegramButton;
+        private System.Windows.Forms.TabPage logPage;
+        private Serilog.Sinks.WinForms.GridLog gridLog1;
+        private System.Windows.Forms.Button runTelegramButton;
+        private System.Windows.Forms.TextBox ocrSpaceKeyBox;
+        private System.Windows.Forms.Label label10;
     }
 }
 
