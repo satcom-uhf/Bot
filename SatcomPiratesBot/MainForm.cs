@@ -242,38 +242,43 @@ namespace SatcomPiratesBot
                 OpenComPort();
                 connectComPortButton.Text = "Disconnect;";
                 comPortsBox.Enabled = false;
+                refreshPortsButton.Enabled = false;
             }
             else
             {
                 ComPort?.Close();
                 connectComPortButton.Text = "Connect";
+                refreshPortsButton.Enabled = true;
                 comPortsBox.Enabled = true;
             }
         }
 
         private Action handleActive;
+        private const string ACTIVITY = "Activity";
+        private const string SILENCE = "Silence";
         private void OpenComPort()
         {
             var portName = comPortsBox.SelectedItem?.ToString();
-            handleActive= Debounce(() =>
-            {
-                if (stillActive)
-                {
-                    try
-                    {
-                        Invoke(new Action(() => {
-                            activityLabel.Text = "ACTIVITY";
-                            SetMask();
-                        }));                        
-                        LastActivity = DateTime.Now;
+            handleActive = Debounce(() =>
+             {
+                 if (stillActive)
+                 {
+                     try
+                     {
+                         Invoke(new Action(() =>
+                         {
+                             activityLabel.Text = "ACTIVITY";
+                             SetMask();
+                         }));
+                         LastActivity = DateTime.Now;
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "");
-                    }
-                }
-            });
+                     }
+                     catch (Exception ex)
+                     {
+                         Log.Error(ex, "");
+                     }
+                 }
+             });
             if (!string.IsNullOrEmpty(portName))
             {
                 ComPort = new SerialPort(portName);
@@ -283,7 +288,7 @@ namespace SatcomPiratesBot
                     var data = ComPort.ReadExisting();
                     if (data.Contains("activity"))
                     {
-                        Invoke(new Action(() => activityLabel.Text = "ON"));
+                        Invoke(new Action(() => activityLabel.Text = ACTIVITY));
                         stillActive = true;
                         handleActive();
                     }
@@ -292,11 +297,11 @@ namespace SatcomPiratesBot
                         stillActive = false;
                         Invoke(new Action(() =>
                         {
-                            if (activityLabel.Text == "ON")
+                            if (activityLabel.Text == ACTIVITY)
                             {
                                 PttClickCounter++;
                             }
-                            activityLabel.Text = "OFF";
+                            activityLabel.Text = SILENCE;
                         }));
                     }
                 };

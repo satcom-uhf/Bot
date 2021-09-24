@@ -413,6 +413,7 @@ namespace SatcomPiratesBot
             this.maskBox.Location = new System.Drawing.Point(344, 167);
             this.maskBox.Name = "maskBox";
             this.maskBox.Size = new System.Drawing.Size(259, 157);
+            this.maskBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.maskBox.TabIndex = 5;
             this.maskBox.TabStop = false;
             // 
@@ -566,9 +567,9 @@ namespace SatcomPiratesBot
             this.activityLabel.AutoSize = true;
             this.activityLabel.Location = new System.Drawing.Point(18, 413);
             this.activityLabel.Name = "activityLabel";
-            this.activityLabel.Size = new System.Drawing.Size(47, 15);
+            this.activityLabel.Size = new System.Drawing.Size(44, 15);
             this.activityLabel.TabIndex = 3;
-            this.activityLabel.Text = "Activity";
+            this.activityLabel.Text = "Silence";
             // 
             // MainForm
             // 
