@@ -128,28 +128,28 @@ namespace SatcomPiratesBot
         }
 
         #region Settings
-        internal static ConfigModel Config { get; private set; }
+        internal static ConfigModel Config { get; private set; } = new ConfigModel();
 
         private void LoadSettings()
         {
             try
             {
-                Config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));
-                h1.Value = Config.StartHSV.H;
-                s1.Value = Config.StartHSV.S;
-                v1.Value = Config.StartHSV.V;
-                h2.Value = Config.EndHSV.H;
-                s2.Value = Config.EndHSV.S;
-                v2.Value = Config.EndHSV.V;
-                telegramTokenBox.Text = Config.TelegramToken;
-                n2yoApiKeyBox.Text = Config.N2YOApiKey;
-                sstvPathBox.Text = Config.SSTVPath;
-                ocrSpaceKeyBox.Text = Config.OcrSpaceKey;
+                Config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));                
             }
             catch
             {
                 // use default values
             }
+            h1.Value = Config.StartHSV.H;
+            s1.Value = Config.StartHSV.S;
+            v1.Value = Config.StartHSV.V;
+            h2.Value = Config.EndHSV.H;
+            s2.Value = Config.EndHSV.S;
+            v2.Value = Config.EndHSV.V;
+            telegramTokenBox.Text = Config.TelegramToken;
+            n2yoApiKeyBox.Text = Config.N2YOApiKey;
+            sstvPathBox.Text = Config.SSTVPath;
+            ocrSpaceKeyBox.Text = Config.OcrSpaceKey;
         }
         private void SaveSettings()
         {
