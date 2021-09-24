@@ -80,7 +80,7 @@ namespace SatcomPiratesBot
             // first row
             yield return new[]
                     {
-                        WithCallbackData("(!)Отплючить TMR", $"{Qyt}{stepsToDisableTmr}"),
+                        WithCallbackData("(!)Отключить TMR", $"{Qyt}{stepsToDisableTmr}"),
                     };
             yield return new[]
                     {
