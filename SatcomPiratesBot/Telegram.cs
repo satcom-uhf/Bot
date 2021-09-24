@@ -11,6 +11,8 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace SatcomPiratesBot
 {
     using static InlineKeyboardButton;
+    using static TelegramCommands;
+    using static QytCommands;
     static class Telegram
     {
         private static TelegramBotClient Bot;
@@ -36,11 +38,11 @@ namespace SatcomPiratesBot
         {
             // first row
             yield return new[]            {
-                         WithCallbackData("📶 Active frequencies / Активные частоты", TelegramCommands.Freq)
+                         WithCallbackData("📶 Active frequencies / Активные частоты", Freq)
                     };
             yield return new[]
             {
-                        WithCallbackData("🎤 Record your voice / Записать свой голос", TelegramCommands.SoundRecord)
+                        WithCallbackData("🎤 Record your voice / Записать свой голос", SoundRecord)
                     };
             //yield return new[]
             //        {
@@ -58,8 +60,8 @@ namespace SatcomPiratesBot
             if (user.IsAdmin())
             {
                 yield return new[] {
-                    WithCallbackData("Управление станцией", TelegramCommands.Qyt),
-                    WithCallbackData("Подудеть (инструкция)", TelegramCommands.TransmitVoice)
+                    WithCallbackData("Управление станцией", Qyt),
+                    WithCallbackData("Подудеть", TransmitVoice)
                 };
             }
             //new []
@@ -73,16 +75,27 @@ namespace SatcomPiratesBot
 
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> QytKeyboard()
         {
+            var stepsToDisableTmr = Menu + Menu + Up + Menu + Exit;
+            var stepsToEnableTmr = Menu + Menu + Down + Menu + Exit;
             // first row
-            yield return new[]            {
-                        WithCallbackData("🔼   Up", $"{TelegramCommands.Qyt}+"),
-                        WithCallbackData("✅ Menu", $"{TelegramCommands.Qyt}_m")
+            yield return new[]
+                    {
+                        WithCallbackData("(!)Отплючить TMR", $"{Qyt}{stepsToDisableTmr}"),
                     };
             yield return new[]
                     {
-                        WithCallbackData("🔽 Down", $"{TelegramCommands.Qyt}-"),
-                        WithCallbackData("🔠 Exit", $"{TelegramCommands.Qyt}_e")
+                        WithCallbackData("(!)Включить TMR",$"{Qyt}{stepsToEnableTmr}"),
                     };
+            yield return new[]            {
+                        WithCallbackData("🔼   Up", $"{Qyt}{Up}"),
+                        WithCallbackData("✅ Menu", $"{Qyt}{Menu}")
+                    };
+            yield return new[]
+                    {
+                        WithCallbackData("🔽 Down", $"{Qyt}{Down}"),
+                        WithCallbackData("🔠 Exit", $"{Qyt}{Exit}")
+                    };
+            
             yield return new[]
                     {
                         WithCallbackData("Закрыть управление", "/start"),

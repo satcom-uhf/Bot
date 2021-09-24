@@ -57,9 +57,11 @@ namespace SatcomPiratesBot
                     else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt))
                     {
                         await HandleQyt(botClient, callbackQuery);
-                    } else if (callbackQuery.Data == TelegramCommands.TransmitVoice)
+                    }
+                    else if (callbackQuery.Data == TelegramCommands.TransmitVoice)
                     {
                         await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, README_TRANSMIT);
+                        await botClient.SendInlineKeyboard(message.Chat, callbackQuery.From);
                     }
                 }
                 else if (update.Message is Message message)
@@ -127,11 +129,13 @@ namespace SatcomPiratesBot
         {
             try
             {
-                var cmd = callbackQuery.Data.Last();
-                Transmitter.ComPort.WriteLine(cmd.ToString());
-
+                var commands = callbackQuery.Data.Replace(TelegramCommands.Qyt, "");
+                foreach (var cmd in commands)
+                {
+                    Transmitter.ComPort.WriteLine(cmd.ToString());
+                    await Task.Delay(TimeSpan.FromMilliseconds(300)); // let's wait a bit
+                }
                 await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
-
                 await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     "Radio screen",
