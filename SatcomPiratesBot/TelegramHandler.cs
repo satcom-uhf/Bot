@@ -22,6 +22,9 @@ namespace SatcomPiratesBot
                     UpdateType.Poll,
                     UpdateType.PollAnswer};
 
+        private const string README_TRANSMIT = "Я всегда готов дудеть. Убедись, что отключен TMR и выбран нужный канал. " +
+                                               "После этого отправь мне голосовое сообщение, я передам его в эфир как только наступит пауза в разговоре.";
+
         public Task HandleError(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             Log.Error(exception, "Telegram error handled");
@@ -54,12 +57,23 @@ namespace SatcomPiratesBot
                     else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt))
                     {
                         await HandleQyt(botClient, callbackQuery);
+                    } else if (callbackQuery.Data == TelegramCommands.TransmitVoice)
+                    {
+                        await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, README_TRANSMIT);
                     }
                 }
                 else if (update.Message is Message message)
                 {
-                    Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
-                    await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    if (message.Voice != null)
+                    {
+                        Log.Information("Voice from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
+                        await HandleVoiceMessage(botClient, message);
+                    }
+                    else
+                    {
+                        Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
+                        await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    }
                 }
             }
             catch (Exception ex)
@@ -68,12 +82,53 @@ namespace SatcomPiratesBot
             }
         }
 
+        private async Task HandleVoiceMessage(ITelegramBotClient botClient, Message message)
+        {
+            var now = DateTime.Now;
+            var waitFor = TimeSpan.FromSeconds(30);
+            while (Transmitter.TransmitterBusy && (DateTime.Now - now < waitFor))
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Ждите, передатчик занят..");
+                await Task.Delay(TimeSpan.FromSeconds(10));
+            }
+            if (Transmitter.TransmitterBusy)
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Увы, передатчик пока не освободился, повторите попытку позже");
+                return;
+            }
+            Transmitter.TransmitterBusy = true;
+            await botClient.SendTextMessageAsync(message.Chat, "Сообщение принято обрабатывается...");
+            var voice = message.Voice;
+            var fileInfo = await botClient.GetFileAsync(voice.FileId);
+            var currentDir = System.Windows.Forms.Application.StartupPath;
+            var voiceDir = Path.Combine(currentDir, "voice");
+            if (!Directory.Exists(voiceDir)) { Directory.CreateDirectory(voiceDir); }
+            var fn = $"voice_{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}.ogg";
+            var fullPath = Path.Combine(voiceDir, fn);
+            var outputWav = "audio.wav";
+            var outputWavFulPath = Path.Combine(voiceDir, outputWav);
+
+            using (var fs = System.IO.File.OpenWrite(fullPath))
+            {
+                await botClient.DownloadFileAsync(fileInfo.FilePath, fs);
+            }
+            using var fileopener = new System.Diagnostics.Process();
+
+            fileopener.StartInfo.FileName = "cmd";
+            fileopener.StartInfo.Arguments = $"/C ffmpeg -i voice\\{fn} voice\\{outputWav} -y";
+            fileopener.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            fileopener.StartInfo.WorkingDirectory = currentDir;
+            fileopener.Start();
+            fileopener.WaitForExit();
+            Transmitter.Transmit(botClient, message.Chat, voice.Duration, outputWavFulPath);
+        }
+
         private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
             try
             {
-                var cmd = callbackQuery.ChatInstance.Last();
-                MainForm.ComPort.WriteLine(cmd.ToString());
+                var cmd = callbackQuery.Data.Last();
+                Transmitter.ComPort.WriteLine(cmd.ToString());
 
                 await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
 

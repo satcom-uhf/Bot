@@ -55,9 +55,12 @@ namespace SatcomPiratesBot
                     {
                         WithUrl("📻 WebSDR от Nano", "http://171.25.164.45:3000/")
                     };
-            if (Admins.Any(x => x.User.Id == user.Id))
+            if (user.IsAdmin())
             {
-                yield return new[] { WithCallbackData("Управление станцией", TelegramCommands.Qyt) };
+                yield return new[] {
+                    WithCallbackData("Управление станцией", TelegramCommands.Qyt),
+                    WithCallbackData("Подудеть (инструкция)", TelegramCommands.TransmitVoice)
+                };
             }
             //new []
             //{
@@ -65,6 +68,8 @@ namespace SatcomPiratesBot
             //}
 
         }
+
+        public static bool IsAdmin(this User user) => Admins.Any(x => x.User.Id == user.Id);
 
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> QytKeyboard()
         {
@@ -92,6 +97,7 @@ namespace SatcomPiratesBot
                 replyMarkup: new InlineKeyboardMarkup(InlineKeyboard(user)),
                 disableNotification: true
             );
+
         }
     }
 }

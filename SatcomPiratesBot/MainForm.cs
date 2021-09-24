@@ -24,9 +24,7 @@ namespace SatcomPiratesBot
         public static Mat CurrentFrame = new Mat();
         public static Mat Mask = new Mat();
         public static DateTime LastActivity;
-        public static int PttClickCounter { get; set; }
-        public static SerialPort ComPort { get; set; }
-
+        public static int PttClickCounter { get; set; }        
         public MainForm()
         {
             InitializeComponent();
@@ -187,7 +185,7 @@ namespace SatcomPiratesBot
         private void ocrSettings_Click(object sender, EventArgs e) => ToggleOcrSettings();
 
         private bool ocrDebug = true;
-        private bool stillActive;
+        
 
         private void ToggleOcrSettings()
         {
@@ -246,7 +244,7 @@ namespace SatcomPiratesBot
             }
             else
             {
-                ComPort?.Close();
+                Transmitter.ComPort?.Close();
                 connectComPortButton.Text = "Connect";
                 refreshPortsButton.Enabled = true;
                 comPortsBox.Enabled = true;
@@ -254,6 +252,7 @@ namespace SatcomPiratesBot
         }
 
         private Action handleActive;
+        private const string SQUELCH_OPEN = "Squelch opened";
         private const string ACTIVITY = "Activity";
         private const string SILENCE = "Silence";
         private void OpenComPort()
@@ -261,13 +260,13 @@ namespace SatcomPiratesBot
             var portName = comPortsBox.SelectedItem?.ToString();
             handleActive = Debounce(() =>
              {
-                 if (stillActive)
+                 if (Transmitter.ChannelBusy)
                  {
                      try
                      {
                          Invoke(new Action(() =>
                          {
-                             activityLabel.Text = "ACTIVITY";
+                             activityLabel.Text = ACTIVITY;
                              SetMask();
                          }));
                          LastActivity = DateTime.Now;
@@ -281,23 +280,23 @@ namespace SatcomPiratesBot
              });
             if (!string.IsNullOrEmpty(portName))
             {
-                ComPort = new SerialPort(portName);
-                ComPort.BaudRate = 9600;
-                ComPort.DataReceived += (s, e) =>
+                Transmitter.ComPort = new SerialPort(portName);
+                Transmitter.ComPort.BaudRate = 9600;
+                Transmitter.ComPort.DataReceived += (s, e) =>
                 {
-                    var data = ComPort.ReadExisting();
+                    var data = Transmitter.ComPort.ReadExisting();
                     if (data.Contains("activity"))
                     {
-                        Invoke(new Action(() => activityLabel.Text = ACTIVITY));
-                        stillActive = true;
+                        Invoke(new Action(() => activityLabel.Text = SQUELCH_OPEN));
+                        Transmitter.ChannelBusy = true;
                         handleActive();
                     }
                     else if (data.Contains("silence"))
                     {
-                        stillActive = false;
+                        Transmitter.ChannelBusy = false;
                         Invoke(new Action(() =>
                         {
-                            if (activityLabel.Text == ACTIVITY)
+                            if (activityLabel.Text == SQUELCH_OPEN)
                             {
                                 PttClickCounter++;
                             }
@@ -305,7 +304,7 @@ namespace SatcomPiratesBot
                         }));
                     }
                 };
-                ComPort.Open();
+                Transmitter.ComPort.Open();
             }
         }
 
@@ -315,7 +314,7 @@ namespace SatcomPiratesBot
             return () =>
             {
                 var current = Interlocked.Increment(ref last);
-                Task.Delay(milliseconds).ContinueWith(task =>
+                Task.Delay(milliseconds, cts.Token).ContinueWith(task =>
                 {
                     if (current == last) func();
                     task.Dispose();

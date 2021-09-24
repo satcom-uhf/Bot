@@ -6,5 +6,6 @@
         public const string SoundRecord = "/record";
         public const string Tle = "/tle";
         public const string Qyt = "/qyt";
+        public const string TransmitVoice = "/transmit";
     }
 }
