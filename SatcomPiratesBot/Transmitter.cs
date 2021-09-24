@@ -41,7 +41,7 @@ namespace SatcomPiratesBot
                           await Task.Delay(100);
                       }
                   }
-                  await Task.Delay(TimeSpan.FromSeconds(duration + 1));
+                  //await Task.Delay(TimeSpan.FromSeconds(duration + 1));
                   await botClient.SendTextMessageAsync(chat, "Сообщение передано");
               }
               finally

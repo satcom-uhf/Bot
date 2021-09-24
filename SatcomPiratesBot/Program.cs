@@ -17,7 +17,7 @@ namespace SatcomPiratesBot
         static void Main()
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteToGridView()
+                .WriteToSimpleAndRichTextBox()
                 .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);

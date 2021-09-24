@@ -133,9 +133,9 @@ namespace SatcomPiratesBot
                 foreach (var cmd in commands)
                 {
                     Transmitter.ComPort.WriteLine(cmd.ToString());
-                    await Task.Delay(TimeSpan.FromMilliseconds(300)); // let's wait a bit
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
                 }
-                await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
+                await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
                 await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     "Radio screen",

@@ -70,10 +70,10 @@ namespace SatcomPiratesBot
             this.telegramTokenBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.logPage = new System.Windows.Forms.TabPage();
-            this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
+            this.transparentSimpleLogTextBox1 = new Serilog.Sinks.WinForms.TransparentSimpleLogTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -535,22 +535,13 @@ namespace SatcomPiratesBot
             // 
             // logPage
             // 
-            this.logPage.Controls.Add(this.gridLog1);
+            this.logPage.Controls.Add(this.transparentSimpleLogTextBox1);
             this.logPage.Location = new System.Drawing.Point(4, 24);
             this.logPage.Name = "logPage";
             this.logPage.Size = new System.Drawing.Size(616, 371);
             this.logPage.TabIndex = 2;
             this.logPage.Text = "Log";
             this.logPage.UseVisualStyleBackColor = true;
-            // 
-            // gridLog1
-            // 
-            this.gridLog1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridLog1.Location = new System.Drawing.Point(0, 0);
-            this.gridLog1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.gridLog1.Name = "gridLog1";
-            this.gridLog1.Size = new System.Drawing.Size(616, 371);
-            this.gridLog1.TabIndex = 0;
             // 
             // runTelegramButton
             // 
@@ -570,6 +561,17 @@ namespace SatcomPiratesBot
             this.activityLabel.Size = new System.Drawing.Size(44, 15);
             this.activityLabel.TabIndex = 3;
             this.activityLabel.Text = "Silence";
+            // 
+            // transparentSimpleLogTextBox1
+            // 
+            this.transparentSimpleLogTextBox1.BackColor = System.Drawing.Color.Transparent;
+            this.transparentSimpleLogTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.transparentSimpleLogTextBox1.ForContext = "";
+            this.transparentSimpleLogTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.transparentSimpleLogTextBox1.Multiline = true;
+            this.transparentSimpleLogTextBox1.Name = "transparentSimpleLogTextBox1";
+            this.transparentSimpleLogTextBox1.Size = new System.Drawing.Size(616, 371);
+            this.transparentSimpleLogTextBox1.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -605,6 +607,7 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logPage.ResumeLayout(false);
+            this.logPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -646,7 +649,6 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button setSstvPathButton;
         private System.Windows.Forms.Button testTelegramButton;
         private System.Windows.Forms.TabPage logPage;
-        private Serilog.Sinks.WinForms.GridLog gridLog1;
         private System.Windows.Forms.Button runTelegramButton;
         private System.Windows.Forms.TextBox ocrSpaceKeyBox;
         private System.Windows.Forms.Label label10;
@@ -656,6 +658,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button connectComPortButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label activityLabel;
+        private Serilog.Sinks.WinForms.TransparentSimpleLogTextBox transparentSimpleLogTextBox1;
     }
 }
 
