@@ -86,6 +86,11 @@ namespace SatcomPiratesBot
 
         private async Task HandleVoiceMessage(ITelegramBotClient botClient, Message message)
         {
+            if (!message.From.IsAdmin())
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Функция доступна только админам");
+                return;
+            }
             var now = DateTime.Now;
             var waitFor = TimeSpan.FromSeconds(30);
             while (Transmitter.TransmitterBusy && (DateTime.Now - now < waitFor))
