@@ -5,7 +5,9 @@ using OpenCvSharp.Extensions;
 using Serilog;
 using System;
 using System.Data;
+using System.Drawing;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +24,8 @@ namespace SatcomPiratesBot
         public static Mat CurrentFrame = new Mat();
         public static Mat Mask = new Mat();
         public static DateTime LastActivity;
-        public static int PttClickCounter;
+        public static int PttClickCounter { get; set; }
+        public static SerialPort ComPort { get; set; }
 
         public MainForm()
         {
@@ -32,8 +35,16 @@ namespace SatcomPiratesBot
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadCameras();
+            LoadPorts();
             LoadSettings();
             ToggleOcrSettings();
+            CurrentFrame = BitmapConverter.ToMat(new Bitmap(cameraBox.Image));
+        }
+
+        private void LoadPorts()
+        {
+            comPortsBox.Items.Clear();
+            comPortsBox.Items.AddRange(SerialPort.GetPortNames());
         }
 
         private void LoadCameras()
@@ -134,7 +145,7 @@ namespace SatcomPiratesBot
         {
             try
             {
-                Config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));                
+                Config = JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText("preferences.json"));
             }
             catch
             {
@@ -176,6 +187,7 @@ namespace SatcomPiratesBot
         private void ocrSettings_Click(object sender, EventArgs e) => ToggleOcrSettings();
 
         private bool ocrDebug = true;
+        private bool stillActive;
 
         private void ToggleOcrSettings()
         {
@@ -215,6 +227,95 @@ namespace SatcomPiratesBot
             await Telegram.Start(Config.TelegramToken, cts.Token);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
+        }
+
+        private void refreshPortsButton_Click(object sender, EventArgs e)
+        {
+            LoadPorts();
+        }
+
+        private void connectComPortButton_Click(object sender, EventArgs e)
+        {
+            var comPortState = !comPortsBox.Enabled;
+            if (!comPortState)
+            {
+                OpenComPort();
+                connectComPortButton.Text = "Disconnect;";
+                comPortsBox.Enabled = false;
+            }
+            else
+            {
+                ComPort?.Close();
+                connectComPortButton.Text = "Connect";
+                comPortsBox.Enabled = true;
+            }
+        }
+
+        private Action handleActive;
+        private void OpenComPort()
+        {
+            var portName = comPortsBox.SelectedItem?.ToString();
+            handleActive= Debounce(() =>
+            {
+                if (stillActive)
+                {
+                    try
+                    {
+                        Invoke(new Action(() => {
+                            activityLabel.Text = "ACTIVITY";
+                            SetMask();
+                        }));                        
+                        LastActivity = DateTime.Now;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "");
+                    }
+                }
+            });
+            if (!string.IsNullOrEmpty(portName))
+            {
+                ComPort = new SerialPort(portName);
+                ComPort.BaudRate = 9600;
+                ComPort.DataReceived += (s, e) =>
+                {
+                    var data = ComPort.ReadExisting();
+                    if (data.Contains("activity"))
+                    {
+                        Invoke(new Action(() => activityLabel.Text = "ON"));
+                        stillActive = true;
+                        handleActive();
+                    }
+                    else if (data.Contains("silence"))
+                    {
+                        stillActive = false;
+                        Invoke(new Action(() =>
+                        {
+                            if (activityLabel.Text == "ON")
+                            {
+                                PttClickCounter++;
+                            }
+                            activityLabel.Text = "OFF";
+                        }));
+                    }
+                };
+                ComPort.Open();
+            }
+        }
+
+        private Action Debounce(Action func, int milliseconds = 1200)
+        {
+            var last = 0;
+            return () =>
+            {
+                var current = Interlocked.Increment(ref last);
+                Task.Delay(milliseconds).ContinueWith(task =>
+                {
+                    if (current == last) func();
+                    task.Dispose();
+                });
+            };
         }
     }
 }

@@ -32,7 +32,15 @@ namespace SatcomPiratesBot
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.cameraBox = new System.Windows.Forms.PictureBox();
             this.tabs = new System.Windows.Forms.TabControl();
-            this.webcamPage = new System.Windows.Forms.TabPage();
+            this.radioPage = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comPortsBox = new System.Windows.Forms.ComboBox();
+            this.refreshPortsButton = new System.Windows.Forms.Button();
+            this.connectComPortButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.camerasDropDown = new System.Windows.Forms.ComboBox();
+            this.refreshCameras = new System.Windows.Forms.Button();
+            this.startWebCam = new System.Windows.Forms.Button();
             this.ocrSettings = new System.Windows.Forms.Button();
             this.mask2 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -49,10 +57,9 @@ namespace SatcomPiratesBot
             this.v1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.maskBox = new System.Windows.Forms.PictureBox();
-            this.startWebCam = new System.Windows.Forms.Button();
-            this.refreshCameras = new System.Windows.Forms.Button();
-            this.camerasDropDown = new System.Windows.Forms.ComboBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
+            this.ocrSpaceKeyBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.testTelegramButton = new System.Windows.Forms.Button();
             this.setSstvPathButton = new System.Windows.Forms.Button();
             this.sstvPathBox = new System.Windows.Forms.TextBox();
@@ -66,11 +73,12 @@ namespace SatcomPiratesBot
             this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
-            this.ocrSpaceKeyBox = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.activityLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
-            this.webcamPage.SuspendLayout();
+            this.radioPage.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.mask2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.h2)).BeginInit();
@@ -87,7 +95,7 @@ namespace SatcomPiratesBot
             // cameraBox
             // 
             this.cameraBox.Image = ((System.Drawing.Image)(resources.GetObject("cameraBox.Image")));
-            this.cameraBox.Location = new System.Drawing.Point(8, 84);
+            this.cameraBox.Location = new System.Drawing.Point(8, 120);
             this.cameraBox.Name = "cameraBox";
             this.cameraBox.Size = new System.Drawing.Size(320, 240);
             this.cameraBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -96,7 +104,7 @@ namespace SatcomPiratesBot
             // 
             // tabs
             // 
-            this.tabs.Controls.Add(this.webcamPage);
+            this.tabs.Controls.Add(this.radioPage);
             this.tabs.Controls.Add(this.settingsPage);
             this.tabs.Controls.Add(this.logPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Top;
@@ -107,23 +115,102 @@ namespace SatcomPiratesBot
             this.tabs.Size = new System.Drawing.Size(624, 399);
             this.tabs.TabIndex = 1;
             // 
-            // webcamPage
+            // radioPage
             // 
-            this.webcamPage.Controls.Add(this.ocrSettings);
-            this.webcamPage.Controls.Add(this.mask2);
-            this.webcamPage.Controls.Add(this.mask1);
-            this.webcamPage.Controls.Add(this.maskBox);
-            this.webcamPage.Controls.Add(this.startWebCam);
-            this.webcamPage.Controls.Add(this.refreshCameras);
-            this.webcamPage.Controls.Add(this.camerasDropDown);
-            this.webcamPage.Controls.Add(this.cameraBox);
-            this.webcamPage.Location = new System.Drawing.Point(4, 24);
-            this.webcamPage.Name = "webcamPage";
-            this.webcamPage.Padding = new System.Windows.Forms.Padding(3);
-            this.webcamPage.Size = new System.Drawing.Size(616, 371);
-            this.webcamPage.TabIndex = 0;
-            this.webcamPage.Text = "Camera and machine vision";
-            this.webcamPage.UseVisualStyleBackColor = true;
+            this.radioPage.Controls.Add(this.groupBox2);
+            this.radioPage.Controls.Add(this.groupBox1);
+            this.radioPage.Controls.Add(this.ocrSettings);
+            this.radioPage.Controls.Add(this.mask2);
+            this.radioPage.Controls.Add(this.mask1);
+            this.radioPage.Controls.Add(this.maskBox);
+            this.radioPage.Controls.Add(this.cameraBox);
+            this.radioPage.Location = new System.Drawing.Point(4, 24);
+            this.radioPage.Name = "radioPage";
+            this.radioPage.Padding = new System.Windows.Forms.Padding(3);
+            this.radioPage.Size = new System.Drawing.Size(616, 371);
+            this.radioPage.TabIndex = 0;
+            this.radioPage.Text = "Radio integration";
+            this.radioPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.comPortsBox);
+            this.groupBox2.Controls.Add(this.refreshPortsButton);
+            this.groupBox2.Controls.Add(this.connectComPortButton);
+            this.groupBox2.Location = new System.Drawing.Point(8, 56);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(320, 41);
+            this.groupBox2.TabIndex = 23;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "COM port";
+            // 
+            // comPortsBox
+            // 
+            this.comPortsBox.FormattingEnabled = true;
+            this.comPortsBox.Location = new System.Drawing.Point(6, 15);
+            this.comPortsBox.Name = "comPortsBox";
+            this.comPortsBox.Size = new System.Drawing.Size(166, 23);
+            this.comPortsBox.TabIndex = 1;
+            // 
+            // refreshPortsButton
+            // 
+            this.refreshPortsButton.Location = new System.Drawing.Point(178, 15);
+            this.refreshPortsButton.Name = "refreshPortsButton";
+            this.refreshPortsButton.Size = new System.Drawing.Size(56, 23);
+            this.refreshPortsButton.TabIndex = 3;
+            this.refreshPortsButton.Text = "Refresh";
+            this.refreshPortsButton.UseVisualStyleBackColor = true;
+            this.refreshPortsButton.Click += new System.EventHandler(this.refreshPortsButton_Click);
+            // 
+            // connectComPortButton
+            // 
+            this.connectComPortButton.Location = new System.Drawing.Point(239, 15);
+            this.connectComPortButton.Name = "connectComPortButton";
+            this.connectComPortButton.Size = new System.Drawing.Size(75, 23);
+            this.connectComPortButton.TabIndex = 4;
+            this.connectComPortButton.Text = "Connect";
+            this.connectComPortButton.UseVisualStyleBackColor = true;
+            this.connectComPortButton.Click += new System.EventHandler(this.connectComPortButton_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.camerasDropDown);
+            this.groupBox1.Controls.Add(this.refreshCameras);
+            this.groupBox1.Controls.Add(this.startWebCam);
+            this.groupBox1.Location = new System.Drawing.Point(8, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(320, 41);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Camera";
+            // 
+            // camerasDropDown
+            // 
+            this.camerasDropDown.FormattingEnabled = true;
+            this.camerasDropDown.Location = new System.Drawing.Point(6, 15);
+            this.camerasDropDown.Name = "camerasDropDown";
+            this.camerasDropDown.Size = new System.Drawing.Size(166, 23);
+            this.camerasDropDown.TabIndex = 1;
+            // 
+            // refreshCameras
+            // 
+            this.refreshCameras.Location = new System.Drawing.Point(178, 15);
+            this.refreshCameras.Name = "refreshCameras";
+            this.refreshCameras.Size = new System.Drawing.Size(56, 23);
+            this.refreshCameras.TabIndex = 3;
+            this.refreshCameras.Text = "Refresh";
+            this.refreshCameras.UseVisualStyleBackColor = true;
+            this.refreshCameras.Click += new System.EventHandler(this.refreshCameras_Click);
+            // 
+            // startWebCam
+            // 
+            this.startWebCam.Location = new System.Drawing.Point(239, 15);
+            this.startWebCam.Name = "startWebCam";
+            this.startWebCam.Size = new System.Drawing.Size(75, 23);
+            this.startWebCam.TabIndex = 4;
+            this.startWebCam.Text = "Connect";
+            this.startWebCam.UseVisualStyleBackColor = true;
+            this.startWebCam.Click += new System.EventHandler(this.startWebCam_Click);
             // 
             // ocrSettings
             // 
@@ -329,34 +416,6 @@ namespace SatcomPiratesBot
             this.maskBox.TabIndex = 5;
             this.maskBox.TabStop = false;
             // 
-            // startWebCam
-            // 
-            this.startWebCam.Location = new System.Drawing.Point(253, 5);
-            this.startWebCam.Name = "startWebCam";
-            this.startWebCam.Size = new System.Drawing.Size(75, 23);
-            this.startWebCam.TabIndex = 4;
-            this.startWebCam.Text = "Connect";
-            this.startWebCam.UseVisualStyleBackColor = true;
-            this.startWebCam.Click += new System.EventHandler(this.startWebCam_Click);
-            // 
-            // refreshCameras
-            // 
-            this.refreshCameras.Location = new System.Drawing.Point(180, 6);
-            this.refreshCameras.Name = "refreshCameras";
-            this.refreshCameras.Size = new System.Drawing.Size(57, 23);
-            this.refreshCameras.TabIndex = 3;
-            this.refreshCameras.Text = "Refresh";
-            this.refreshCameras.UseVisualStyleBackColor = true;
-            this.refreshCameras.Click += new System.EventHandler(this.refreshCameras_Click);
-            // 
-            // camerasDropDown
-            // 
-            this.camerasDropDown.FormattingEnabled = true;
-            this.camerasDropDown.Location = new System.Drawing.Point(8, 6);
-            this.camerasDropDown.Name = "camerasDropDown";
-            this.camerasDropDown.Size = new System.Drawing.Size(166, 23);
-            this.camerasDropDown.TabIndex = 1;
-            // 
             // settingsPage
             // 
             this.settingsPage.Controls.Add(this.ocrSpaceKeyBox);
@@ -377,6 +436,22 @@ namespace SatcomPiratesBot
             this.settingsPage.TabIndex = 1;
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
+            // 
+            // ocrSpaceKeyBox
+            // 
+            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 158);
+            this.ocrSpaceKeyBox.Name = "ocrSpaceKeyBox";
+            this.ocrSpaceKeyBox.Size = new System.Drawing.Size(322, 23);
+            this.ocrSpaceKeyBox.TabIndex = 10;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(20, 161);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(108, 15);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "OCR.Space API Key";
             // 
             // testTelegramButton
             // 
@@ -486,27 +561,21 @@ namespace SatcomPiratesBot
             this.runTelegramButton.UseVisualStyleBackColor = true;
             this.runTelegramButton.Click += new System.EventHandler(this.runTelegramButton_Click);
             // 
-            // ocrSpaceKeyBox
+            // activityLabel
             // 
-            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 158);
-            this.ocrSpaceKeyBox.Name = "ocrSpaceKeyBox";
-            this.ocrSpaceKeyBox.Size = new System.Drawing.Size(322, 23);
-            this.ocrSpaceKeyBox.TabIndex = 10;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 161);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(108, 15);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "OCR.Space API Key";
+            this.activityLabel.AutoSize = true;
+            this.activityLabel.Location = new System.Drawing.Point(18, 413);
+            this.activityLabel.Name = "activityLabel";
+            this.activityLabel.Size = new System.Drawing.Size(47, 15);
+            this.activityLabel.TabIndex = 3;
+            this.activityLabel.Text = "Activity";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
+            this.Controls.Add(this.activityLabel);
             this.Controls.Add(this.runTelegramButton);
             this.Controls.Add(this.tabs);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -518,7 +587,9 @@ namespace SatcomPiratesBot
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).EndInit();
             this.tabs.ResumeLayout(false);
-            this.webcamPage.ResumeLayout(false);
+            this.radioPage.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.mask2.ResumeLayout(false);
             this.mask2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s2)).EndInit();
@@ -534,6 +605,7 @@ namespace SatcomPiratesBot
             this.settingsPage.PerformLayout();
             this.logPage.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -541,7 +613,7 @@ namespace SatcomPiratesBot
 
         private System.Windows.Forms.PictureBox cameraBox;
         private System.Windows.Forms.TabControl tabs;
-        private System.Windows.Forms.TabPage webcamPage;
+        private System.Windows.Forms.TabPage radioPage;
         private System.Windows.Forms.TabPage settingsPage;
         private System.Windows.Forms.ComboBox camerasDropDown;
         private System.Windows.Forms.Button refreshCameras;
@@ -577,6 +649,12 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button runTelegramButton;
         private System.Windows.Forms.TextBox ocrSpaceKeyBox;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox comPortsBox;
+        private System.Windows.Forms.Button refreshPortsButton;
+        private System.Windows.Forms.Button connectComPortButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label activityLabel;
     }
 }
 
