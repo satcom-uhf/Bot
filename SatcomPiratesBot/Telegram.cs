@@ -1,11 +1,13 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace SatcomPiratesBot
@@ -17,23 +19,62 @@ namespace SatcomPiratesBot
     {
         private static TelegramBotClient Bot;
         public static ChatMember[] Admins = new ChatMember[] { };
-
-        public static async Task Start(string token, CancellationToken cancellationToken)
+        private static FileSystemWatcher SstvSpy = new FileSystemWatcher();
+        
+        public static async Task Start(ConfigModel config, CancellationToken cancellationToken)
         {
             try
             {
                 Log.Information("Starting bot");
-                Bot = new TelegramBotClient(token);
+                Bot = new TelegramBotClient(config.TelegramToken);
                 Bot.StartReceiving<TelegramHandler>(cancellationToken);
                 await Bot.GetMeAsync();
                 Log.Information("Getting admins");
-                Admins = await Bot.GetChatAdministratorsAsync("@SATCOM_UHF");
+                Admins = await Bot.GetChatAdministratorsAsync(config.MainDiscussuionGroup);
+                Log.Information("Starting SSTV Spy");
+                StartSstvSpy(config);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Cannot start bot");
             }
         }
+
+        private static void StartSstvSpy(ConfigModel config)
+        {
+            SstvSpy.Path = config.SSTVPath;
+            SstvSpy.NotifyFilter = NotifyFilters.Attributes
+                                 | NotifyFilters.CreationTime
+                                 | NotifyFilters.DirectoryName
+                                 | NotifyFilters.FileName
+                                 | NotifyFilters.LastAccess
+                                 | NotifyFilters.LastWrite
+                                 | NotifyFilters.Security
+                                 | NotifyFilters.Size;
+            SstvSpy.Created += async (s, e) =>
+            {
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    await SendPhotoToChannel(new ChatId(config.SSTVChannel), e.FullPath);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "SSTV error");
+                }
+            };
+            SstvSpy.Filter = "*.jpg";
+            SstvSpy.Error += (s, e) => Log.Error(e?.GetException(), $"Watcher error");
+            SstvSpy.EnableRaisingEvents = true;
+        }
+        private static async Task SendPhotoToChannel(ChatId channel, string path)
+        {
+            using (var fs = System.IO.File.OpenRead(path))
+            {
+                await Bot.SendPhotoAsync(channel, new InputOnlineFile(fs));
+            }
+        }
+
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> InlineKeyboard(User user)
         {
             // first row
@@ -95,7 +136,7 @@ namespace SatcomPiratesBot
                         WithCallbackData("🔽 Down", $"{Qyt}{Down}"),
                         WithCallbackData("🔠 Exit", $"{Qyt}{Exit}")
                     };
-            
+
             yield return new[]
                     {
                         WithCallbackData("Закрыть управление", "/start"),

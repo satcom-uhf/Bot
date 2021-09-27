@@ -70,10 +70,14 @@ namespace SatcomPiratesBot
             this.telegramTokenBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.logPage = new System.Windows.Forms.TabPage();
+            this.simpleLogTextBox1 = new Serilog.Sinks.WinForms.SimpleLogTextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
-            this.transparentSimpleLogTextBox1 = new Serilog.Sinks.WinForms.TransparentSimpleLogTextBox();
+            this.sstvChannelBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.mainGroupBox = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -419,6 +423,10 @@ namespace SatcomPiratesBot
             // 
             // settingsPage
             // 
+            this.settingsPage.Controls.Add(this.mainGroupBox);
+            this.settingsPage.Controls.Add(this.label12);
+            this.settingsPage.Controls.Add(this.sstvChannelBox);
+            this.settingsPage.Controls.Add(this.label11);
             this.settingsPage.Controls.Add(this.ocrSpaceKeyBox);
             this.settingsPage.Controls.Add(this.label10);
             this.settingsPage.Controls.Add(this.testTelegramButton);
@@ -440,7 +448,7 @@ namespace SatcomPiratesBot
             // 
             // ocrSpaceKeyBox
             // 
-            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 158);
+            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 101);
             this.ocrSpaceKeyBox.Name = "ocrSpaceKeyBox";
             this.ocrSpaceKeyBox.Size = new System.Drawing.Size(322, 23);
             this.ocrSpaceKeyBox.TabIndex = 10;
@@ -448,7 +456,7 @@ namespace SatcomPiratesBot
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 161);
+            this.label10.Location = new System.Drawing.Point(20, 104);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(108, 15);
             this.label10.TabIndex = 9;
@@ -466,7 +474,7 @@ namespace SatcomPiratesBot
             // 
             // setSstvPathButton
             // 
-            this.setSstvPathButton.Location = new System.Drawing.Point(471, 110);
+            this.setSstvPathButton.Location = new System.Drawing.Point(471, 74);
             this.setSstvPathButton.Name = "setSstvPathButton";
             this.setSstvPathButton.Size = new System.Drawing.Size(75, 23);
             this.setSstvPathButton.TabIndex = 7;
@@ -477,7 +485,7 @@ namespace SatcomPiratesBot
             // sstvPathBox
             // 
             this.sstvPathBox.Enabled = false;
-            this.sstvPathBox.Location = new System.Drawing.Point(143, 110);
+            this.sstvPathBox.Location = new System.Drawing.Point(143, 74);
             this.sstvPathBox.Name = "sstvPathBox";
             this.sstvPathBox.Size = new System.Drawing.Size(322, 23);
             this.sstvPathBox.TabIndex = 6;
@@ -485,7 +493,7 @@ namespace SatcomPiratesBot
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(68, 113);
+            this.label9.Location = new System.Drawing.Point(68, 77);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 15);
             this.label9.TabIndex = 5;
@@ -503,7 +511,7 @@ namespace SatcomPiratesBot
             // 
             // n2yoApiKeyBox
             // 
-            this.n2yoApiKeyBox.Location = new System.Drawing.Point(143, 63);
+            this.n2yoApiKeyBox.Location = new System.Drawing.Point(143, 48);
             this.n2yoApiKeyBox.Name = "n2yoApiKeyBox";
             this.n2yoApiKeyBox.Size = new System.Drawing.Size(322, 23);
             this.n2yoApiKeyBox.TabIndex = 3;
@@ -511,7 +519,7 @@ namespace SatcomPiratesBot
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(47, 66);
+            this.label8.Location = new System.Drawing.Point(47, 51);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(81, 15);
             this.label8.TabIndex = 2;
@@ -535,13 +543,27 @@ namespace SatcomPiratesBot
             // 
             // logPage
             // 
-            this.logPage.Controls.Add(this.transparentSimpleLogTextBox1);
+            this.logPage.BackColor = System.Drawing.Color.White;
+            this.logPage.Controls.Add(this.simpleLogTextBox1);
             this.logPage.Location = new System.Drawing.Point(4, 24);
             this.logPage.Name = "logPage";
             this.logPage.Size = new System.Drawing.Size(616, 371);
             this.logPage.TabIndex = 2;
             this.logPage.Text = "Log";
-            this.logPage.UseVisualStyleBackColor = true;
+            // 
+            // simpleLogTextBox1
+            // 
+            this.simpleLogTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.simpleLogTextBox1.ForContext = "";
+            this.simpleLogTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.simpleLogTextBox1.LogBorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.simpleLogTextBox1.LogPadding = new System.Windows.Forms.Padding(3);
+            this.simpleLogTextBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.simpleLogTextBox1.Name = "simpleLogTextBox1";
+            this.simpleLogTextBox1.ReadOnly = false;
+            this.simpleLogTextBox1.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.simpleLogTextBox1.Size = new System.Drawing.Size(616, 371);
+            this.simpleLogTextBox1.TabIndex = 0;
             // 
             // runTelegramButton
             // 
@@ -562,16 +584,37 @@ namespace SatcomPiratesBot
             this.activityLabel.TabIndex = 3;
             this.activityLabel.Text = "Silence";
             // 
-            // transparentSimpleLogTextBox1
+            // sstvChannelBox
             // 
-            this.transparentSimpleLogTextBox1.BackColor = System.Drawing.Color.Transparent;
-            this.transparentSimpleLogTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.transparentSimpleLogTextBox1.ForContext = "";
-            this.transparentSimpleLogTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.transparentSimpleLogTextBox1.Multiline = true;
-            this.transparentSimpleLogTextBox1.Name = "transparentSimpleLogTextBox1";
-            this.transparentSimpleLogTextBox1.Size = new System.Drawing.Size(616, 371);
-            this.transparentSimpleLogTextBox1.TabIndex = 0;
+            this.sstvChannelBox.Location = new System.Drawing.Point(143, 130);
+            this.sstvChannelBox.Name = "sstvChannelBox";
+            this.sstvChannelBox.Size = new System.Drawing.Size(322, 23);
+            this.sstvChannelBox.TabIndex = 12;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 133);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(123, 15);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "SSTV && Voice channel";
+            // 
+            // mainGroupBox
+            // 
+            this.mainGroupBox.Location = new System.Drawing.Point(143, 158);
+            this.mainGroupBox.Name = "mainGroupBox";
+            this.mainGroupBox.Size = new System.Drawing.Size(322, 23);
+            this.mainGroupBox.TabIndex = 14;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(5, 161);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(127, 15);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "Main discussion group";
             // 
             // MainForm
             // 
@@ -607,7 +650,6 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logPage.ResumeLayout(false);
-            this.logPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -658,7 +700,11 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button connectComPortButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label activityLabel;
-        private Serilog.Sinks.WinForms.TransparentSimpleLogTextBox transparentSimpleLogTextBox1;
+        private Serilog.Sinks.WinForms.SimpleLogTextBox simpleLogTextBox1;
+        private System.Windows.Forms.TextBox sstvChannelBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox mainGroupBox;
+        private System.Windows.Forms.Label label12;
     }
 }
 

@@ -158,7 +158,9 @@ namespace SatcomPiratesBot
             telegramTokenBox.Text = Config.TelegramToken;
             n2yoApiKeyBox.Text = Config.N2YOApiKey;
             sstvPathBox.Text = Config.SSTVPath;
+            sstvChannelBox.Text = Config.SSTVChannel;
             ocrSpaceKeyBox.Text = Config.OcrSpaceKey;
+            mainGroupBox.Text = Config.MainDiscussuionGroup;
         }
         private void SaveSettings()
         {
@@ -173,7 +175,9 @@ namespace SatcomPiratesBot
                 Config.TelegramToken = telegramTokenBox.Text;
                 Config.N2YOApiKey = n2yoApiKeyBox.Text;
                 Config.SSTVPath = sstvPathBox.Text;
+                Config.SSTVChannel = sstvChannelBox.Text;
                 Config.OcrSpaceKey = ocrSpaceKeyBox.Text;
+                Config.MainDiscussuionGroup = mainGroupBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }
             catch
@@ -222,7 +226,7 @@ namespace SatcomPiratesBot
 
         private async void runTelegramButton_Click(object sender, EventArgs e)
         {
-            await Telegram.Start(Config.TelegramToken, cts.Token);
+            await Telegram.Start(Config, cts.Token);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
         }

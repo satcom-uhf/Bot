@@ -14,5 +14,7 @@
         public string N2YOApiKey { get; set; }
         public string OcrSpaceKey { get; set; }
         public string SSTVPath { get; set; } = @"C:\RX-SSTV\History";
+        public string SSTVChannel { get; set; } = "@SATCOM_BOARD";
+        public string MainDiscussuionGroup { get; set; } = "@SATCOM_UHF";
     }
 }
