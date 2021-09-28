@@ -162,7 +162,7 @@ namespace SatcomPiratesBot
             var activity = "";
             try
             {
-                activity = await MainForm.Mask.Resize().RecognizeImage();
+                activity = MainForm.Mask.Resize().RecognizeImage();
             }
             catch { }
             activity = activity.Replace("\r", "").Replace("\n", "");

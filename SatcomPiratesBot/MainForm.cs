@@ -159,7 +159,6 @@ namespace SatcomPiratesBot
             n2yoApiKeyBox.Text = Config.N2YOApiKey;
             sstvPathBox.Text = Config.SSTVPath;
             sstvChannelBox.Text = Config.SSTVChannel;
-            ocrSpaceKeyBox.Text = Config.OcrSpaceKey;
             mainGroupBox.Text = Config.MainDiscussuionGroup;
         }
         private void SaveSettings()
@@ -176,7 +175,6 @@ namespace SatcomPiratesBot
                 Config.N2YOApiKey = n2yoApiKeyBox.Text;
                 Config.SSTVPath = sstvPathBox.Text;
                 Config.SSTVChannel = sstvChannelBox.Text;
-                Config.OcrSpaceKey = ocrSpaceKeyBox.Text;
                 Config.MainDiscussuionGroup = mainGroupBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }

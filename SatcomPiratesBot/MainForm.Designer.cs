@@ -58,8 +58,10 @@ namespace SatcomPiratesBot
             this.label2 = new System.Windows.Forms.Label();
             this.maskBox = new System.Windows.Forms.PictureBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
-            this.ocrSpaceKeyBox = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.mainGroupBox = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.sstvChannelBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.testTelegramButton = new System.Windows.Forms.Button();
             this.setSstvPathButton = new System.Windows.Forms.Button();
             this.sstvPathBox = new System.Windows.Forms.TextBox();
@@ -74,10 +76,6 @@ namespace SatcomPiratesBot
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
-            this.sstvChannelBox = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.mainGroupBox = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -427,8 +425,6 @@ namespace SatcomPiratesBot
             this.settingsPage.Controls.Add(this.label12);
             this.settingsPage.Controls.Add(this.sstvChannelBox);
             this.settingsPage.Controls.Add(this.label11);
-            this.settingsPage.Controls.Add(this.ocrSpaceKeyBox);
-            this.settingsPage.Controls.Add(this.label10);
             this.settingsPage.Controls.Add(this.testTelegramButton);
             this.settingsPage.Controls.Add(this.setSstvPathButton);
             this.settingsPage.Controls.Add(this.sstvPathBox);
@@ -446,21 +442,37 @@ namespace SatcomPiratesBot
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
             // 
-            // ocrSpaceKeyBox
+            // mainGroupBox
             // 
-            this.ocrSpaceKeyBox.Location = new System.Drawing.Point(143, 101);
-            this.ocrSpaceKeyBox.Name = "ocrSpaceKeyBox";
-            this.ocrSpaceKeyBox.Size = new System.Drawing.Size(322, 23);
-            this.ocrSpaceKeyBox.TabIndex = 10;
+            this.mainGroupBox.Location = new System.Drawing.Point(143, 158);
+            this.mainGroupBox.Name = "mainGroupBox";
+            this.mainGroupBox.Size = new System.Drawing.Size(322, 23);
+            this.mainGroupBox.TabIndex = 14;
             // 
-            // label10
+            // label12
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 104);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(108, 15);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "OCR.Space API Key";
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(5, 161);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(127, 15);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "Main discussion group";
+            // 
+            // sstvChannelBox
+            // 
+            this.sstvChannelBox.Location = new System.Drawing.Point(143, 130);
+            this.sstvChannelBox.Name = "sstvChannelBox";
+            this.sstvChannelBox.Size = new System.Drawing.Size(322, 23);
+            this.sstvChannelBox.TabIndex = 12;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 133);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(123, 15);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "SSTV && Voice channel";
             // 
             // testTelegramButton
             // 
@@ -584,38 +596,6 @@ namespace SatcomPiratesBot
             this.activityLabel.TabIndex = 3;
             this.activityLabel.Text = "Silence";
             // 
-            // sstvChannelBox
-            // 
-            this.sstvChannelBox.Location = new System.Drawing.Point(143, 130);
-            this.sstvChannelBox.Name = "sstvChannelBox";
-            this.sstvChannelBox.Size = new System.Drawing.Size(322, 23);
-            this.sstvChannelBox.TabIndex = 12;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(5, 133);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(123, 15);
-            this.label11.TabIndex = 11;
-            this.label11.Text = "SSTV && Voice channel";
-            // 
-            // mainGroupBox
-            // 
-            this.mainGroupBox.Location = new System.Drawing.Point(143, 158);
-            this.mainGroupBox.Name = "mainGroupBox";
-            this.mainGroupBox.Size = new System.Drawing.Size(322, 23);
-            this.mainGroupBox.TabIndex = 14;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(5, 161);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(127, 15);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "Main discussion group";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -692,8 +672,6 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button testTelegramButton;
         private System.Windows.Forms.TabPage logPage;
         private System.Windows.Forms.Button runTelegramButton;
-        private System.Windows.Forms.TextBox ocrSpaceKeyBox;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox comPortsBox;
         private System.Windows.Forms.Button refreshPortsButton;
