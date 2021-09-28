@@ -20,7 +20,7 @@ namespace SatcomPiratesBot
         private static TelegramBotClient Bot;
         public static ChatMember[] Admins = new ChatMember[] { };
         private static FileSystemWatcher SstvSpy = new FileSystemWatcher();
-        
+
         public static async Task Start(ConfigModel config, CancellationToken cancellationToken)
         {
             try
@@ -85,10 +85,11 @@ namespace SatcomPiratesBot
             {
                         WithCallbackData("🎤 Record your voice / Записать свой голос", SoundRecord)
                     };
-            //yield return new[]
-            //        {
-            //            WithCallbackData("🔭 TLE", "/tle"), WithUrl("🌐 n2yo map", N2YO.Link)
-            //        };
+
+            yield return new[]
+                    {
+                        WithCallbackData("🔭 TLE", Tle), WithUrl("🌐 n2yo map", N2YO.Link)
+                    };
 
             yield return new[]
                     {

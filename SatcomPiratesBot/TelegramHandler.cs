@@ -58,6 +58,23 @@ namespace SatcomPiratesBot
                     {
                         await HandleQyt(botClient, callbackQuery);
                     }
+                    else if (callbackQuery.Data == TelegramCommands.Tle)
+                    {
+                        var n2yo = new N2YO(MainForm.Config);
+                        var tle = await n2yo.PrepareTLE();
+                        if (!string.IsNullOrEmpty(tle))
+                        {
+                            using var stream = new MemoryStream();
+                            var writer = new StreamWriter(stream);
+                            writer.Write(tle);
+                            writer.Flush();
+                            stream.Position = 0;
+                            await botClient.SendDocumentAsync(message.Chat,
+                                new InputOnlineFile(stream, $"{DateTime.Now.ToString("yyyy-MM-dd")}.txt"),
+                                disableNotification: true
+                                );
+                        }
+                    }
                     else if (callbackQuery.Data == TelegramCommands.TransmitVoice)
                     {
                         await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, README_TRANSMIT);
