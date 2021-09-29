@@ -58,6 +58,7 @@ namespace SatcomPiratesBot
             this.label2 = new System.Windows.Forms.Label();
             this.maskBox = new System.Windows.Forms.PictureBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
+            this.audioLevel = new System.Windows.Forms.ProgressBar();
             this.mainGroupBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.sstvChannelBox = new System.Windows.Forms.TextBox();
@@ -442,6 +443,13 @@ namespace SatcomPiratesBot
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
             // 
+            // audioLevel
+            // 
+            this.audioLevel.Location = new System.Drawing.Point(189, 406);
+            this.audioLevel.Name = "audioLevel";
+            this.audioLevel.Size = new System.Drawing.Size(229, 23);
+            this.audioLevel.TabIndex = 15;
+            // 
             // mainGroupBox
             // 
             this.mainGroupBox.Location = new System.Drawing.Point(143, 158);
@@ -513,7 +521,7 @@ namespace SatcomPiratesBot
             // 
             // apiKeysSaveButton
             // 
-            this.apiKeysSaveButton.Location = new System.Drawing.Point(390, 230);
+            this.apiKeysSaveButton.Location = new System.Drawing.Point(533, 342);
             this.apiKeysSaveButton.Name = "apiKeysSaveButton";
             this.apiKeysSaveButton.Size = new System.Drawing.Size(75, 23);
             this.apiKeysSaveButton.TabIndex = 4;
@@ -601,6 +609,7 @@ namespace SatcomPiratesBot
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
+            this.Controls.Add(this.audioLevel);
             this.Controls.Add(this.activityLabel);
             this.Controls.Add(this.runTelegramButton);
             this.Controls.Add(this.tabs);
@@ -683,6 +692,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox mainGroupBox;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ProgressBar audioLevel;
     }
 }
 

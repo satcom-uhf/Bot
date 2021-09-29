@@ -22,8 +22,6 @@ namespace SatcomPiratesBot
                     UpdateType.Poll,
                     UpdateType.PollAnswer};
 
-        private const string README_TRANSMIT = "Я всегда готов дудеть. Убедись, что отключен TMR и выбран нужный канал. " +
-                                               "После этого отправь мне голосовое сообщение, я передам его в эфир как только наступит пауза в разговоре.";
 
         public Task HandleError(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
@@ -75,76 +73,38 @@ namespace SatcomPiratesBot
                                 );
                         }
                     }
-                    else if (callbackQuery.Data == TelegramCommands.TransmitVoice)
+                    else if (callbackQuery.Data == TelegramCommands.EnableVox)
                     {
-                        await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, README_TRANSMIT);
-                        await botClient.SendInlineKeyboard(message.Chat, callbackQuery.From);
+                        var TOT = TimeSpan.FromMinutes(5);
+                        Transmitter.Vox.Start(TOT, cancellationToken);
+                        var msg = $"VOX активирован и будет автоматически выключен через {(Transmitter.Vox.StopTime - DateTime.Now).ToString(@"mm\:ss")}";
+                        await SendRadioScreen(botClient,
+                    callbackQuery.Message.Chat,
+                    msg,
+                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    );
+                    }
+                    else if (callbackQuery.Data == TelegramCommands.DisableVox)
+                    {
+                        Transmitter.Vox.Stop();
+                        var msg = $"VOX деактивирован";
+                        await SendRadioScreen(botClient,
+                    callbackQuery.Message.Chat,
+                    msg,
+                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    );
                     }
                 }
                 else if (update.Message is Message message)
                 {
-                    if (message.Voice != null)
-                    {
-                        Log.Information("Voice from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
-                        await HandleVoiceMessage(botClient, message);
-                    }
-                    else
-                    {
-                        Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
-                        await botClient.SendInlineKeyboard(message.Chat, message.From);
-                    }
+                    Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
+                    await botClient.SendInlineKeyboard(message.Chat, message.From);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Cannot handle update");
             }
-        }
-
-        private async Task HandleVoiceMessage(ITelegramBotClient botClient, Message message)
-        {
-            if (!message.From.IsAdmin())
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Функция доступна только админам");
-                return;
-            }
-            var now = DateTime.Now;
-            var waitFor = TimeSpan.FromSeconds(30);
-            while (Transmitter.TransmitterBusy && (DateTime.Now - now < waitFor))
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Ждите, передатчик занят..");
-                await Task.Delay(TimeSpan.FromSeconds(10));
-            }
-            if (Transmitter.TransmitterBusy)
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Увы, передатчик пока не освободился, повторите попытку позже");
-                return;
-            }
-            Transmitter.TransmitterBusy = true;
-            await botClient.SendTextMessageAsync(message.Chat, "Сообщение принято обрабатывается...");
-            var voice = message.Voice;
-            var fileInfo = await botClient.GetFileAsync(voice.FileId);
-            var currentDir = System.Windows.Forms.Application.StartupPath;
-            var voiceDir = Path.Combine(currentDir, "voice");
-            if (!Directory.Exists(voiceDir)) { Directory.CreateDirectory(voiceDir); }
-            var fn = $"voice_{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}.ogg";
-            var fullPath = Path.Combine(voiceDir, fn);
-            var outputWav = "audio.wav";
-            var outputWavFulPath = Path.Combine(voiceDir, outputWav);
-
-            using (var fs = System.IO.File.OpenWrite(fullPath))
-            {
-                await botClient.DownloadFileAsync(fileInfo.FilePath, fs);
-            }
-            using var fileopener = new System.Diagnostics.Process();
-
-            fileopener.StartInfo.FileName = "cmd";
-            fileopener.StartInfo.Arguments = $"/C ffmpeg -i voice\\{fn} voice\\{outputWav} -y";
-            fileopener.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            fileopener.StartInfo.WorkingDirectory = currentDir;
-            fileopener.Start();
-            fileopener.WaitForExit();
-            Transmitter.Transmit(botClient, message.Chat, voice.Duration, outputWavFulPath);
         }
 
         private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)

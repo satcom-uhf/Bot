@@ -102,8 +102,7 @@ namespace SatcomPiratesBot
             if (user.IsAdmin())
             {
                 yield return new[] {
-                    WithCallbackData("Управление станцией", Qyt),
-                    WithCallbackData("Подудеть", TransmitVoice)
+                    WithCallbackData("Управление станцией", Qyt)
                 };
             }
             //new []
@@ -120,14 +119,11 @@ namespace SatcomPiratesBot
             var stepsToDisableTmr = Menu + Menu + Up + Menu + Exit;
             var stepsToEnableTmr = Menu + Menu + Down + Menu + Exit;
             // first row
+            var voxActive = Transmitter.Vox.Running;
             yield return new[]
-                    {
-                        WithCallbackData("(!)Отключить TMR", $"{Qyt}{stepsToDisableTmr}"),
-                    };
-            yield return new[]
-                    {
-                        WithCallbackData("(!)Включить TMR",$"{Qyt}{stepsToEnableTmr}"),
-                    };
+            {
+                WithCallbackData(voxActive?"Выключить VOX":"Включить VOX", voxActive?DisableVox:EnableVox)
+            };
             yield return new[]            {
                         WithCallbackData("🔼   Up", $"{Qyt}{Up}"),
                         WithCallbackData("✅ Menu", $"{Qyt}{Menu}")
@@ -140,8 +136,18 @@ namespace SatcomPiratesBot
 
             yield return new[]
                     {
-                        WithCallbackData("Закрыть управление", "/start"),
+                        WithCallbackData("(!)Отключить TMR", $"{Qyt}{stepsToDisableTmr}"),
                     };
+            yield return new[]
+                    {
+                        WithCallbackData("(!)Включить TMR",$"{Qyt}{stepsToEnableTmr}"),
+                    };
+            yield return new[]
+                   {
+                        WithCallbackData("Закрыть управление", Freq),
+                    };
+
+
         }
 
         public static async Task SendInlineKeyboard(this ITelegramBotClient bot, ChatId chat, User user)

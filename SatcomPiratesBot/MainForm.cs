@@ -24,7 +24,7 @@ namespace SatcomPiratesBot
         public static Mat CurrentFrame = new Mat();
         public static Mat Mask = new Mat();
         public static DateTime LastActivity;
-        public static int PttClickCounter { get; set; }        
+        public static int PttClickCounter { get; set; }
         public MainForm()
         {
             InitializeComponent();
@@ -37,7 +37,7 @@ namespace SatcomPiratesBot
             LoadSettings();
             ToggleOcrSettings();
             CurrentFrame = BitmapConverter.ToMat(new Bitmap(cameraBox.Image));
-        }
+        }      
 
         private void LoadPorts()
         {
@@ -187,7 +187,7 @@ namespace SatcomPiratesBot
         private void ocrSettings_Click(object sender, EventArgs e) => ToggleOcrSettings();
 
         private bool ocrDebug = true;
-        
+
 
         private void ToggleOcrSettings()
         {
