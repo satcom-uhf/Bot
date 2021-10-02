@@ -41,7 +41,10 @@ namespace SatcomPiratesBot
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
                     try
                     {
-                        await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message
+                        if (!(callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && callbackQuery.Data != TelegramCommands.Qyt))
+                        {
+                            //await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message
+                        }
                     }
                     catch
                     {
@@ -50,7 +53,7 @@ namespace SatcomPiratesBot
                     Log.Information("Callback {Data} from {User} ({FirstName},{LastName})", callbackQuery.Data, from, from.FirstName, from.LastName);
                     if (callbackQuery.Data == TelegramCommands.Freq)
                     {
-                        await HandleFreq(botClient, callbackQuery);
+                        await HandleFreq(botClient, callbackQuery.Message, callbackQuery.From);
                     }
                     else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt))
                     {
@@ -98,7 +101,8 @@ namespace SatcomPiratesBot
                 else if (update.Message is Message message)
                 {
                     Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
-                    await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    //await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    await HandleFreq(botClient, message, message.From);
                 }
             }
             catch (Exception ex)
@@ -119,8 +123,7 @@ namespace SatcomPiratesBot
                 }
                 await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
                 await SendRadioScreen(botClient,
-                    callbackQuery.Message.Chat,
-                    "Radio screen",
+                    callbackQuery.Message,                    
                     new InlineKeyboardMarkup(Telegram.QytKeyboard())
                     );
             }
@@ -131,10 +134,8 @@ namespace SatcomPiratesBot
             }
         }
 
-        private async Task HandleFreq(ITelegramBotClient botClient, CallbackQuery query)
+        private async Task HandleFreq(ITelegramBotClient botClient, Message message, User from)
         {
-            var message = query.Message;
-            var from = query.From;
             await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
             var activity = "";
             try
@@ -167,6 +168,26 @@ namespace SatcomPiratesBot
               new InputOnlineFile(s),
                caption,
                disableNotification: true,
+              replyMarkup: replyMarkup
+              );
+                return;
+            }
+        }
+
+        private async Task SendRadioScreen(ITelegramBotClient botClient, Message msg, InlineKeyboardMarkup replyMarkup)
+        {
+            var screen = MainForm.CurrentFrame.Resize();
+
+            using (var s = new MemoryStream())
+            {
+                BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
+                s.Position = 0;
+                await botClient.EditMessageMediaAsync(
+              msg.Chat,
+              msg.MessageId,
+              new InputMediaPhoto(new InputMedia(s, "radioscreen.png")),
+              //caption,
+              //disableNotification: true,
               replyMarkup: replyMarkup
               );
                 return;
