@@ -58,7 +58,8 @@ namespace SatcomPiratesBot
             this.label2 = new System.Windows.Forms.Label();
             this.maskBox = new System.Windows.Forms.PictureBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
-            this.audioLevel = new System.Windows.Forms.ProgressBar();
+            this.dtmfCodeBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.mainGroupBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.sstvChannelBox = new System.Windows.Forms.TextBox();
@@ -77,6 +78,7 @@ namespace SatcomPiratesBot
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
+            this.dtmfLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -422,6 +424,8 @@ namespace SatcomPiratesBot
             // 
             // settingsPage
             // 
+            this.settingsPage.Controls.Add(this.dtmfCodeBox);
+            this.settingsPage.Controls.Add(this.label10);
             this.settingsPage.Controls.Add(this.mainGroupBox);
             this.settingsPage.Controls.Add(this.label12);
             this.settingsPage.Controls.Add(this.sstvChannelBox);
@@ -443,12 +447,21 @@ namespace SatcomPiratesBot
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
             // 
-            // audioLevel
+            // dtmfCodeBox
             // 
-            this.audioLevel.Location = new System.Drawing.Point(189, 406);
-            this.audioLevel.Name = "audioLevel";
-            this.audioLevel.Size = new System.Drawing.Size(229, 23);
-            this.audioLevel.TabIndex = 15;
+            this.dtmfCodeBox.Location = new System.Drawing.Point(143, 101);
+            this.dtmfCodeBox.Name = "dtmfCodeBox";
+            this.dtmfCodeBox.Size = new System.Drawing.Size(322, 23);
+            this.dtmfCodeBox.TabIndex = 16;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(58, 104);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(70, 15);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "DTMF Code";
             // 
             // mainGroupBox
             // 
@@ -604,12 +617,21 @@ namespace SatcomPiratesBot
             this.activityLabel.TabIndex = 3;
             this.activityLabel.Text = "Silence";
             // 
+            // dtmfLabel
+            // 
+            this.dtmfLabel.AutoSize = true;
+            this.dtmfLabel.Location = new System.Drawing.Point(140, 413);
+            this.dtmfLabel.Name = "dtmfLabel";
+            this.dtmfLabel.Size = new System.Drawing.Size(39, 15);
+            this.dtmfLabel.TabIndex = 4;
+            this.dtmfLabel.Text = "DTMF";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.audioLevel);
+            this.Controls.Add(this.dtmfLabel);
             this.Controls.Add(this.activityLabel);
             this.Controls.Add(this.runTelegramButton);
             this.Controls.Add(this.tabs);
@@ -692,7 +714,9 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox mainGroupBox;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ProgressBar audioLevel;
+        private System.Windows.Forms.Label dtmfLabel;
+        private System.Windows.Forms.TextBox dtmfCodeBox;
+        private System.Windows.Forms.Label label10;
     }
 }
 

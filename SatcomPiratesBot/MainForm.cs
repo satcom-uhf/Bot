@@ -37,7 +37,7 @@ namespace SatcomPiratesBot
             LoadSettings();
             ToggleOcrSettings();
             CurrentFrame = BitmapConverter.ToMat(new Bitmap(cameraBox.Image));
-        }      
+        }
 
         private void LoadPorts()
         {
@@ -160,6 +160,7 @@ namespace SatcomPiratesBot
             sstvPathBox.Text = Config.SSTVPath;
             sstvChannelBox.Text = Config.SSTVChannel;
             mainGroupBox.Text = Config.MainDiscussuionGroup;
+            dtmfCodeBox.Text = Config.DTMFCode;
         }
         private void SaveSettings()
         {
@@ -176,6 +177,7 @@ namespace SatcomPiratesBot
                 Config.SSTVPath = sstvPathBox.Text;
                 Config.SSTVChannel = sstvChannelBox.Text;
                 Config.MainDiscussuionGroup = mainGroupBox.Text;
+                Config.DTMFCode = dtmfCodeBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }
             catch
@@ -225,6 +227,9 @@ namespace SatcomPiratesBot
         private async void runTelegramButton_Click(object sender, EventArgs e)
         {
             await Telegram.Start(Config, cts.Token);
+            DTMF.Changed += (s, e) => Invoke(new Action(() => dtmfLabel.Text = e));
+            DTMF.Detected += (s, e) => { };
+            DTMF.StartDetection(Config);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
         }

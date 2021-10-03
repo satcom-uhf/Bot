@@ -16,6 +16,7 @@ namespace SatcomPiratesBot
         [STAThread]
         static void Main()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Log.Logger = new LoggerConfiguration()
                 .WriteToSimpleAndRichTextBox()
                 .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
@@ -24,6 +25,12 @@ namespace SatcomPiratesBot
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Serilog.Log.Error(e.ExceptionObject as Exception, "Unhandled exception");
+            Log.CloseAndFlush();
         }
     }
 }
