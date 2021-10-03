@@ -41,6 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="OK.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Satellites.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

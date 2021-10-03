@@ -228,7 +228,18 @@ namespace SatcomPiratesBot
         {
             await Telegram.Start(Config, cts.Token);
             DTMF.Changed += (s, e) => Invoke(new Action(() => dtmfLabel.Text = e));
-            DTMF.Detected += (s, e) => { };
+            DTMF.Detected += async (s, e) =>
+            {
+                try
+                {
+                    Transmitter.Vox.Start(TimeSpan.FromSeconds(10), cts.Token);
+                    await Sound.PlayOK();
+                }
+                finally
+                {
+                    Transmitter.Vox.Stop();
+                }
+            };
             DTMF.StartDetection(Config);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
