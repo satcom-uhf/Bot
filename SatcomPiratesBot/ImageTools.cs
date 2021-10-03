@@ -24,9 +24,9 @@ namespace SatcomPiratesBot
             try
             {
                 TesseractEngine engine = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
-                var pix=Tesseract.PixConverter.ToPix(bitmap);
+                var pix = Tesseract.PixConverter.ToPix(bitmap);
                 Page page = engine.Process(pix, PageSegMode.Auto);
-                return page.GetText()?.Replace(" ", "");
+                return page.GetText()?.Replace(" ", "")?.Replace("\r", "")?.Replace("\n", "");
 
             }
             catch (Exception ex)

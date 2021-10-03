@@ -40,6 +40,20 @@ namespace SatcomPiratesBot
             }
         }
 
+        public static async Task SendVoiceMessageToChannel(ConfigModel config, string frequency)
+        {
+            var text = await Sound.RecognizeMessage(config);
+            await SendVoiceMessageTo(new ChatId(config.SSTVChannel), $"[{frequency}]  {text}");
+        }
+
+        public static async Task SendVoiceMessageTo(ChatId chat, string title = null)
+        {
+            using (var fs = System.IO.File.OpenRead(Sound.RecordMp3))
+            {
+                await Bot.SendVoiceAsync(chat, new InputOnlineFile(fs), caption: title);
+            }
+        }
+
         private static void StartSstvSpy(ConfigModel config)
         {
             SstvSpy.Path = config.SSTVPath;

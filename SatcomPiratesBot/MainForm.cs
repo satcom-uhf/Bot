@@ -161,6 +161,7 @@ namespace SatcomPiratesBot
             sstvChannelBox.Text = Config.SSTVChannel;
             mainGroupBox.Text = Config.MainDiscussuionGroup;
             dtmfCodeBox.Text = Config.DTMFCode;
+            witAiTokenBox.Text = Config.WitAiToken;
         }
         private void SaveSettings()
         {
@@ -178,6 +179,7 @@ namespace SatcomPiratesBot
                 Config.SSTVChannel = sstvChannelBox.Text;
                 Config.MainDiscussuionGroup = mainGroupBox.Text;
                 Config.DTMFCode = dtmfCodeBox.Text;
+                Config.WitAiToken = witAiTokenBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));
             }
             catch
@@ -234,6 +236,11 @@ namespace SatcomPiratesBot
                 {
                     Transmitter.Vox.Start(TimeSpan.FromSeconds(10), cts.Token);
                     await Sound.PlayOK();
+                    var (available, caption) = await Sound.RecordVoice();
+                    if (available)
+                    {
+                        await Telegram.SendVoiceMessageToChannel(Config, caption);
+                    }
                 }
                 finally
                 {

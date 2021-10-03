@@ -79,6 +79,8 @@ namespace SatcomPiratesBot
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
+            this.witAiTokenBox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -424,6 +426,8 @@ namespace SatcomPiratesBot
             // 
             // settingsPage
             // 
+            this.settingsPage.Controls.Add(this.witAiTokenBox);
+            this.settingsPage.Controls.Add(this.label13);
             this.settingsPage.Controls.Add(this.dtmfCodeBox);
             this.settingsPage.Controls.Add(this.label10);
             this.settingsPage.Controls.Add(this.mainGroupBox);
@@ -449,7 +453,7 @@ namespace SatcomPiratesBot
             // 
             // dtmfCodeBox
             // 
-            this.dtmfCodeBox.Location = new System.Drawing.Point(143, 101);
+            this.dtmfCodeBox.Location = new System.Drawing.Point(143, 135);
             this.dtmfCodeBox.Name = "dtmfCodeBox";
             this.dtmfCodeBox.Size = new System.Drawing.Size(322, 23);
             this.dtmfCodeBox.TabIndex = 16;
@@ -457,7 +461,7 @@ namespace SatcomPiratesBot
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(58, 104);
+            this.label10.Location = new System.Drawing.Point(58, 138);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(70, 15);
             this.label10.TabIndex = 15;
@@ -465,7 +469,7 @@ namespace SatcomPiratesBot
             // 
             // mainGroupBox
             // 
-            this.mainGroupBox.Location = new System.Drawing.Point(143, 158);
+            this.mainGroupBox.Location = new System.Drawing.Point(143, 192);
             this.mainGroupBox.Name = "mainGroupBox";
             this.mainGroupBox.Size = new System.Drawing.Size(322, 23);
             this.mainGroupBox.TabIndex = 14;
@@ -473,7 +477,7 @@ namespace SatcomPiratesBot
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(5, 161);
+            this.label12.Location = new System.Drawing.Point(5, 195);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(127, 15);
             this.label12.TabIndex = 13;
@@ -481,7 +485,7 @@ namespace SatcomPiratesBot
             // 
             // sstvChannelBox
             // 
-            this.sstvChannelBox.Location = new System.Drawing.Point(143, 130);
+            this.sstvChannelBox.Location = new System.Drawing.Point(143, 164);
             this.sstvChannelBox.Name = "sstvChannelBox";
             this.sstvChannelBox.Size = new System.Drawing.Size(322, 23);
             this.sstvChannelBox.TabIndex = 12;
@@ -489,7 +493,7 @@ namespace SatcomPiratesBot
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(5, 133);
+            this.label11.Location = new System.Drawing.Point(5, 167);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(123, 15);
             this.label11.TabIndex = 11;
@@ -507,7 +511,7 @@ namespace SatcomPiratesBot
             // 
             // setSstvPathButton
             // 
-            this.setSstvPathButton.Location = new System.Drawing.Point(471, 74);
+            this.setSstvPathButton.Location = new System.Drawing.Point(471, 108);
             this.setSstvPathButton.Name = "setSstvPathButton";
             this.setSstvPathButton.Size = new System.Drawing.Size(75, 23);
             this.setSstvPathButton.TabIndex = 7;
@@ -518,7 +522,7 @@ namespace SatcomPiratesBot
             // sstvPathBox
             // 
             this.sstvPathBox.Enabled = false;
-            this.sstvPathBox.Location = new System.Drawing.Point(143, 74);
+            this.sstvPathBox.Location = new System.Drawing.Point(143, 108);
             this.sstvPathBox.Name = "sstvPathBox";
             this.sstvPathBox.Size = new System.Drawing.Size(322, 23);
             this.sstvPathBox.TabIndex = 6;
@@ -526,7 +530,7 @@ namespace SatcomPiratesBot
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(68, 77);
+            this.label9.Location = new System.Drawing.Point(68, 111);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 15);
             this.label9.TabIndex = 5;
@@ -626,6 +630,22 @@ namespace SatcomPiratesBot
             this.dtmfLabel.TabIndex = 4;
             this.dtmfLabel.Text = "DTMF";
             // 
+            // witAiTokenBox
+            // 
+            this.witAiTokenBox.Location = new System.Drawing.Point(143, 77);
+            this.witAiTokenBox.Name = "witAiTokenBox";
+            this.witAiTokenBox.Size = new System.Drawing.Size(322, 23);
+            this.witAiTokenBox.TabIndex = 18;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(47, 80);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(78, 15);
+            this.label13.TabIndex = 17;
+            this.label13.Text = "WIT AI Token";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -717,6 +737,8 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label dtmfLabel;
         private System.Windows.Forms.TextBox dtmfCodeBox;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox witAiTokenBox;
+        private System.Windows.Forms.Label label13;
     }
 }
 

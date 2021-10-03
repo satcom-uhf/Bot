@@ -143,7 +143,6 @@ namespace SatcomPiratesBot
                 activity = MainForm.Mask.Resize().RecognizeImage();
             }
             catch { }
-            activity = activity.Replace("\r", "").Replace("\n", "");
             //var (msgText, ) = await RecognizeImage(screen);
             //var lines = msgText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Where(x => x.Length > 3);
             //msgText = string.Join("\r\n", lines);
