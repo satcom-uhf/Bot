@@ -24,6 +24,7 @@ namespace SatcomPiratesBot
         public static Mat CurrentFrame = new Mat();
         public static Mat Mask = new Mat();
         public static DateTime LastActivity;
+        private DateTime dtmfDetected = DateTime.Now;
         public static int PttClickCounter { get; set; }
         public MainForm()
         {
@@ -236,11 +237,7 @@ namespace SatcomPiratesBot
                 {
                     Transmitter.Vox.Start(TimeSpan.FromSeconds(10), cts.Token);
                     await Sound.PlayOK();
-                    var (available, caption) = await Sound.RecordVoice();
-                    if (available)
-                    {
-                        await Telegram.SendVoiceMessageToChannel(Config, caption);
-                    }
+                    dtmfDetected = DateTime.Now;
                 }
                 finally
                 {
@@ -287,20 +284,12 @@ namespace SatcomPiratesBot
              {
                  if (Transmitter.ChannelBusy)
                  {
-                     try
+                     Invoke(new Action(() =>
                      {
-                         Invoke(new Action(() =>
-                         {
-                             activityLabel.Text = ACTIVITY;
-                             SetMask();
-                         }));
-                         LastActivity = DateTime.Now;
-
-                     }
-                     catch (Exception ex)
-                     {
-                         Log.Error(ex, "");
-                     }
+                         activityLabel.Text = ACTIVITY;
+                         SetMask();
+                     }));
+                     LastActivity = DateTime.Now;
                  }
              });
             if (!string.IsNullOrEmpty(portName))
@@ -315,6 +304,7 @@ namespace SatcomPiratesBot
                         Invoke(new Action(() => activityLabel.Text = SQUELCH_OPEN));
                         Transmitter.ChannelBusy = true;
                         handleActive();
+                        RecordSoundIfNeed();
                     }
                     else if (data.Contains("silence"))
                     {
@@ -330,6 +320,31 @@ namespace SatcomPiratesBot
                     }
                 };
                 Transmitter.ComPort.Open();
+            }
+        }
+
+        private void RecordSoundIfNeed()
+        {
+            var diff = DateTime.Now - dtmfDetected;
+            if (diff < TimeSpan.FromSeconds(10))
+            {
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        Log.Information("Recording started");
+                        var (available, caption) = await Sound.RecordVoice();
+                        if (available)
+                        {
+                            Log.Information("Sending recorded mp3");
+                            await Telegram.SendVoiceMessageToChannel(Config, caption);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Recording error");
+                    }
+                });
             }
         }
 
