@@ -3,6 +3,7 @@ Our community bot is integrated with QYT-KT7900D and can do the following:
 
 - [Full remote control for admins](https://satcom-uhf.github.io/QYT-KT7900D/RemoteControl/)
 - Activity monitoring on selected channels
+- Record & send voice message using DTMF command
 - Automatic SSTV reception using RXSSTV
 - Ability to transmit from voice chat (for admins only)
 - Automatic on-demand TLE from n2yo
