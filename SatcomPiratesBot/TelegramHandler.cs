@@ -39,6 +39,10 @@ namespace SatcomPiratesBot
                     var message = callbackQuery.Message;
                     var from = callbackQuery.From;
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
+                    if (await ShouldBeIgnored(botClient, message.Chat, from))
+                    {
+                        return;
+                    }
                     try
                     {
                         if (!(callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && callbackQuery.Data != TelegramCommands.Qyt))
@@ -102,6 +106,10 @@ namespace SatcomPiratesBot
                 {
                     Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
                     //await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    if (await ShouldBeIgnored(botClient, message.Chat, message.From))
+                    {
+                        return;
+                    }
                     await HandleFreq(botClient, message, message.From);
                 }
             }
@@ -109,6 +117,27 @@ namespace SatcomPiratesBot
             {
                 Log.Error(ex, "Cannot handle update");
             }
+        }
+
+        private async Task<bool> ShouldBeIgnored(ITelegramBotClient botClient, ChatId chat,  User from)
+        {
+            var valid = false;
+            try
+            {
+                var member = await botClient.GetChatMemberAsync(Telegram.PrimaryGroup, from.Id);
+                valid = member.Status == ChatMemberStatus.Administrator
+                    || member.Status == ChatMemberStatus.Creator
+                    || member.Status == ChatMemberStatus.Member;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Can't check membership");
+            }
+            if (!valid)
+            {
+                await botClient.SendTextMessageAsync(chat, "Sorry. You are not member of Satcom Pirates. /  Сожалеем, но вы не являетесь членом Satcom Pirates.");
+            }
+            return !valid;
         }
 
         private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)
@@ -123,7 +152,7 @@ namespace SatcomPiratesBot
                 }
                 await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
                 await SendRadioScreen(botClient,
-                    callbackQuery.Message,                    
+                    callbackQuery.Message,
                     new InlineKeyboardMarkup(Telegram.QytKeyboard())
                     );
             }

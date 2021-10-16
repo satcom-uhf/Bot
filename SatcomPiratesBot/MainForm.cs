@@ -160,7 +160,7 @@ namespace SatcomPiratesBot
             n2yoApiKeyBox.Text = Config.N2YOApiKey;
             sstvPathBox.Text = Config.SSTVPath;
             sstvChannelBox.Text = Config.SSTVChannel;
-            mainGroupBox.Text = Config.MainDiscussuionGroup;
+            mainGroupBox.Text = Config.PrimaryGroup.ToString();
             dtmfCodeBox.Text = Config.DTMFCode;
             witAiTokenBox.Text = Config.WitAiToken;
         }
@@ -178,7 +178,7 @@ namespace SatcomPiratesBot
                 Config.N2YOApiKey = n2yoApiKeyBox.Text;
                 Config.SSTVPath = sstvPathBox.Text;
                 Config.SSTVChannel = sstvChannelBox.Text;
-                Config.MainDiscussuionGroup = mainGroupBox.Text;
+                Config.PrimaryGroup = Convert.ToInt64(mainGroupBox.Text);
                 Config.DTMFCode = dtmfCodeBox.Text;
                 Config.WitAiToken = witAiTokenBox.Text;
                 File.WriteAllText("preferences.json", JsonConvert.SerializeObject(Config));

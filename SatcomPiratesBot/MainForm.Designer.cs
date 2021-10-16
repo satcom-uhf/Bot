@@ -58,6 +58,8 @@ namespace SatcomPiratesBot
             this.label2 = new System.Windows.Forms.Label();
             this.maskBox = new System.Windows.Forms.PictureBox();
             this.settingsPage = new System.Windows.Forms.TabPage();
+            this.witAiTokenBox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.dtmfCodeBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.mainGroupBox = new System.Windows.Forms.TextBox();
@@ -79,8 +81,6 @@ namespace SatcomPiratesBot
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
-            this.witAiTokenBox = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -451,6 +451,22 @@ namespace SatcomPiratesBot
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
             // 
+            // witAiTokenBox
+            // 
+            this.witAiTokenBox.Location = new System.Drawing.Point(143, 77);
+            this.witAiTokenBox.Name = "witAiTokenBox";
+            this.witAiTokenBox.Size = new System.Drawing.Size(322, 23);
+            this.witAiTokenBox.TabIndex = 18;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(47, 80);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(78, 15);
+            this.label13.TabIndex = 17;
+            this.label13.Text = "WIT AI Token";
+            // 
             // dtmfCodeBox
             // 
             this.dtmfCodeBox.Location = new System.Drawing.Point(143, 135);
@@ -479,9 +495,9 @@ namespace SatcomPiratesBot
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(5, 195);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(127, 15);
+            this.label12.Size = new System.Drawing.Size(83, 15);
             this.label12.TabIndex = 13;
-            this.label12.Text = "Main discussion group";
+            this.label12.Text = "Primary group";
             // 
             // sstvChannelBox
             // 
@@ -630,22 +646,6 @@ namespace SatcomPiratesBot
             this.dtmfLabel.TabIndex = 4;
             this.dtmfLabel.Text = "DTMF";
             // 
-            // witAiTokenBox
-            // 
-            this.witAiTokenBox.Location = new System.Drawing.Point(143, 77);
-            this.witAiTokenBox.Name = "witAiTokenBox";
-            this.witAiTokenBox.Size = new System.Drawing.Size(322, 23);
-            this.witAiTokenBox.TabIndex = 18;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(47, 80);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(78, 15);
-            this.label13.TabIndex = 17;
-            this.label13.Text = "WIT AI Token";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -732,13 +732,13 @@ namespace SatcomPiratesBot
         private Serilog.Sinks.WinForms.SimpleLogTextBox simpleLogTextBox1;
         private System.Windows.Forms.TextBox sstvChannelBox;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox mainGroupBox;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label dtmfLabel;
         private System.Windows.Forms.TextBox dtmfCodeBox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox witAiTokenBox;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox mainGroupBox;
     }
 }
 

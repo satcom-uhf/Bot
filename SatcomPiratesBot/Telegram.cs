@@ -19,6 +19,7 @@ namespace SatcomPiratesBot
     {
         private static TelegramBotClient Bot;
         public static ChatMember[] Admins = new ChatMember[] { };
+        public static ChatId PrimaryGroup { get; set; }
         private static FileSystemWatcher SstvSpy = new FileSystemWatcher();
 
         public static async Task Start(ConfigModel config, CancellationToken cancellationToken)
@@ -27,10 +28,11 @@ namespace SatcomPiratesBot
             {
                 Log.Information("Starting bot");
                 Bot = new TelegramBotClient(config.TelegramToken);
+                PrimaryGroup = new ChatId(config.PrimaryGroup);
                 Bot.StartReceiving<TelegramHandler>(cancellationToken);
                 await Bot.GetMeAsync();
                 Log.Information("Getting admins");
-                Admins = await Bot.GetChatAdministratorsAsync(config.MainDiscussuionGroup);
+                Admins = await Bot.GetChatAdministratorsAsync(config.PrimaryGroup);
                 Log.Information("Starting SSTV Spy");
                 StartSstvSpy(config);
             }
@@ -161,17 +163,6 @@ namespace SatcomPiratesBot
                         WithCallbackData("Закрыть управление", Freq),
                     };
 
-
-        }
-
-        public static async Task SendInlineKeyboard(this ITelegramBotClient bot, ChatId chat, User user)
-        {
-            await bot.SendTextMessageAsync(
-                chatId: chat,
-                text: "Select an action / Выберите действие",
-                replyMarkup: new InlineKeyboardMarkup(InlineKeyboard(user)),
-                disableNotification: true
-            );
 
         }
     }
