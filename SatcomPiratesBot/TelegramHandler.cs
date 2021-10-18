@@ -38,28 +38,21 @@ namespace SatcomPiratesBot
                     var callbackQuery = update.CallbackQuery;
                     var message = callbackQuery.Message;
                     var from = callbackQuery.From;
+                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
-                    if (await ShouldBeIgnored(botClient, message.Chat, from))
-                    {
-                        return;
-                    }
-                    try
-                    {
-                        if (!(callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && callbackQuery.Data != TelegramCommands.Qyt))
-                        {
-                            //await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message
-                        }
-                    }
-                    catch
-                    {
-                        // ignore
-                    }
                     Log.Information("Callback {Data} from {User} ({FirstName},{LastName})", callbackQuery.Data, from, from.FirstName, from.LastName);
                     if (callbackQuery.Data == TelegramCommands.Freq)
                     {
-                        await HandleFreq(botClient, callbackQuery.Message, callbackQuery.From);
+                        if (await from.IsPirate(botClient))
+                        {
+                            await HandleFreq(botClient, callbackQuery.Message, callbackQuery.From);
+                        }
+                        else
+                        {
+                            await Sorry(botClient, message.Chat);
+                        }
                     }
-                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt))
+                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && from.IsAdmin())
                     {
                         await HandleQyt(botClient, callbackQuery);
                     }
@@ -80,7 +73,7 @@ namespace SatcomPiratesBot
                                 );
                         }
                     }
-                    else if (callbackQuery.Data == TelegramCommands.EnableVox)
+                    else if (callbackQuery.Data == TelegramCommands.EnableVox && from.IsAdmin())
                     {
                         var TOT = TimeSpan.FromMinutes(5);
                         Transmitter.Vox.Start(TOT, cancellationToken);
@@ -104,13 +97,16 @@ namespace SatcomPiratesBot
                 }
                 else if (update.Message is Message message)
                 {
-                    Log.Information("Message from {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
-                    //await botClient.SendInlineKeyboard(message.Chat, message.From);
-                    if (await ShouldBeIgnored(botClient, message.Chat, message.From))
+                    if (await message.From.IsPirate(botClient))
                     {
-                        return;
+                        Log.Information("Message from  pirate {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
+                        await HandleFreq(botClient, message, message.From);
                     }
-                    await HandleFreq(botClient, message, message.From);
+                    else
+                    {
+                        Log.Information("Message from unknown {User} ({FirstName},{LastName})", message.From, message.From.FirstName, message.From.LastName);
+                        await botClient.SendInlineKeyboard(message.Chat, message.From);
+                    }
                 }
             }
             catch (Exception ex)
@@ -119,27 +115,10 @@ namespace SatcomPiratesBot
             }
         }
 
-        private async Task<bool> ShouldBeIgnored(ITelegramBotClient botClient, ChatId chat,  User from)
+        private async Task Sorry(ITelegramBotClient botClient, ChatId chat)
         {
-            var valid = false;
-            try
-            {
-                var member = await botClient.GetChatMemberAsync(Telegram.PrimaryGroup, from.Id);
-                valid = member.Status == ChatMemberStatus.Administrator
-                    || member.Status == ChatMemberStatus.Creator
-                    || member.Status == ChatMemberStatus.Member;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Can't check membership");
-            }
-            if (!valid)
-            {
-                await botClient.SendTextMessageAsync(chat, "Sorry. You are not member of Satcom Pirates. /  Сожалеем, но вы не являетесь членом Satcom Pirates.");
-            }
-            return !valid;
+            await botClient.SendTextMessageAsync(chat, "Sorry. You are not member of Satcom Pirates. /  Сожалеем, но вы не являетесь членом Satcom Pirates.");
         }
-
         private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
             try

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -55,7 +56,32 @@ namespace SatcomPiratesBot
                 await Bot.SendVoiceAsync(chat, new InputOnlineFile(fs), caption: title);
             }
         }
+        public static async Task<bool> IsPirate(this User from, ITelegramBotClient botClient)
+        {
+            var valid = false;
+            try
+            {
+                var member = await botClient.GetChatMemberAsync(PrimaryGroup, from.Id);
+                valid = member.Status == ChatMemberStatus.Administrator
+                    || member.Status == ChatMemberStatus.Creator
+                    || member.Status == ChatMemberStatus.Member;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Can't check membership");
+            }
+            return valid;
+        }
+        public static async Task SendInlineKeyboard(this ITelegramBotClient bot, ChatId chat, User user)
+        {
+            await bot.SendTextMessageAsync(
+                chatId: chat,
+                text: "Select an action / Выберите действие",
+                replyMarkup: new InlineKeyboardMarkup(InlineKeyboard(user)),
+                disableNotification: true
+            );
 
+        }
         private static void StartSstvSpy(ConfigModel config)
         {
             SstvSpy.Path = config.SSTVPath;
@@ -97,10 +123,10 @@ namespace SatcomPiratesBot
             yield return new[]            {
                          WithCallbackData("📶 Active frequencies / Активные частоты", Freq)
                     };
-            yield return new[]
-            {
-                        WithCallbackData("🎤 Record your voice / Записать свой голос", SoundRecord)
-                    };
+            //yield return new[]
+            //{
+            //            WithCallbackData("🎤 Record your voice / Записать свой голос", SoundRecord)
+            //        };
 
             yield return new[]
                     {
@@ -113,7 +139,7 @@ namespace SatcomPiratesBot
                     };
             yield return new[]
                     {
-                        WithUrl("📻 WebSDR от Nano", "http://171.25.164.45:3000/")
+                        WithUrl("📻 WebSDR от @Nano_VHF", "http://sdr.rlspb.ru:3000/")
                     };
             if (user.IsAdmin())
             {
