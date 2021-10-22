@@ -361,5 +361,10 @@ namespace SatcomPiratesBot
                 });
             };
         }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            Vox.Sensitivity = trackBar1.Value;
+        }
     }
 }

@@ -81,6 +81,7 @@ namespace SatcomPiratesBot
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBox)).BeginInit();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
@@ -97,6 +98,7 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.maskBox)).BeginInit();
             this.settingsPage.SuspendLayout();
             this.logPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // cameraBox
@@ -646,11 +648,22 @@ namespace SatcomPiratesBot
             this.dtmfLabel.TabIndex = 4;
             this.dtmfLabel.Text = "DTMF";
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(276, 401);
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(104, 45);
+            this.trackBar1.TabIndex = 5;
+            this.trackBar1.Value = 1;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.dtmfLabel);
             this.Controls.Add(this.activityLabel);
             this.Controls.Add(this.runTelegramButton);
@@ -681,6 +694,7 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -739,6 +753,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.TextBox witAiTokenBox;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox mainGroupBox;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 

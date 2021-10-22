@@ -12,12 +12,13 @@ namespace SatcomPiratesBot
         public bool IsOpened { get; private set; }
         public bool Running { get; private set; }
         public event EventHandler StateChanged;
+        public static int Sensitivity { get; set; } = 2;
         public Vox()
         {
             var enumerator = new MMDeviceEnumerator();
             device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
         }
-        private bool SoundDetected => Convert.ToInt32(device.AudioMeterInformation.MasterPeakValue * 2) > 0;
+        private bool SoundDetected => Convert.ToInt32(device.AudioMeterInformation.MasterPeakValue * Sensitivity) > 0;
         public void Start(TimeSpan maxTimeLimit, CancellationToken cancellationToken)
         {
             if (!Running)

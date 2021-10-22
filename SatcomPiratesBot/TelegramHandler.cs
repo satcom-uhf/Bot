@@ -75,7 +75,7 @@ namespace SatcomPiratesBot
                     }
                     else if (callbackQuery.Data == TelegramCommands.EnableVox && from.IsAdmin())
                     {
-                        var TOT = TimeSpan.FromMinutes(5);
+                        var TOT = TimeSpan.FromMinutes(15);
                         Transmitter.Vox.Start(TOT, cancellationToken);
                         var msg = $"VOX активирован и будет автоматически выключен через {(Transmitter.Vox.StopTime - DateTime.Now).ToString(@"mm\:ss")}";
                         await SendRadioScreen(botClient,
