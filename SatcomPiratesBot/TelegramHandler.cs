@@ -38,6 +38,7 @@ namespace SatcomPiratesBot
                     var callbackQuery = update.CallbackQuery;
                     var message = callbackQuery.Message;
                     var from = callbackQuery.From;
+                    var isAdmin = await from.IsAdmin(botClient);
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
                     Log.Information("Callback {Data} from {User} ({FirstName},{LastName})", callbackQuery.Data, from, from.FirstName, from.LastName);
@@ -52,7 +53,7 @@ namespace SatcomPiratesBot
                             await Sorry(botClient, message.Chat);
                         }
                     }
-                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && from.IsAdmin())
+                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && isAdmin)
                     {
                         await HandleQyt(botClient, callbackQuery);
                     }
@@ -73,7 +74,7 @@ namespace SatcomPiratesBot
                                 );
                         }
                     }
-                    else if (callbackQuery.Data == TelegramCommands.EnableVox && from.IsAdmin())
+                    else if (callbackQuery.Data == TelegramCommands.EnableVox && isAdmin)
                     {
                         var TOT = TimeSpan.FromMinutes(15);
                         Transmitter.Vox.Start(TOT, cancellationToken);
@@ -159,7 +160,8 @@ namespace SatcomPiratesBot
                 activity = $"[{activity}] {DateTime.Now - MainForm.LastActivity:hh\\:mm\\:ss} ago";
                 activity = $"Last activity / Последняя активность {activity}\r\nPTT clicks detected / Отшлепов обнаружено: {MainForm.PttClickCounter}";
             }
-            await SendRadioScreen(botClient, message.Chat, activity, new InlineKeyboardMarkup(Telegram.InlineKeyboard(from)));
+            var isAdmin = await from.IsAdmin(botClient);
+            await SendRadioScreen(botClient, message.Chat, activity, new InlineKeyboardMarkup(Telegram.InlineKeyboard(from, isAdmin)));
         }
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, string caption, InlineKeyboardMarkup replyMarkup)

@@ -19,7 +19,6 @@ namespace SatcomPiratesBot
     static class Telegram
     {
         private static TelegramBotClient Bot;
-        public static ChatMember[] Admins = new ChatMember[] { };
         public static ChatId PrimaryGroup { get; set; }
         private static FileSystemWatcher SstvSpy = new FileSystemWatcher();
 
@@ -32,8 +31,6 @@ namespace SatcomPiratesBot
                 PrimaryGroup = new ChatId(config.PrimaryGroup);
                 Bot.StartReceiving<TelegramHandler>(cancellationToken);
                 await Bot.GetMeAsync();
-                Log.Information("Getting admins");
-                Admins = await Bot.GetChatAdministratorsAsync(config.PrimaryGroup);
                 Log.Information("Starting SSTV Spy");
                 StartSstvSpy(config);
             }
@@ -62,9 +59,25 @@ namespace SatcomPiratesBot
             try
             {
                 var member = await botClient.GetChatMemberAsync(PrimaryGroup, from.Id);
+                Log.Information("Status is {Status}", member.Status);
                 valid = member.Status == ChatMemberStatus.Administrator
                     || member.Status == ChatMemberStatus.Creator
-                    || member.Status == ChatMemberStatus.Member;
+                    || member.Status == ChatMemberStatus.Member;                
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Can't check membership");
+            }
+            return valid;
+        }
+        public static async Task<bool> IsAdmin(this User from, ITelegramBotClient botClient)
+        {
+            var valid = false;
+            try
+            {
+                var member = await botClient.GetChatMemberAsync(PrimaryGroup, from.Id);
+                valid = member.Status == ChatMemberStatus.Creator 
+                    || (member.Status == ChatMemberStatus.Administrator && member.CanRestrictMembers == true);
             }
             catch (Exception ex)
             {
@@ -74,10 +87,11 @@ namespace SatcomPiratesBot
         }
         public static async Task SendInlineKeyboard(this ITelegramBotClient bot, ChatId chat, User user)
         {
+            var isAdmin = await user.IsAdmin(bot);
             await bot.SendTextMessageAsync(
                 chatId: chat,
                 text: "Select an action / Выберите действие",
-                replyMarkup: new InlineKeyboardMarkup(InlineKeyboard(user)),
+                replyMarkup: new InlineKeyboardMarkup(InlineKeyboard(user, isAdmin)),
                 disableNotification: true
             );
 
@@ -117,7 +131,7 @@ namespace SatcomPiratesBot
             }
         }
 
-        public static IEnumerable<IEnumerable<InlineKeyboardButton>> InlineKeyboard(User user)
+        public static IEnumerable<IEnumerable<InlineKeyboardButton>> InlineKeyboard(User user, bool isAdmin)
         {
             // first row
             yield return new[]            {
@@ -141,7 +155,7 @@ namespace SatcomPiratesBot
                     {
                         WithUrl("📻 WebSDR от @Nano_VHF", "http://sdr.rlspb.ru:3000/")
                     };
-            if (user.IsAdmin())
+            if (isAdmin)
             {
                 yield return new[] {
                     WithCallbackData("Управление станцией", Qyt)
@@ -153,9 +167,7 @@ namespace SatcomPiratesBot
             //}
 
         }
-
-        public static bool IsAdmin(this User user) => Admins.Any(x => x.User.Id == user.Id);
-
+        
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> QytKeyboard()
         {
             var stepsToDisableTmr = Menu + Menu + Up + Menu + Exit;
