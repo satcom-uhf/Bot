@@ -53,9 +53,9 @@ namespace SatcomPiratesBot
                             await Sorry(botClient, message.Chat);
                         }
                     }
-                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && isAdmin)
+                    else if (callbackQuery.Data.StartsWith(TelegramCommands.GM360) && isAdmin)
                     {
-                        await HandleQyt(botClient, callbackQuery);
+                        await HandleGM360(botClient, callbackQuery);
                     }
                     else if (callbackQuery.Data == TelegramCommands.Tle)
                     {
@@ -120,16 +120,12 @@ namespace SatcomPiratesBot
         {
             await botClient.SendTextMessageAsync(chat, "Sorry. You are not member of Satcom Pirates. /  Сожалеем, но вы не являетесь членом Satcom Pirates.");
         }
-        private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)
+        private async Task HandleGM360(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
             try
             {
-                var commands = callbackQuery.Data.Replace(TelegramCommands.Qyt, "");
-                foreach (var cmd in commands)
-                {
-                    Transmitter.ComPort.WriteLine(cmd.ToString());
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
-                }
+                var command = callbackQuery.Data.Replace(TelegramCommands.GM360, "");
+                Transmitter.ComPort.WriteLine(command);
                 await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
                 await SendRadioScreen(botClient,
                     callbackQuery.Message,

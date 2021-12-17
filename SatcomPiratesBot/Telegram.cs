@@ -15,7 +15,7 @@ namespace SatcomPiratesBot
 {
     using static InlineKeyboardButton;
     using static TelegramCommands;
-    using static QytCommands;
+    using static GM360Commands;
     static class Telegram
     {
         private static TelegramBotClient Bot;
@@ -158,7 +158,7 @@ namespace SatcomPiratesBot
             if (isAdmin)
             {
                 yield return new[] {
-                    WithCallbackData("Управление станцией", Qyt)
+                    WithCallbackData("Управление станцией", GM360)
                 };
             }
             //new []
@@ -170,31 +170,27 @@ namespace SatcomPiratesBot
         
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> QytKeyboard()
         {
-            var stepsToDisableTmr = Menu + Menu + Up + Menu + Exit;
-            var stepsToEnableTmr = Menu + Menu + Down + Menu + Exit;
             // first row
-            var voxActive = Transmitter.Vox.Running;
-            yield return new[]
-            {
-                WithCallbackData(voxActive?"Выключить VOX":"Включить VOX", voxActive?DisableVox:EnableVox)
-            };
+            //var voxActive = Transmitter.Vox.Running;
+            //yield return new[]
+            //{
+            //    WithCallbackData(voxActive?"Выключить VOX":"Включить VOX", voxActive?DisableVox:EnableVox)
+            //};
             yield return new[]            {
-                        WithCallbackData("🔼   Up", $"{Qyt}{Up}"),
-                        WithCallbackData("✅ Menu", $"{Qyt}{Menu}")
-                    };
-            yield return new[]
-                    {
-                        WithCallbackData("🔽 Down", $"{Qyt}{Down}"),
-                        WithCallbackData("🔠 Exit", $"{Qyt}{Exit}")
-                    };
+                        WithCallbackData("P1", $"{GM360}{P1}"),
+                        WithCallbackData("⎋", $"{GM360}{Exit}"),
+                        WithCallbackData("🔼", $"{GM360}{Up}"),
+                        WithCallbackData("✅", $"{GM360}{Ok}"),
+                        WithCallbackData("P3", $"{GM360}{P3}"),
 
-            yield return new[]
-                    {
-                        WithCallbackData("(!)Отключить TMR", $"{Qyt}{stepsToDisableTmr}"),
                     };
             yield return new[]
                     {
-                        WithCallbackData("(!)Включить TMR",$"{Qyt}{stepsToEnableTmr}"),
+                        WithCallbackData("P2", $"{GM360}{P1}"),
+                        WithCallbackData("◀️", $"{GM360}{Left}"),
+                        WithCallbackData("🔽", $"{GM360}{Down}"),
+                        WithCallbackData("▶️ ", $"{GM360}{Right}"),
+                        WithCallbackData("P4", $"{GM360}{P4}")
                     };
             yield return new[]
                    {
