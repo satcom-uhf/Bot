@@ -244,7 +244,7 @@ namespace SatcomPiratesBot
                     Transmitter.Vox.Stop();
                 }
             };
-            DTMF.StartDetection(Config);
+            // DTMF.StartDetection(Config);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
         }
@@ -299,9 +299,11 @@ namespace SatcomPiratesBot
                 Transmitter.ComPort.DataReceived += (s, e) =>
                 {
                     var data = Transmitter.ComPort.ReadExisting();
+                    Invoke(new Action(() => activityLabel.Text = data));
+                    return;
                     if (data.Contains("activity"))
                     {
-                        Invoke(new Action(() => activityLabel.Text = SQUELCH_OPEN));
+                        Invoke(new Action(() => activityLabel.Text = data));
                         Transmitter.ChannelBusy = true;
                         handleActive();
                         RecordSoundIfNeed();

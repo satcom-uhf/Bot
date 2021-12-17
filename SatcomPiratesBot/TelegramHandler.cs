@@ -11,6 +11,7 @@ using OpenCvSharp.Extensions;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Linq;
+using Telegram.Bot.Exceptions;
 
 namespace SatcomPiratesBot
 {
@@ -82,7 +83,7 @@ namespace SatcomPiratesBot
                         await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     msg,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
                     }
                     else if (callbackQuery.Data == TelegramCommands.DisableVox)
@@ -92,7 +93,7 @@ namespace SatcomPiratesBot
                         await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     msg,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
                     }
                 }
@@ -125,16 +126,29 @@ namespace SatcomPiratesBot
             try
             {
                 var command = callbackQuery.Data.Replace(TelegramCommands.GM360, "");
-                Transmitter.ComPort.WriteLine(command);
-                await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
+                Log.Information($"SEND:{command}");
+                Transmitter.ComPort.Write(command);
+                await Task.Delay(TimeSpan.FromMilliseconds(2000)); // let's wait a bit
                 await SendRadioScreen(botClient,
                     callbackQuery.Message,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
+            }
+            catch(MessageIsNotModifiedException notModified)
+            {
+                Log.Error(notModified, "Screen was not updated");
+                try
+                {
+                    await SendRadioScreen(botClient,
+                        callbackQuery.Message,
+                        new InlineKeyboardMarkup(Telegram.RadioKeyboard())
+                        );
+                }
+                catch { }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Cannot handle QYT command");
+                Log.Error(ex, "Cannot handle command");
                 await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, "Oops...command error =( ");
             }
         }

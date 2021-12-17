@@ -168,7 +168,7 @@ namespace SatcomPiratesBot
 
         }
         
-        public static IEnumerable<IEnumerable<InlineKeyboardButton>> QytKeyboard()
+        public static IEnumerable<IEnumerable<InlineKeyboardButton>> RadioKeyboard()
         {
             // first row
             //var voxActive = Transmitter.Vox.Running;
