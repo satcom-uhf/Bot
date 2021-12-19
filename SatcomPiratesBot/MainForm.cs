@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -33,8 +34,8 @@ namespace SatcomPiratesBot
 
         private void LoadPorts()
         {
-            outComPortsBox.Items.Clear();
-            outComPortsBox.Items.AddRange(SerialPort.GetPortNames());
+            comPortsBox.Items.Clear();
+            comPortsBox.Items.AddRange(SerialPort.GetPortNames());
         }
 
         private bool closingHack = true;
@@ -47,6 +48,7 @@ namespace SatcomPiratesBot
                 closingHack = false;
                 SaveSettings();
                 Close();
+                Transmitter.ComPort?.Close();
             }
         }
 
@@ -63,7 +65,7 @@ namespace SatcomPiratesBot
             {
                 // use default values
             }
-            
+
             telegramTokenBox.Text = Config.TelegramToken;
             n2yoApiKeyBox.Text = Config.N2YOApiKey;
             sstvPathBox.Text = Config.SSTVPath;
@@ -91,7 +93,7 @@ namespace SatcomPiratesBot
             }
         }
         #endregion
-        
+
         private void apiKeysSaveButton_Click(object sender, EventArgs e) => SaveSettings();
 
         private void setSstvPathButton_Click(object sender, EventArgs e)
@@ -147,12 +149,12 @@ namespace SatcomPiratesBot
 
         private void connectComPortButton_Click(object sender, EventArgs e)
         {
-            var comPortState = !outComPortsBox.Enabled;
+            var comPortState = !comPortsBox.Enabled;
             if (!comPortState)
             {
                 OpenComPort();
                 connectComPortButton.Text = "Disconnect;";
-                outComPortsBox.Enabled = false;
+                comPortsBox.Enabled = false;
                 refreshPortsButton.Enabled = false;
             }
             else
@@ -160,7 +162,7 @@ namespace SatcomPiratesBot
                 Transmitter.ComPort?.Close();
                 connectComPortButton.Text = "Connect";
                 refreshPortsButton.Enabled = true;
-                outComPortsBox.Enabled = true;
+                comPortsBox.Enabled = true;
             }
         }
 
@@ -168,9 +170,21 @@ namespace SatcomPiratesBot
         private const string SQUELCH_OPEN = "Squelch opened";
         private const string ACTIVITY = "Activity";
         private const string SILENCE = "Silence";
+
+        Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
+        private void RedrawScanState()
+        {
+            scanList.Items.Clear();
+            foreach (var scanRow in scanState.OrderByDescending(x => x.Value))
+            {
+                scanList.Items.Add(new ListViewItem(scanRow.Key) { BackColor = Color.Black, ForeColor = Color.GreenYellow });
+            }
+        }
+        SBEPSniffer sniffer = new SBEPSniffer();
+        Task monitor;
         private void OpenComPort()
         {
-            var portName = outComPortsBox.SelectedItem?.ToString();
+            var portName = comPortsBox.SelectedItem?.ToString();
             handleActive = Debounce(() =>
              {
                  if (Transmitter.ChannelBusy)
@@ -184,37 +198,66 @@ namespace SatcomPiratesBot
              });
             if (!string.IsNullOrEmpty(portName))
             {
-                Transmitter.ComPort = new SerialPort(portName);
-                Transmitter.ComPort.BaudRate = 9600;
-                Transmitter.ComPort.DataReceived += (s, e) =>
+                rawLog.Text = "";
+                sniffer.RawUpdate += (s, e) => Invoke(new Action(() => rawLog.Text = e + "\r\n" + rawLog.Text));
+                sniffer.DisplayChange += (s, e) => Invoke(new Action(() => { scanState[e] = DateTime.Now; RedrawScanState(); }));
+                sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
                 {
-                    var data = Transmitter.ComPort.ReadExisting();
-                    Invoke(new Action(() => activityLabel.Text = data));
-                    return;
-                    if (data.Contains("activity"))
+                    RedrawScanState();
+                    if (scanList.Items.Count > 0)
                     {
-                        Invoke(new Action(() => activityLabel.Text = data));
-                        Transmitter.ChannelBusy = true;
-                        handleActive();
-                        RecordSoundIfNeed();
+                        scanList.Items[0].BackColor = busy ? Color.OrangeRed : Color.Black;
                     }
-                    else if (data.Contains("silence"))
-                    {
-                        Transmitter.ChannelBusy = false;
-                        Invoke(new Action(() =>
-                        {
-                            if (activityLabel.Text == SQUELCH_OPEN)
-                            {
-                                PttClickCounter++;
-                            }
-                            activityLabel.Text = SILENCE;
-                        }));
-                    }
-                };
+                }));
+                Transmitter.ComPort = new SerialPort(portName, 115200);
+                //Transmitter.ComPort.DataReceived += (s, e) =>
+                //{
+                //    var data = Transmitter.ComPort.ReadExisting();
+                //    Invoke(new Action(() => activityLabel.Text = data));
+                //    return;
+                //    if (data.Contains("activity"))
+                //    {
+                //        Invoke(new Action(() => activityLabel.Text = data));
+                //        Transmitter.ChannelBusy = true;
+                //        handleActive();
+                //        RecordSoundIfNeed();
+                //    }
+                //    else if (data.Contains("silence"))
+                //    {
+                //        Transmitter.ChannelBusy = false;
+                //        Invoke(new Action(() =>
+                //        {
+                //            if (activityLabel.Text == SQUELCH_OPEN)
+                //            {
+                //                PttClickCounter++;
+                //            }
+                //            activityLabel.Text = SILENCE;
+                //        }));
+                //    }
+                //};
                 Transmitter.ComPort.Open();
+                monitor = Task.Run(() =>
+                {
+                    sniffer.Subscribe(GetBytes(Transmitter.ComPort));
+                });
             }
         }
-
+        private static IEnumerable<byte[]> GetBytes(SerialPort port)
+        {
+            List<byte> batch = new();
+            while (port.IsOpen)
+            {
+                var b = port.BaseStream.ReadByte();
+                var byteVal = (byte)b;
+                batch.Add(byteVal);
+                if (b == -1) { yield break; }
+                if (byteVal == 0x50)
+                {
+                    yield return batch.ToArray();
+                    batch.Clear();
+                }
+            }
+        }
         private void RecordSoundIfNeed()
         {
             var diff = DateTime.Now - dtmfDetected;

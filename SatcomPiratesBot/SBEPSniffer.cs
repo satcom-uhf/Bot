@@ -10,9 +10,9 @@ namespace SatcomPiratesBot
     {
         private Dictionary<string, string> lines = new Dictionary<string, string>();
 
-        private bool squelchOpened;
-        public string Display => $"{(squelchOpened ? "BUSY" : "RX")} {string.Join("\r\n", lines.Values)}";
-        public event EventHandler<string> Updated;
+        public event EventHandler<bool> SquelchUpdate;
+        public event EventHandler<string> DisplayChange;
+        public event EventHandler<string> RawUpdate;
         public void Subscribe(IEnumerable<byte[]> bytesSeq)
         {
             try
@@ -22,11 +22,11 @@ namespace SatcomPiratesBot
                     var bytesAsString = BitConverter.ToString(bytes);
                     if (OpenSquelch(bytesAsString))
                     {
-                        squelchOpened = true;
+                        SquelchUpdate?.Invoke(this, true);
                     }
                     else if (CloseSquelch(bytesAsString))
                     {
-                        squelchOpened = false;
+                        SquelchUpdate?.Invoke(this, false);
                     }
                     else if (DisplayUpdate(bytesAsString))
                     {
@@ -34,14 +34,16 @@ namespace SatcomPiratesBot
                         var addr = bytesAsString.Substring(startIndex + DisplayPrefix.Length - 1, 5);
                         var subArray = bytes.Skip(6).Take(bytes.Length - 8).ToArray();
                         lines[addr] = ExcludeSpecificChars(subArray);
+                        DisplayChange?.Invoke(this, string.Join("\r\n", lines.Values));
                     }
                     var usefulChars = ExcludeSpecificChars(bytes);
-                    Updated?.Invoke(this, $"{bytesAsString} {usefulChars}");
+                    RawUpdate?.Invoke(this, $"{bytesAsString} [{usefulChars}]");
                 }
 
             }
             catch (Exception ex)
             {
+                Serilog.Log.Error(ex, "Cannot handle bytes");
             }
         }
 

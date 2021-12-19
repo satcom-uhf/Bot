@@ -31,17 +31,14 @@ namespace SatcomPiratesBot
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.rawLog = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.inComPortsBox = new System.Windows.Forms.ComboBox();
-            this.refreshInPortsButton = new System.Windows.Forms.Button();
-            this.connectInputPort = new System.Windows.Forms.Button();
+            this.scanList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.outComPortsBox = new System.Windows.Forms.ComboBox();
+            this.comPortsBox = new System.Windows.Forms.ComboBox();
             this.refreshPortsButton = new System.Windows.Forms.Button();
             this.connectComPortButton = new System.Windows.Forms.Button();
             this.settingsPage = new System.Windows.Forms.TabPage();
@@ -62,20 +59,21 @@ namespace SatcomPiratesBot
             this.label8 = new System.Windows.Forms.Label();
             this.telegramTokenBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.logTab = new System.Windows.Forms.TabPage();
+            this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).BeginInit();
             this.screenPanel.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
+            this.logTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,6 +81,7 @@ namespace SatcomPiratesBot
             // 
             this.tabs.Controls.Add(this.radioPage);
             this.tabs.Controls.Add(this.settingsPage);
+            this.tabs.Controls.Add(this.logTab);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
@@ -93,10 +92,9 @@ namespace SatcomPiratesBot
             // 
             // radioPage
             // 
-            this.radioPage.Controls.Add(this.textBox1);
+            this.radioPage.Controls.Add(this.rawLog);
             this.radioPage.Controls.Add(this.groupBox1);
             this.radioPage.Controls.Add(this.screenPanel);
-            this.radioPage.Controls.Add(this.groupBox3);
             this.radioPage.Controls.Add(this.groupBox2);
             this.radioPage.Location = new System.Drawing.Point(4, 24);
             this.radioPage.Name = "radioPage";
@@ -106,13 +104,13 @@ namespace SatcomPiratesBot
             this.radioPage.Text = "Radio integration";
             this.radioPage.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // rawLog
             // 
-            this.textBox1.Location = new System.Drawing.Point(335, 150);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(273, 215);
-            this.textBox1.TabIndex = 27;
+            this.rawLog.Location = new System.Drawing.Point(335, 150);
+            this.rawLog.Multiline = true;
+            this.rawLog.Name = "rawLog";
+            this.rawLog.Size = new System.Drawing.Size(273, 215);
+            this.rawLog.TabIndex = 27;
             // 
             // groupBox1
             // 
@@ -155,53 +153,27 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
-            this.screenPanel.Controls.Add(this.listBox1);
+            this.screenPanel.Controls.Add(this.scanList);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
-            this.screenPanel.Size = new System.Drawing.Size(320, 215);
+            this.screenPanel.Size = new System.Drawing.Size(321, 215);
             this.screenPanel.TabIndex = 25;
             // 
-            // groupBox3
+            // scanList
             // 
-            this.groupBox3.Controls.Add(this.inComPortsBox);
-            this.groupBox3.Controls.Add(this.refreshInPortsButton);
-            this.groupBox3.Controls.Add(this.connectInputPort);
-            this.groupBox3.Location = new System.Drawing.Point(8, 103);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(320, 41);
-            this.groupBox3.TabIndex = 24;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "In COM port";
-            // 
-            // inComPortsBox
-            // 
-            this.inComPortsBox.FormattingEnabled = true;
-            this.inComPortsBox.Location = new System.Drawing.Point(6, 15);
-            this.inComPortsBox.Name = "inComPortsBox";
-            this.inComPortsBox.Size = new System.Drawing.Size(166, 23);
-            this.inComPortsBox.TabIndex = 1;
-            // 
-            // refreshInPortsButton
-            // 
-            this.refreshInPortsButton.Location = new System.Drawing.Point(178, 15);
-            this.refreshInPortsButton.Name = "refreshInPortsButton";
-            this.refreshInPortsButton.Size = new System.Drawing.Size(56, 23);
-            this.refreshInPortsButton.TabIndex = 3;
-            this.refreshInPortsButton.Text = "Refresh";
-            this.refreshInPortsButton.UseVisualStyleBackColor = true;
-            // 
-            // connectInputPort
-            // 
-            this.connectInputPort.Location = new System.Drawing.Point(239, 15);
-            this.connectInputPort.Name = "connectInputPort";
-            this.connectInputPort.Size = new System.Drawing.Size(75, 23);
-            this.connectInputPort.TabIndex = 4;
-            this.connectInputPort.Text = "Connect";
-            this.connectInputPort.UseVisualStyleBackColor = true;
+            this.scanList.BackColor = System.Drawing.Color.Black;
+            this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.scanList.HideSelection = false;
+            this.scanList.Location = new System.Drawing.Point(6, 4);
+            this.scanList.Name = "scanList";
+            this.scanList.Size = new System.Drawing.Size(308, 208);
+            this.scanList.TabIndex = 0;
+            this.scanList.UseCompatibleStateImageBehavior = false;
+            this.scanList.View = System.Windows.Forms.View.List;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.outComPortsBox);
+            this.groupBox2.Controls.Add(this.comPortsBox);
             this.groupBox2.Controls.Add(this.refreshPortsButton);
             this.groupBox2.Controls.Add(this.connectComPortButton);
             this.groupBox2.Location = new System.Drawing.Point(8, 56);
@@ -209,15 +181,15 @@ namespace SatcomPiratesBot
             this.groupBox2.Size = new System.Drawing.Size(320, 41);
             this.groupBox2.TabIndex = 23;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Out COM port";
+            this.groupBox2.Text = "COM port";
             // 
-            // outComPortsBox
+            // comPortsBox
             // 
-            this.outComPortsBox.FormattingEnabled = true;
-            this.outComPortsBox.Location = new System.Drawing.Point(6, 15);
-            this.outComPortsBox.Name = "outComPortsBox";
-            this.outComPortsBox.Size = new System.Drawing.Size(166, 23);
-            this.outComPortsBox.TabIndex = 1;
+            this.comPortsBox.FormattingEnabled = true;
+            this.comPortsBox.Location = new System.Drawing.Point(6, 15);
+            this.comPortsBox.Name = "comPortsBox";
+            this.comPortsBox.Size = new System.Drawing.Size(166, 23);
+            this.comPortsBox.TabIndex = 1;
             // 
             // refreshPortsButton
             // 
@@ -409,6 +381,25 @@ namespace SatcomPiratesBot
             this.label1.TabIndex = 0;
             this.label1.Text = "Telegram Bot Token";
             // 
+            // logTab
+            // 
+            this.logTab.Controls.Add(this.gridLog1);
+            this.logTab.Location = new System.Drawing.Point(4, 24);
+            this.logTab.Name = "logTab";
+            this.logTab.Padding = new System.Windows.Forms.Padding(3);
+            this.logTab.Size = new System.Drawing.Size(616, 371);
+            this.logTab.TabIndex = 2;
+            this.logTab.Text = "Log";
+            this.logTab.UseVisualStyleBackColor = true;
+            // 
+            // gridLog1
+            // 
+            this.gridLog1.Location = new System.Drawing.Point(4, 6);
+            this.gridLog1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gridLog1.Name = "gridLog1";
+            this.gridLog1.Size = new System.Drawing.Size(605, 248);
+            this.gridLog1.TabIndex = 0;
+            // 
             // runTelegramButton
             // 
             this.runTelegramButton.Location = new System.Drawing.Point(448, 406);
@@ -447,18 +438,6 @@ namespace SatcomPiratesBot
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
-            // listBox1
-            // 
-            this.listBox1.BackColor = System.Drawing.Color.Black;
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox1.ForeColor = System.Drawing.Color.Chartreuse;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(6, 6);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(308, 135);
-            this.listBox1.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -482,10 +461,10 @@ namespace SatcomPiratesBot
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).EndInit();
             this.screenPanel.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
+            this.logTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -508,7 +487,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Button testTelegramButton;
         private System.Windows.Forms.Button runTelegramButton;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ComboBox outComPortsBox;
+        private System.Windows.Forms.ComboBox comPortsBox;
         private System.Windows.Forms.Button refreshPortsButton;
         private System.Windows.Forms.Button connectComPortButton;
         private System.Windows.Forms.Label activityLabel;
@@ -522,16 +501,14 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox mainGroupBox;
         private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ComboBox inComPortsBox;
-        private System.Windows.Forms.Button refreshInPortsButton;
-        private System.Windows.Forms.Button connectInputPort;
         private System.Windows.Forms.Panel screenPanel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown httpPortNumberBox;
         private System.Windows.Forms.Button startWebCamServerButton;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.TextBox rawLog;
+        private System.Windows.Forms.ListView scanList;
+        private System.Windows.Forms.TabPage logTab;
+        private Serilog.Sinks.WinForms.GridLog gridLog1;
     }
 }
 
