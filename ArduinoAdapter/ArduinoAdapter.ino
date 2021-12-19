@@ -1,3 +1,6 @@
+#include <SoftwareSerial.h>
+ 
+SoftwareSerial bus(2, 3);
 void setup()
 {
     int i = 5;
@@ -8,16 +11,13 @@ void setup()
         i++;
     }
     digitalWrite(8, LOW);
-    Serial.begin(9600);
+    Serial.begin(115200);
+    bus.begin(9600);
+    bus.listen();
 }
 
 void click(int rowV, int colV, bool longClick)
 {
-    if (longClick)
-        Serial.print("L ");
-    Serial.print(rowV);
-    Serial.print(colV);
-    Serial.print("\r\n");
     bool levelR = rowV == 8;
     digitalWrite(rowV, levelR);
     digitalWrite(colV, LOW);
@@ -43,6 +43,10 @@ void Check(String expected, String received, int row, int col)
 
 void loop()
 {
+   while (bus.available()) {
+    byte SBEP_byte = bus.read();
+    Serial.write(SBEP_byte);
+   }
     if (Serial.available())
     {
         String cmd = Serial.readString();
