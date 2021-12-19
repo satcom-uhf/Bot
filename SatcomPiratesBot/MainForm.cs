@@ -177,14 +177,25 @@ namespace SatcomPiratesBot
             scanList.Items.Clear();
             foreach (var scanRow in scanState.OrderByDescending(x => x.Value))
             {
-                scanList.Items.Add(new ListViewItem(scanRow.Key) { BackColor = Color.Black, ForeColor = Color.GreenYellow });
+                if (scanRow.Key.ToLower().Contains("скан"))
+                { continue; }
+
+                var diff = DateTime.Now - scanRow.Value;
+                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "active";
+                scanList.Items.Add(new ListViewItem($"{scanRow.Key} {diffstr}")
+                {
+                    BackColor = Color.Black,
+                    ForeColor = Color.GreenYellow
+                });
             }
         }
         SBEPSniffer sniffer = new SBEPSniffer();
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         Task monitor;
         private void OpenComPort()
         {
             var portName = comPortsBox.SelectedItem?.ToString();
+
             handleActive = Debounce(() =>
              {
                  if (Transmitter.ChannelBusy)
@@ -198,6 +209,9 @@ namespace SatcomPiratesBot
              });
             if (!string.IsNullOrEmpty(portName))
             {
+                timer.Interval = 10000;
+                timer.Tick += (s, e) => RedrawScanState();
+                timer.Start();
                 rawLog.Text = "";
                 sniffer.RawUpdate += (s, e) => Invoke(new Action(() => rawLog.Text = e + "\r\n" + rawLog.Text));
                 sniffer.DisplayChange += (s, e) => Invoke(new Action(() => { scanState[e] = DateTime.Now; RedrawScanState(); }));
@@ -309,6 +323,11 @@ namespace SatcomPiratesBot
             startWebCamServerButton.Enabled = false;
             streamingServer = new ImageStreamingServer(screenPanel);
             streamingServer.Start(Convert.ToInt32(httpPortNumberBox.Value));
+        }
+
+        private void scanButton_Click(object sender, EventArgs e)
+        {
+            Transmitter.ComPort?.Write("p3");
         }
     }
 }

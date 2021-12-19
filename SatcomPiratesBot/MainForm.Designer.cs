@@ -31,7 +31,6 @@ namespace SatcomPiratesBot
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
-            this.rawLog = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
@@ -66,6 +65,8 @@ namespace SatcomPiratesBot
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.rawLog = new System.Windows.Forms.TextBox();
+            this.scanButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -92,6 +93,7 @@ namespace SatcomPiratesBot
             // 
             // radioPage
             // 
+            this.radioPage.Controls.Add(this.scanButton);
             this.radioPage.Controls.Add(this.rawLog);
             this.radioPage.Controls.Add(this.groupBox1);
             this.radioPage.Controls.Add(this.screenPanel);
@@ -103,14 +105,6 @@ namespace SatcomPiratesBot
             this.radioPage.TabIndex = 0;
             this.radioPage.Text = "Radio integration";
             this.radioPage.UseVisualStyleBackColor = true;
-            // 
-            // rawLog
-            // 
-            this.rawLog.Location = new System.Drawing.Point(335, 150);
-            this.rawLog.Multiline = true;
-            this.rawLog.Name = "rawLog";
-            this.rawLog.Size = new System.Drawing.Size(273, 215);
-            this.rawLog.TabIndex = 27;
             // 
             // groupBox1
             // 
@@ -438,6 +432,24 @@ namespace SatcomPiratesBot
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
+            // rawLog
+            // 
+            this.rawLog.Location = new System.Drawing.Point(335, 150);
+            this.rawLog.Multiline = true;
+            this.rawLog.Name = "rawLog";
+            this.rawLog.Size = new System.Drawing.Size(273, 215);
+            this.rawLog.TabIndex = 27;
+            // 
+            // scanButton
+            // 
+            this.scanButton.Location = new System.Drawing.Point(384, 25);
+            this.scanButton.Name = "scanButton";
+            this.scanButton.Size = new System.Drawing.Size(75, 23);
+            this.scanButton.TabIndex = 28;
+            this.scanButton.Text = "Scan";
+            this.scanButton.UseVisualStyleBackColor = true;
+            this.scanButton.Click += new System.EventHandler(this.scanButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -505,10 +517,11 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown httpPortNumberBox;
         private System.Windows.Forms.Button startWebCamServerButton;
-        private System.Windows.Forms.TextBox rawLog;
         private System.Windows.Forms.ListView scanList;
         private System.Windows.Forms.TabPage logTab;
         private Serilog.Sinks.WinForms.GridLog gridLog1;
+        private System.Windows.Forms.TextBox rawLog;
+        private System.Windows.Forms.Button scanButton;
     }
 }
 
