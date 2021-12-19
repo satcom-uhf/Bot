@@ -51,13 +51,11 @@ namespace SatcomPiratesBot
                     };
                     waveInStream.StartRecording();
                     await Task.Delay(TimeSpan.FromSeconds(5));
-                    var frame = MainForm.Mask.Resize();
                     await Task.Delay(TimeSpan.FromSeconds(5));
                     waveInStream.StopRecording();
                     try
                     {
-                        var freq = frame.RecognizeImage();
-                        return (true, freq);
+                        return (true, "");
                     }
                     catch
                     {

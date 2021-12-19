@@ -15,14 +15,11 @@
     <PackageReference Include="Flurl.Http" Version="3.2.0" />
     <PackageReference Include="NAudio.Lame" Version="1.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="OpenCvSharp4.Windows" Version="4.5.3.20210817" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.WinForms" Version="2.3.1" />
     <PackageReference Include="System.IO.Ports" Version="5.0.1" />
     <PackageReference Include="Telegram.Bot" Version="16.0.2" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="0.2.0" />
-    <PackageReference Include="Tesseract" Version="4.1.1" />
-    <PackageReference Include="Tesseract.Drawing" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,9 +42,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Satellites.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\eng.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
