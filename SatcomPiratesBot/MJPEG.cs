@@ -7,12 +7,6 @@ namespace SatcomPiratesBot
 {
     public class MJPEG : IDisposable
     {
-
-        private static byte[] CRLF = new byte[] { 13, 10 };
-        private static byte[] EmptyLine = new byte[] { 13, 10, 13, 10 };
-
-        private string _Boundary;
-
         public MJPEG(Stream stream)
             : this(stream, "--boundary")
         {

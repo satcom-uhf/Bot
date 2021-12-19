@@ -36,7 +36,6 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.inComPortsBox = new System.Windows.Forms.ComboBox();
             this.refreshInPortsButton = new System.Windows.Forms.Button();
@@ -68,6 +67,7 @@ namespace SatcomPiratesBot
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -131,7 +131,7 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton.Name = "startWebCamServerButton";
             this.startWebCamServerButton.Size = new System.Drawing.Size(75, 23);
             this.startWebCamServerButton.TabIndex = 5;
-            this.startWebCamServerButton.Text = "Connect";
+            this.startWebCamServerButton.Text = "Start";
             this.startWebCamServerButton.UseVisualStyleBackColor = true;
             this.startWebCamServerButton.Click += new System.EventHandler(this.startWebCamServerButton_Click);
             // 
@@ -155,21 +155,11 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
-            this.screenPanel.Controls.Add(this.label2);
+            this.screenPanel.Controls.Add(this.listBox1);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
             this.screenPanel.Size = new System.Drawing.Size(320, 215);
             this.screenPanel.TabIndex = 25;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.Chartreuse;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 15);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Test Label";
             // 
             // groupBox3
             // 
@@ -457,6 +447,18 @@ namespace SatcomPiratesBot
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
+            // listBox1
+            // 
+            this.listBox1.BackColor = System.Drawing.Color.Black;
+            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox1.ForeColor = System.Drawing.Color.Chartreuse;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 15;
+            this.listBox1.Location = new System.Drawing.Point(6, 6);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(308, 135);
+            this.listBox1.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -480,7 +482,6 @@ namespace SatcomPiratesBot
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).EndInit();
             this.screenPanel.ResumeLayout(false);
-            this.screenPanel.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.settingsPage.ResumeLayout(false);
@@ -530,7 +531,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.NumericUpDown httpPortNumberBox;
         private System.Windows.Forms.Button startWebCamServerButton;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 
