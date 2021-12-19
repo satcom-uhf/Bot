@@ -258,5 +258,14 @@ namespace SatcomPiratesBot
         {
             Vox.Sensitivity = trackBar1.Value;
         }
+
+        private ImageStreamingServer streamingServer;
+        private void startWebCamServerButton_Click(object sender, EventArgs e)
+        {
+            startWebCamServerButton.Text = "Started";
+            startWebCamServerButton.Enabled = false;
+            streamingServer = new ImageStreamingServer(screenPanel);
+            streamingServer.Start(Convert.ToInt32(httpPortNumberBox.Value));
+        }
     }
 }

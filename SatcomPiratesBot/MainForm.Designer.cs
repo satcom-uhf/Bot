@@ -31,10 +31,12 @@ namespace SatcomPiratesBot
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.inComPortsBox = new System.Windows.Forms.ComboBox();
             this.refreshInPortsButton = new System.Windows.Forms.Button();
@@ -66,11 +68,11 @@ namespace SatcomPiratesBot
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).BeginInit();
+            this.screenPanel.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
@@ -104,6 +106,14 @@ namespace SatcomPiratesBot
             this.radioPage.Text = "Radio integration";
             this.radioPage.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(335, 150);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(273, 215);
+            this.textBox1.TabIndex = 27;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.startWebCamServerButton);
@@ -123,6 +133,7 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton.TabIndex = 5;
             this.startWebCamServerButton.Text = "Connect";
             this.startWebCamServerButton.UseVisualStyleBackColor = true;
+            this.startWebCamServerButton.Click += new System.EventHandler(this.startWebCamServerButton_Click);
             // 
             // httpPortNumberBox
             // 
@@ -144,10 +155,21 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
+            this.screenPanel.Controls.Add(this.label2);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
             this.screenPanel.Size = new System.Drawing.Size(320, 215);
             this.screenPanel.TabIndex = 25;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Chartreuse;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 15);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Test Label";
             // 
             // groupBox3
             // 
@@ -435,14 +457,6 @@ namespace SatcomPiratesBot
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(335, 150);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(273, 215);
-            this.textBox1.TabIndex = 27;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -465,6 +479,8 @@ namespace SatcomPiratesBot
             this.radioPage.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).EndInit();
+            this.screenPanel.ResumeLayout(false);
+            this.screenPanel.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.settingsPage.ResumeLayout(false);
@@ -514,6 +530,7 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.NumericUpDown httpPortNumberBox;
         private System.Windows.Forms.Button startWebCamServerButton;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
