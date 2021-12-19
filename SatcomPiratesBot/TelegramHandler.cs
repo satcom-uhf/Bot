@@ -11,6 +11,7 @@ using OpenCvSharp.Extensions;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Linq;
+using Telegram.Bot.Exceptions;
 
 namespace SatcomPiratesBot
 {
@@ -53,9 +54,9 @@ namespace SatcomPiratesBot
                             await Sorry(botClient, message.Chat);
                         }
                     }
-                    else if (callbackQuery.Data.StartsWith(TelegramCommands.Qyt) && isAdmin)
+                    else if (callbackQuery.Data.StartsWith(TelegramCommands.GM360) && isAdmin)
                     {
-                        await HandleQyt(botClient, callbackQuery);
+                        await HandleGM360(botClient, callbackQuery);
                     }
                     else if (callbackQuery.Data == TelegramCommands.Tle)
                     {
@@ -82,7 +83,7 @@ namespace SatcomPiratesBot
                         await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     msg,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
                     }
                     else if (callbackQuery.Data == TelegramCommands.DisableVox)
@@ -92,7 +93,7 @@ namespace SatcomPiratesBot
                         await SendRadioScreen(botClient,
                     callbackQuery.Message.Chat,
                     msg,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
                     }
                 }
@@ -120,25 +121,34 @@ namespace SatcomPiratesBot
         {
             await botClient.SendTextMessageAsync(chat, "Sorry. You are not member of Satcom Pirates. /  Сожалеем, но вы не являетесь членом Satcom Pirates.");
         }
-        private async Task HandleQyt(ITelegramBotClient botClient, CallbackQuery callbackQuery)
+        private async Task HandleGM360(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
             try
             {
-                var commands = callbackQuery.Data.Replace(TelegramCommands.Qyt, "");
-                foreach (var cmd in commands)
-                {
-                    Transmitter.ComPort.WriteLine(cmd.ToString());
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000)); // let's wait a bit
-                }
-                await Task.Delay(TimeSpan.FromMilliseconds(500)); // let's wait a bit
+                var command = callbackQuery.Data.Replace(TelegramCommands.GM360, "");
+                Log.Information($"SEND:{command}");
+                Transmitter.ComPort.Write(command);
+                await Task.Delay(TimeSpan.FromMilliseconds(2000)); // let's wait a bit
                 await SendRadioScreen(botClient,
                     callbackQuery.Message,
-                    new InlineKeyboardMarkup(Telegram.QytKeyboard())
+                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
+            }
+            catch(MessageIsNotModifiedException notModified)
+            {
+                Log.Error(notModified, "Screen was not updated");
+                try
+                {
+                    await SendRadioScreen(botClient,
+                        callbackQuery.Message,
+                        new InlineKeyboardMarkup(Telegram.RadioKeyboard())
+                        );
+                }
+                catch { }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Cannot handle QYT command");
+                Log.Error(ex, "Cannot handle command");
                 await botClient.SendTextMessageAsync(callbackQuery.Message.Chat, "Oops...command error =( ");
             }
         }
