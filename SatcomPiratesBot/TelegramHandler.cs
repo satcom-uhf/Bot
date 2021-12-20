@@ -41,6 +41,11 @@ namespace SatcomPiratesBot
                     var isAdmin = await from.IsAdmin(botClient);
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
+                    try
+                    {
+                        await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message                        
+                    }
+                    catch { }
                     Log.Information("Callback {Data} from {User} ({FirstName},{LastName})", callbackQuery.Data, from, from.FirstName, from.LastName);
                     if (callbackQuery.Data == TelegramCommands.Freq)
                     {
@@ -74,27 +79,7 @@ namespace SatcomPiratesBot
                                 );
                         }
                     }
-                    else if (callbackQuery.Data == TelegramCommands.EnableVox && isAdmin)
-                    {
-                        var TOT = TimeSpan.FromMinutes(15);
-                        Transmitter.Vox.Start(TOT, cancellationToken);
-                        var msg = $"VOX активирован и будет автоматически выключен через {(Transmitter.Vox.StopTime - DateTime.Now).ToString(@"mm\:ss")}";
-                        await SendRadioScreen(botClient,
-                    callbackQuery.Message.Chat,
-                    msg,
-                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
-                    );
-                    }
-                    else if (callbackQuery.Data == TelegramCommands.DisableVox)
-                    {
-                        Transmitter.Vox.Stop();
-                        var msg = $"VOX деактивирован";
-                        await SendRadioScreen(botClient,
-                    callbackQuery.Message.Chat,
-                    msg,
-                    new InlineKeyboardMarkup(Telegram.RadioKeyboard())
-                    );
-                    }
+                    
                 }
                 else if (update.Message is Message message)
                 {
@@ -155,18 +140,11 @@ namespace SatcomPiratesBot
         private async Task HandleFreq(ITelegramBotClient botClient, Message message, User from)
         {
             await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
-            var activity = "";
-
-            if (!string.IsNullOrEmpty(activity))
-            {
-                activity = $"[{activity}] {DateTime.Now - MainForm.LastActivity:hh\\:mm\\:ss} ago";
-                activity = $"Last activity / Последняя активность {activity}\r\nPTT clicks detected / Отшлепов обнаружено: {MainForm.PttClickCounter}";
-            }
             var isAdmin = await from.IsAdmin(botClient);
-            await SendRadioScreen(botClient, message.Chat, activity, new InlineKeyboardMarkup(Telegram.InlineKeyboard(from, isAdmin)));
+            await SendRadioScreen(botClient, message.Chat, new InlineKeyboardMarkup(Telegram.InlineKeyboard(from, isAdmin)));
         }
 
-        private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, string caption, InlineKeyboardMarkup replyMarkup)
+        private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, InlineKeyboardMarkup replyMarkup)
         {
             await botClient.SendTextMessageAsync(
           chat,
@@ -179,27 +157,11 @@ namespace SatcomPiratesBot
         private async Task SendRadioScreen(ITelegramBotClient botClient, Message msg, InlineKeyboardMarkup replyMarkup)
         {
             await botClient.SendTextMessageAsync(
-        msg.Chat,
-         string.Join("\r\n", MainForm.Sniffer.ScanState),
-         disableNotification: true,
-        replyMarkup: replyMarkup
-        );
-            //var screen = MainForm.CurrentFrame.Resize();
-
-            //using (var s = new MemoryStream())
-            //{
-            //    BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
-            //    s.Position = 0;
-            //    await botClient.EditMessageMediaAsync(
-            //  msg.Chat,
-            //  msg.MessageId,
-            //  new InputMediaPhoto(new InputMedia(s, "radioscreen.png")),
-            //  //caption,
-            //  //disableNotification: true,
-            //  replyMarkup: replyMarkup
-            //  );
-            //    return;
-            //}
+                msg.Chat,
+                string.Join("\r\n", MainForm.Sniffer.ScanState),
+                disableNotification: true,
+                replyMarkup: replyMarkup
+                );
         }
     }
 }
