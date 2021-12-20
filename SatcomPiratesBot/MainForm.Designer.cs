@@ -31,6 +31,8 @@ namespace SatcomPiratesBot
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
+            this.scanButton = new System.Windows.Forms.Button();
+            this.rawLog = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
@@ -65,8 +67,6 @@ namespace SatcomPiratesBot
             this.activityLabel = new System.Windows.Forms.Label();
             this.dtmfLabel = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.rawLog = new System.Windows.Forms.TextBox();
-            this.scanButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -105,6 +105,24 @@ namespace SatcomPiratesBot
             this.radioPage.TabIndex = 0;
             this.radioPage.Text = "Radio integration";
             this.radioPage.UseVisualStyleBackColor = true;
+            // 
+            // scanButton
+            // 
+            this.scanButton.Location = new System.Drawing.Point(384, 25);
+            this.scanButton.Name = "scanButton";
+            this.scanButton.Size = new System.Drawing.Size(75, 23);
+            this.scanButton.TabIndex = 28;
+            this.scanButton.Text = "Scan";
+            this.scanButton.UseVisualStyleBackColor = true;
+            this.scanButton.Click += new System.EventHandler(this.scanButton_Click);
+            // 
+            // rawLog
+            // 
+            this.rawLog.Location = new System.Drawing.Point(335, 150);
+            this.rawLog.Multiline = true;
+            this.rawLog.Name = "rawLog";
+            this.rawLog.Size = new System.Drawing.Size(273, 215);
+            this.rawLog.TabIndex = 27;
             // 
             // groupBox1
             // 
@@ -150,7 +168,7 @@ namespace SatcomPiratesBot
             this.screenPanel.Controls.Add(this.scanList);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
-            this.screenPanel.Size = new System.Drawing.Size(321, 215);
+            this.screenPanel.Size = new System.Drawing.Size(320, 200);
             this.screenPanel.TabIndex = 25;
             // 
             // scanList
@@ -160,7 +178,7 @@ namespace SatcomPiratesBot
             this.scanList.HideSelection = false;
             this.scanList.Location = new System.Drawing.Point(6, 4);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(308, 208);
+            this.scanList.Size = new System.Drawing.Size(308, 193);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
@@ -431,24 +449,6 @@ namespace SatcomPiratesBot
             this.trackBar1.TabIndex = 5;
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-            // 
-            // rawLog
-            // 
-            this.rawLog.Location = new System.Drawing.Point(335, 150);
-            this.rawLog.Multiline = true;
-            this.rawLog.Name = "rawLog";
-            this.rawLog.Size = new System.Drawing.Size(273, 215);
-            this.rawLog.TabIndex = 27;
-            // 
-            // scanButton
-            // 
-            this.scanButton.Location = new System.Drawing.Point(384, 25);
-            this.scanButton.Name = "scanButton";
-            this.scanButton.Size = new System.Drawing.Size(75, 23);
-            this.scanButton.TabIndex = 28;
-            this.scanButton.Text = "Scan";
-            this.scanButton.UseVisualStyleBackColor = true;
-            this.scanButton.Click += new System.EventHandler(this.scanButton_Click);
             // 
             // MainForm
             // 

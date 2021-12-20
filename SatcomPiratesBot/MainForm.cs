@@ -214,7 +214,11 @@ namespace SatcomPiratesBot
                 timer.Start();
                 rawLog.Text = "";
                 sniffer.RawUpdate += (s, e) => Invoke(new Action(() => rawLog.Text = e + "\r\n" + rawLog.Text));
-                sniffer.DisplayChange += (s, e) => Invoke(new Action(() => { scanState[e] = DateTime.Now; RedrawScanState(); }));
+                sniffer.DisplayChange += (s, e) => Invoke(new Action(() =>
+                {
+                    var key = e.Trim().TrimStart('4');
+                    scanState[key] = DateTime.Now; RedrawScanState();
+                }));
                 sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
                 {
                     RedrawScanState();
