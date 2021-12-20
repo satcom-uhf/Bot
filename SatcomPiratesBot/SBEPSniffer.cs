@@ -10,6 +10,19 @@ namespace SatcomPiratesBot
     {
         private Dictionary<string, string> lines = new Dictionary<string, string>();
 
+        private Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
+
+        public IEnumerable<string> ScanState => scanState
+            .Where(x=>!x.Key.ToLower().Contains("скан"))
+            .OrderByDescending(x => x.Value)
+            .Take(10)
+            .Select(x => {
+                var diff = DateTime.Now - x.Value;
+                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "active";
+                return $"{x.Key} {diffstr}";
+            });
+
+
         public event EventHandler<bool> SquelchUpdate;
         public event EventHandler<string> DisplayChange;
         public event EventHandler<string> RawUpdate;
@@ -34,7 +47,9 @@ namespace SatcomPiratesBot
                         var addr = bytesAsString.Substring(startIndex + DisplayPrefix.Length - 1, 5);
                         var subArray = bytes.Skip(6).Take(bytes.Length - 8).ToArray();
                         lines[addr] = ExcludeSpecificChars(subArray);
-                        DisplayChange?.Invoke(this, string.Join("\r\n", lines.Values));
+                        var key = string.Join("\r\n", lines.Values).Trim().TrimStart('4');
+                        scanState[key] = DateTime.Now;
+                        DisplayChange?.Invoke(this, key);
                     }
                     var usefulChars = ExcludeSpecificChars(bytes);
                     RawUpdate?.Invoke(this, $"{bytesAsString} [{usefulChars}]");

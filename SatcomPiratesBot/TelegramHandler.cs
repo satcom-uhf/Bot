@@ -133,7 +133,7 @@ namespace SatcomPiratesBot
                     new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
             }
-            catch(MessageIsNotModifiedException notModified)
+            catch (MessageIsNotModifiedException notModified)
             {
                 Log.Error(notModified, "Screen was not updated");
                 try
@@ -156,7 +156,7 @@ namespace SatcomPiratesBot
         {
             await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
             var activity = "";
-            
+
             if (!string.IsNullOrEmpty(activity))
             {
                 activity = $"[{activity}] {DateTime.Now - MainForm.LastActivity:hh\\:mm\\:ss} ago";
@@ -168,25 +168,22 @@ namespace SatcomPiratesBot
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, string caption, InlineKeyboardMarkup replyMarkup)
         {
-            //var screen = MainForm.CurrentFrame.Resize();
-
-            //using (var s = new MemoryStream())
-            //{
-            //    BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
-            //    s.Position = 0;
-            //    await botClient.SendPhotoAsync(
-            //  chat,
-            //  new InputOnlineFile(s),
-            //   caption,
-            //   disableNotification: true,
-            //  replyMarkup: replyMarkup
-            //  );
-            //    return;
-            //}
+            await botClient.SendTextMessageAsync(
+          chat,
+           string.Join("\r\n", MainForm.Sniffer.ScanState),
+           disableNotification: true,
+          replyMarkup: replyMarkup
+          );
         }
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Message msg, InlineKeyboardMarkup replyMarkup)
         {
+            await botClient.SendTextMessageAsync(
+        msg.Chat,
+         string.Join("\r\n", MainForm.Sniffer.ScanState),
+         disableNotification: true,
+        replyMarkup: replyMarkup
+        );
             //var screen = MainForm.CurrentFrame.Resize();
 
             //using (var s = new MemoryStream())

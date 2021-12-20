@@ -171,25 +171,19 @@ namespace SatcomPiratesBot
         private const string ACTIVITY = "Activity";
         private const string SILENCE = "Silence";
 
-        Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
         private void RedrawScanState()
         {
             scanList.Items.Clear();
-            foreach (var scanRow in scanState.OrderByDescending(x => x.Value))
+            foreach (var scanRow in Sniffer.ScanState)
             {
-                if (scanRow.Key.ToLower().Contains("скан"))
-                { continue; }
-
-                var diff = DateTime.Now - scanRow.Value;
-                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "active";
-                scanList.Items.Add(new ListViewItem($"{scanRow.Key} {diffstr}")
+                scanList.Items.Add(new ListViewItem(scanRow)
                 {
                     BackColor = Color.Black,
                     ForeColor = Color.GreenYellow
                 });
             }
         }
-        SBEPSniffer sniffer = new SBEPSniffer();
+        internal static SBEPSniffer Sniffer = new SBEPSniffer();
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         Task monitor;
         private void OpenComPort()
@@ -213,13 +207,19 @@ namespace SatcomPiratesBot
                 timer.Tick += (s, e) => RedrawScanState();
                 timer.Start();
                 rawLog.Text = "";
-                sniffer.RawUpdate += (s, e) => Invoke(new Action(() => rawLog.Text = e + "\r\n" + rawLog.Text));
-                sniffer.DisplayChange += (s, e) => Invoke(new Action(() =>
+                Sniffer.RawUpdate += (s, e) => Invoke(new Action(() =>
                 {
-                    var key = e.Trim().TrimStart('4');
-                    scanState[key] = DateTime.Now; RedrawScanState();
+                    rawLog.Text = e + "\r\n" + rawLog.Text;
+                    if (rawLog.Text.Length > 5000)
+                    {
+                        rawLog.Text = rawLog.Text.Substring(0, 4000);
+                    }
                 }));
-                sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
+                Sniffer.DisplayChange += (s, e) => Invoke(new Action(() =>
+                {
+                    RedrawScanState();
+                }));
+                Sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
                 {
                     RedrawScanState();
                     if (scanList.Items.Count > 0)
@@ -256,7 +256,7 @@ namespace SatcomPiratesBot
                 Transmitter.ComPort.Open();
                 monitor = Task.Run(() =>
                 {
-                    sniffer.Subscribe(GetBytes(Transmitter.ComPort));
+                    Sniffer.Subscribe(GetBytes(Transmitter.ComPort));
                 });
             }
         }
