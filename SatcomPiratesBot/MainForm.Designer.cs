@@ -29,6 +29,8 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
             this.scanButton = new System.Windows.Forms.Button();
@@ -176,6 +178,8 @@ namespace SatcomPiratesBot
             this.scanList.BackColor = System.Drawing.Color.Black;
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.scanList.HideSelection = false;
+            this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1});
             this.scanList.Location = new System.Drawing.Point(6, 4);
             this.scanList.Name = "scanList";
             this.scanList.Size = new System.Drawing.Size(308, 193);

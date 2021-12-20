@@ -170,7 +170,7 @@ namespace SatcomPiratesBot
         private const string SQUELCH_OPEN = "Squelch opened";
         private const string ACTIVITY = "Activity";
         private const string SILENCE = "Silence";
-
+        private bool SQL = false;
         private void RedrawScanState()
         {
             scanList.Items.Clear();
@@ -179,8 +179,14 @@ namespace SatcomPiratesBot
                 scanList.Items.Add(new ListViewItem(scanRow)
                 {
                     BackColor = Color.Black,
-                    ForeColor = Color.GreenYellow
+                    ForeColor = Color.White,
+                    Font = new Font(FontFamily.GenericSansSerif, 12)
                 });
+            }
+            if (scanList.Items.Count > 0)
+            {
+                scanList.Items[0].ForeColor = SQL ? Color.Lime : Color.White;
+
             }
         }
         internal static SBEPSniffer Sniffer = new SBEPSniffer();
@@ -221,11 +227,8 @@ namespace SatcomPiratesBot
                 }));
                 Sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
                 {
+                    SQL = busy;
                     RedrawScanState();
-                    if (scanList.Items.Count > 0)
-                    {
-                        scanList.Items[0].BackColor = busy ? Color.OrangeRed : Color.Black;
-                    }
                 }));
                 Transmitter.ComPort = new SerialPort(portName, 115200);
                 //Transmitter.ComPort.DataReceived += (s, e) =>
