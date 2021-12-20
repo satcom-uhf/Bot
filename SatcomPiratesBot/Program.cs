@@ -3,6 +3,7 @@ using Serilog.Sinks.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,9 +17,10 @@ namespace SatcomPiratesBot
         [STAThread]
         static void Main()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Log.Logger = new LoggerConfiguration()
-                .WriteToSimpleAndRichTextBox()
+                .WriteToGridView()
                 .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);

@@ -7,7 +7,6 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Extensions.Polling;
 using System.Threading;
 using System.IO;
-using OpenCvSharp.Extensions;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Linq;
@@ -134,7 +133,7 @@ namespace SatcomPiratesBot
                     new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
             }
-            catch(MessageIsNotModifiedException notModified)
+            catch (MessageIsNotModifiedException notModified)
             {
                 Log.Error(notModified, "Screen was not updated");
                 try
@@ -157,14 +156,7 @@ namespace SatcomPiratesBot
         {
             await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
             var activity = "";
-            try
-            {
-                activity = MainForm.Mask.Resize().RecognizeImage();
-            }
-            catch { }
-            //var (msgText, ) = await RecognizeImage(screen);
-            //var lines = msgText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Where(x => x.Length > 3);
-            //msgText = string.Join("\r\n", lines);
+
             if (!string.IsNullOrEmpty(activity))
             {
                 activity = $"[{activity}] {DateTime.Now - MainForm.LastActivity:hh\\:mm\\:ss} ago";
@@ -176,41 +168,38 @@ namespace SatcomPiratesBot
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, string caption, InlineKeyboardMarkup replyMarkup)
         {
-            var screen = MainForm.CurrentFrame.Resize();
-
-            using (var s = new MemoryStream())
-            {
-                BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
-                s.Position = 0;
-                await botClient.SendPhotoAsync(
-              chat,
-              new InputOnlineFile(s),
-               caption,
-               disableNotification: true,
-              replyMarkup: replyMarkup
-              );
-                return;
-            }
+            await botClient.SendTextMessageAsync(
+          chat,
+           string.Join("\r\n", MainForm.Sniffer.ScanState),
+           disableNotification: true,
+          replyMarkup: replyMarkup
+          );
         }
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Message msg, InlineKeyboardMarkup replyMarkup)
         {
-            var screen = MainForm.CurrentFrame.Resize();
+            await botClient.SendTextMessageAsync(
+        msg.Chat,
+         string.Join("\r\n", MainForm.Sniffer.ScanState),
+         disableNotification: true,
+        replyMarkup: replyMarkup
+        );
+            //var screen = MainForm.CurrentFrame.Resize();
 
-            using (var s = new MemoryStream())
-            {
-                BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
-                s.Position = 0;
-                await botClient.EditMessageMediaAsync(
-              msg.Chat,
-              msg.MessageId,
-              new InputMediaPhoto(new InputMedia(s, "radioscreen.png")),
-              //caption,
-              //disableNotification: true,
-              replyMarkup: replyMarkup
-              );
-                return;
-            }
+            //using (var s = new MemoryStream())
+            //{
+            //    BitmapConverter.ToBitmap(screen).Save(s, System.Drawing.Imaging.ImageFormat.Png);
+            //    s.Position = 0;
+            //    await botClient.EditMessageMediaAsync(
+            //  msg.Chat,
+            //  msg.MessageId,
+            //  new InputMediaPhoto(new InputMedia(s, "radioscreen.png")),
+            //  //caption,
+            //  //disableNotification: true,
+            //  replyMarkup: replyMarkup
+            //  );
+            //    return;
+            //}
         }
     }
 }
