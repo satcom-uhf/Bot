@@ -35,6 +35,12 @@ namespace SatcomPiratesBot
                     var bytesAsString = BitConverter.ToString(bytes);
                     if (OpenSquelch(bytesAsString))
                     {
+                        if (scanState.Count > 0)
+                        {
+                            var lastActiveFreq = scanState.OrderByDescending(x => x.Value).FirstOrDefault();
+                            scanState[lastActiveFreq.Key] = DateTime.Now;
+                        }
+
                         SquelchUpdate?.Invoke(this, true);
                     }
                     else if (CloseSquelch(bytesAsString))
