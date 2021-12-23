@@ -33,12 +33,14 @@ namespace SatcomPiratesBot
             "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
+            this.waveformPainter1 = new NAudio.Gui.WaveformPainter();
             this.scanButton = new System.Windows.Forms.Button();
             this.rawLog = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
+            this.sMeter = new SatcomPiratesBot.SMeter();
             this.scanList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comPortsBox = new System.Windows.Forms.ComboBox();
@@ -66,9 +68,7 @@ namespace SatcomPiratesBot
             this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
-            this.activityLabel = new System.Windows.Forms.Label();
-            this.dtmfLabel = new System.Windows.Forms.Label();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.rawSmeter = new System.Windows.Forms.ProgressBar();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -77,7 +77,6 @@ namespace SatcomPiratesBot
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
             this.logTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabs
@@ -95,6 +94,7 @@ namespace SatcomPiratesBot
             // 
             // radioPage
             // 
+            this.radioPage.Controls.Add(this.waveformPainter1);
             this.radioPage.Controls.Add(this.scanButton);
             this.radioPage.Controls.Add(this.rawLog);
             this.radioPage.Controls.Add(this.groupBox1);
@@ -107,6 +107,14 @@ namespace SatcomPiratesBot
             this.radioPage.TabIndex = 0;
             this.radioPage.Text = "Radio integration";
             this.radioPage.UseVisualStyleBackColor = true;
+            // 
+            // waveformPainter1
+            // 
+            this.waveformPainter1.Location = new System.Drawing.Point(384, 73);
+            this.waveformPainter1.Name = "waveformPainter1";
+            this.waveformPainter1.Size = new System.Drawing.Size(135, 52);
+            this.waveformPainter1.TabIndex = 29;
+            this.waveformPainter1.Text = "waveformPainter1";
             // 
             // scanButton
             // 
@@ -167,11 +175,20 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
+            this.screenPanel.Controls.Add(this.sMeter);
             this.screenPanel.Controls.Add(this.scanList);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
             this.screenPanel.Size = new System.Drawing.Size(320, 200);
             this.screenPanel.TabIndex = 25;
+            // 
+            // sMeter
+            // 
+            this.sMeter.Location = new System.Drawing.Point(294, 13);
+            this.sMeter.Name = "sMeter";
+            this.sMeter.Size = new System.Drawing.Size(20, 170);
+            this.sMeter.TabIndex = 1;
+            this.sMeter.Volume = 0;
             // 
             // scanList
             // 
@@ -182,7 +199,7 @@ namespace SatcomPiratesBot
             listViewItem1});
             this.scanList.Location = new System.Drawing.Point(6, 4);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(308, 193);
+            this.scanList.Size = new System.Drawing.Size(279, 193);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
@@ -426,42 +443,21 @@ namespace SatcomPiratesBot
             this.runTelegramButton.UseVisualStyleBackColor = true;
             this.runTelegramButton.Click += new System.EventHandler(this.runTelegramButton_Click);
             // 
-            // activityLabel
+            // rawSmeter
             // 
-            this.activityLabel.AutoSize = true;
-            this.activityLabel.Location = new System.Drawing.Point(18, 413);
-            this.activityLabel.Name = "activityLabel";
-            this.activityLabel.Size = new System.Drawing.Size(44, 15);
-            this.activityLabel.TabIndex = 3;
-            this.activityLabel.Text = "Silence";
-            // 
-            // dtmfLabel
-            // 
-            this.dtmfLabel.AutoSize = true;
-            this.dtmfLabel.Location = new System.Drawing.Point(140, 413);
-            this.dtmfLabel.Name = "dtmfLabel";
-            this.dtmfLabel.Size = new System.Drawing.Size(39, 15);
-            this.dtmfLabel.TabIndex = 4;
-            this.dtmfLabel.Text = "DTMF";
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Location = new System.Drawing.Point(276, 401);
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(104, 45);
-            this.trackBar1.TabIndex = 5;
-            this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.rawSmeter.Location = new System.Drawing.Point(69, 406);
+            this.rawSmeter.Maximum = 1023;
+            this.rawSmeter.Name = "rawSmeter";
+            this.rawSmeter.Size = new System.Drawing.Size(280, 23);
+            this.rawSmeter.Step = 1;
+            this.rawSmeter.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.dtmfLabel);
-            this.Controls.Add(this.activityLabel);
+            this.Controls.Add(this.rawSmeter);
             this.Controls.Add(this.runTelegramButton);
             this.Controls.Add(this.tabs);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -481,9 +477,7 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -506,17 +500,14 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.ComboBox comPortsBox;
         private System.Windows.Forms.Button refreshPortsButton;
         private System.Windows.Forms.Button connectComPortButton;
-        private System.Windows.Forms.Label activityLabel;
         private System.Windows.Forms.TextBox sstvChannelBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label dtmfLabel;
         private System.Windows.Forms.TextBox dtmfCodeBox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox witAiTokenBox;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox mainGroupBox;
-        private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Panel screenPanel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown httpPortNumberBox;
@@ -526,6 +517,9 @@ namespace SatcomPiratesBot
         private Serilog.Sinks.WinForms.GridLog gridLog1;
         private System.Windows.Forms.TextBox rawLog;
         private System.Windows.Forms.Button scanButton;
+        private NAudio.Gui.WaveformPainter waveformPainter1;
+        private SMeter sMeter;
+        private System.Windows.Forms.ProgressBar rawSmeter;
     }
 }
 

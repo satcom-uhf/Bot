@@ -123,20 +123,20 @@ namespace SatcomPiratesBot
         private async void runTelegramButton_Click(object sender, EventArgs e)
         {
             await Telegram.Start(Config, cts.Token);
-            DTMF.Changed += (s, e) => Invoke(new Action(() => dtmfLabel.Text = e));
-            DTMF.Detected += async (s, e) =>
-            {
-                try
-                {
-                    Transmitter.Vox.Start(TimeSpan.FromSeconds(10), cts.Token);
-                    await Sound.PlayOK();
-                    dtmfDetected = DateTime.Now;
-                }
-                finally
-                {
-                    Transmitter.Vox.Stop();
-                }
-            };
+            //DTMF.Changed += (s, e) => Invoke(new Action(() => dtmfLabel.Text = e));
+            //DTMF.Detected += async (s, e) =>
+            //{
+            //    try
+            //    {
+            //        Transmitter.Vox.Start(TimeSpan.FromSeconds(10), cts.Token);
+            //        await Sound.PlayOK();
+            //        dtmfDetected = DateTime.Now;
+            //    }
+            //    finally
+            //    {
+            //        Transmitter.Vox.Stop();
+            //    }
+            //};
             // DTMF.StartDetection(Config);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
@@ -186,12 +186,21 @@ namespace SatcomPiratesBot
             if (scanList.Items.Count > 0)
             {
                 scanList.Items[0].ForeColor = SQL ? Color.Lime : Color.White;
-
+            }
+            if (!SQL)
+            {
+                sMeter.Volume = 0;
             }
         }
         internal static SBEPSniffer Sniffer = new SBEPSniffer();
+        private int minLevel = 190;
+        private int maxLevel = 250;
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         Task monitor;
+        static float Remap(float value, float from1, float to1, float from2, float to2)
+        {
+            return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+        }
         private void OpenComPort()
         {
             var portName = comPortsBox.SelectedItem?.ToString();
@@ -202,7 +211,7 @@ namespace SatcomPiratesBot
                  {
                      Invoke(new Action(() =>
                      {
-                         activityLabel.Text = ACTIVITY;
+                         // activityLabel.Text = ACTIVITY;
                      }));
                      LastActivity = DateTime.Now;
                  }
@@ -213,6 +222,21 @@ namespace SatcomPiratesBot
                 timer.Tick += (s, e) => RedrawScanState();
                 timer.Start();
                 rawLog.Text = "";
+
+                Sniffer.SMeter += (s, e) =>
+                {
+                    minLevel = Math.Min(minLevel, e);
+                    maxLevel = Math.Max(maxLevel, e);
+                    if (SQL)
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            sMeter.Volume = Convert.ToInt32(Remap(e, minLevel, maxLevel, 0, 15));
+                            rawSmeter.Value = e;
+                        }));
+                    }                   
+
+                };
                 Sniffer.RawUpdate += (s, e) => Invoke(new Action(() =>
                 {
                     rawLog.Text = e + "\r\n" + rawLog.Text;
@@ -316,11 +340,6 @@ namespace SatcomPiratesBot
                     task.Dispose();
                 });
             };
-        }
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            Vox.Sensitivity = trackBar1.Value;
         }
 
         private ImageStreamingServer streamingServer;

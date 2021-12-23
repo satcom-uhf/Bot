@@ -40,9 +40,15 @@ void Check(String expected, String received, int row, int col)
         click(row, col, received == expected);
     }
 }
-
+unsigned long time;
 void loop()
 {
+  if (millis()-time>500){
+    Serial.write(0xC);
+    Serial.print(analogRead(A0));
+    Serial.write(0x50);
+    time=millis();
+    }
    while (bus.available()) {
     byte SBEP_byte = bus.read();
     Serial.write(SBEP_byte);
