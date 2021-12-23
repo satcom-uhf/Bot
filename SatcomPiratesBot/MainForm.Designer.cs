@@ -29,7 +29,10 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            "E"}, -1, System.Drawing.Color.YellowGreen, System.Drawing.Color.Empty, new System.Drawing.Font("LCR Parrot Talk", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
             "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
@@ -40,7 +43,7 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
-            this.sMeter = new SatcomPiratesBot.SMeter();
+            this.sMeter = new System.Windows.Forms.ListView();
             this.scanList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comPortsBox = new System.Windows.Forms.ComboBox();
@@ -184,11 +187,18 @@ namespace SatcomPiratesBot
             // 
             // sMeter
             // 
-            this.sMeter.Location = new System.Drawing.Point(294, 13);
+            this.sMeter.BackColor = System.Drawing.Color.Black;
+            this.sMeter.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.sMeter.HideSelection = false;
+            this.sMeter.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1,
+            listViewItem2});
+            this.sMeter.Location = new System.Drawing.Point(6, 13);
             this.sMeter.Name = "sMeter";
-            this.sMeter.Size = new System.Drawing.Size(20, 170);
+            this.sMeter.Size = new System.Drawing.Size(20, 183);
             this.sMeter.TabIndex = 1;
-            this.sMeter.Volume = 0;
+            this.sMeter.UseCompatibleStateImageBehavior = false;
+            this.sMeter.View = System.Windows.Forms.View.List;
             // 
             // scanList
             // 
@@ -196,10 +206,10 @@ namespace SatcomPiratesBot
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.scanList.Location = new System.Drawing.Point(6, 4);
+            listViewItem3});
+            this.scanList.Location = new System.Drawing.Point(35, 13);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(279, 193);
+            this.scanList.Size = new System.Drawing.Size(279, 163);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
@@ -518,8 +528,8 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.TextBox rawLog;
         private System.Windows.Forms.Button scanButton;
         private NAudio.Gui.WaveformPainter waveformPainter1;
-        private SMeter sMeter;
         private System.Windows.Forms.ProgressBar rawSmeter;
+        private System.Windows.Forms.ListView sMeter;
     }
 }
 

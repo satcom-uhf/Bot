@@ -59,9 +59,9 @@ namespace SatcomPiratesBot
                         DisplayChange?.Invoke(this, key);
                     }
                     var usefulChars = ExcludeSpecificChars(bytes);
-                    if (Signal(bytesAsString))
+                    if (usefulChars.StartsWith("_"))
                     {
-                        SMeter?.Invoke(this, int.Parse(usefulChars.TrimEnd('P')));
+                        SMeter?.Invoke(this, int.Parse(usefulChars.TrimStart('_').TrimEnd('P')));
                         continue;
                     }
                     RawUpdate?.Invoke(this, $"{bytesAsString} [{usefulChars}]");
@@ -83,7 +83,6 @@ namespace SatcomPiratesBot
         private const string DisplayPrefix = "FF-34-00-";
         private static bool DisplayUpdate(string bytes) => bytes.Contains(DisplayPrefix);
 
-        private static bool Signal(string bytes) => bytes.StartsWith("0C-");
         private static bool CloseSquelch(string bytes) => bytes.StartsWith("F5-35-03-FF");
 
         private static bool OpenSquelch(string bytes) => bytes.StartsWith("F5-35-00-3F");

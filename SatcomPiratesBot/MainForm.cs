@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace SatcomPiratesBot
         CancellationTokenSource cts = new CancellationTokenSource();
         public static DateTime LastActivity;
         private DateTime dtmfDetected = DateTime.Now;
+        PrivateFontCollection pfc = new PrivateFontCollection();
+
         public static int PttClickCounter { get; set; }
         public MainForm()
         {
@@ -28,10 +31,51 @@ namespace SatcomPiratesBot
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            pfc.AddFontFile("LCR_Parrot_Talk.ttf");
             LoadPorts();
             LoadSettings();
+            ParrotMeterInit();
         }
 
+        private void ParrotMeterInit()
+        {
+            sMeter.Items.Clear();
+            for (int i = 0; i < 10; i++)
+            {
+                sMeter.Items.Add(new ListViewItem()
+                {
+                    Font = new Font(pfc.Families[0], 12, FontStyle.Regular),
+                    Text = "E",
+                    BackColor = Color.Black,
+                    ForeColor = Color.Gray
+                });
+            }
+        }
+
+        private void ParrotLevel(int level)
+        {
+            var colorMap = new[] {
+                Color.Red,
+                Color.OrangeRed,
+                Color.Orange,
+                Color.Orange,
+                Color.Orange,
+                Color.Green,
+                Color.Green,
+                Color.Green,
+                Color.Green,
+                Color.Green
+            };
+            if (level > 10) level = 10;
+            if (level < 0) level = 0;
+            foreach (ListViewItem item in sMeter.Items)
+            {
+                var i = sMeter.Items.IndexOf(item);
+                var itemLevel = 10 - i;
+                item.ForeColor = itemLevel <= level ? colorMap[i] : Color.Gray;
+            }
+
+        }
         private void LoadPorts()
         {
             comPortsBox.Items.Clear();
@@ -189,7 +233,7 @@ namespace SatcomPiratesBot
             }
             if (!SQL)
             {
-                sMeter.Volume = 0;
+                ParrotLevel(0);
             }
         }
         internal static SBEPSniffer Sniffer = new SBEPSniffer();
@@ -231,10 +275,11 @@ namespace SatcomPiratesBot
                     {
                         Invoke(new Action(() =>
                         {
-                            sMeter.Volume = Convert.ToInt32(Remap(e, minLevel, maxLevel, 0, 15));
+                            var level= Convert.ToInt32(Remap(e, minLevel, maxLevel, 0, 10));
+                            ParrotLevel(level);
                             rawSmeter.Value = e;
                         }));
-                    }                   
+                    }
 
                 };
                 Sniffer.RawUpdate += (s, e) => Invoke(new Action(() =>

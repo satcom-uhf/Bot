@@ -38,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="LCR_Parrot_Talk.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="OK.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

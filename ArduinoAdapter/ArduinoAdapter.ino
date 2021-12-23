@@ -44,7 +44,7 @@ unsigned long time;
 void loop()
 {
   if (millis()-time>500){
-    Serial.write(0xC);
+    Serial.print("_");
     Serial.print(analogRead(A0));
     Serial.write(0x50);
     time=millis();
