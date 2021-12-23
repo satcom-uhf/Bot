@@ -15,7 +15,7 @@ namespace SatcomPiratesBot
         public IEnumerable<string> ScanState => scanState
             .Where(x=>!x.Key.ToLower().Contains("скан"))
             .OrderByDescending(x => x.Value)
-            .Take(10)
+            .Take(6)            
             .Select(x => {
                 var diff = DateTime.Now - x.Value;
                 var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "active";
@@ -54,7 +54,8 @@ namespace SatcomPiratesBot
                         var addr = bytesAsString.Substring(startIndex + DisplayPrefix.Length - 1, 5);
                         var subArray = bytes.Skip(6).Take(bytes.Length - 8).ToArray();
                         lines[addr] = ExcludeSpecificChars(subArray);
-                        var key = string.Join("\r\n", lines.Values).Trim().TrimStart('4');
+                        var key = string.Join("\r\n", lines.Values).Trim().TrimStart('4')
+                            .Split('_')[0];// <-sometimes RSSI is mixed with display data
                         scanState[key] = DateTime.Now;
                         DisplayChange?.Invoke(this, key);
                     }

@@ -22,6 +22,7 @@ namespace SatcomPiratesBot
         public static DateTime LastActivity;
         private DateTime dtmfDetected = DateTime.Now;
         PrivateFontCollection pfc = new PrivateFontCollection();
+        private const int ParrotsCount = 30;
 
         public static int PttClickCounter { get; set; }
         public MainForm()
@@ -34,48 +35,40 @@ namespace SatcomPiratesBot
             pfc.AddFontFile("LCR_Parrot_Talk.ttf");
             LoadPorts();
             LoadSettings();
-            ParrotMeterInit();
+            ParrotLevel(0);
         }
 
-        private void ParrotMeterInit()
+        public static void AppendText(RichTextBox box, string text, Color color, Font font)
         {
-            sMeter.Items.Clear();
-            for (int i = 0; i < 10; i++)
-            {
-                sMeter.Items.Add(new ListViewItem()
-                {
-                    Font = new Font(pfc.Families[0], 12, FontStyle.Regular),
-                    Text = "E",
-                    BackColor = Color.Black,
-                    ForeColor = Color.Gray
-                });
-            }
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.SelectionFont = font;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
         }
 
         private void ParrotLevel(int level)
         {
-            var colorMap = new[] {
-                Color.Red,
-                Color.OrangeRed,
-                Color.Orange,
-                Color.Orange,
-                Color.Orange,
-                Color.Green,
-                Color.Green,
-                Color.Green,
-                Color.Green,
-                Color.Green
-            };
-            if (level > 10) level = 10;
+            if (level > ParrotsCount) level = ParrotsCount;
             if (level < 0) level = 0;
-            foreach (ListViewItem item in sMeter.Items)
+            sMeter.Text = "";
+            for (int i = 0; i < ParrotsCount; i++)
             {
-                var i = sMeter.Items.IndexOf(item);
-                var itemLevel = 10 - i;
-                item.ForeColor = itemLevel <= level ? colorMap[i] : Color.Gray;
+                AppendText(sMeter, "E", level > i ? GetColor(i) : Color.Gray, new Font(pfc.Families[0], 14, FontStyle.Bold));
             }
-
         }
+
+        private Color GetColor(float level) => level switch
+        {
+            < ParrotsCount * 0.25f => Color.Aquamarine,
+            <= ParrotsCount * 0.65f => Color.Green,
+            <= ParrotsCount * 0.85f => Color.Orange,
+            _ => Color.Red
+        };
+
+
         private void LoadPorts()
         {
             comPortsBox.Items.Clear();
@@ -224,7 +217,7 @@ namespace SatcomPiratesBot
                 {
                     BackColor = Color.Black,
                     ForeColor = Color.White,
-                    Font = new Font(FontFamily.GenericSansSerif, 12)
+                    Font = new Font(FontFamily.GenericSansSerif, 14)
                 });
             }
             if (scanList.Items.Count > 0)
@@ -243,7 +236,7 @@ namespace SatcomPiratesBot
         Task monitor;
         static float Remap(float value, float from1, float to1, float from2, float to2)
         {
-            return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+            return from2 + (value - from1) * (to2 - from2) / (to1 - from1);
         }
         private void OpenComPort()
         {
@@ -275,7 +268,7 @@ namespace SatcomPiratesBot
                     {
                         Invoke(new Action(() =>
                         {
-                            var level= Convert.ToInt32(Remap(e, minLevel, maxLevel, 0, 10));
+                            var level = Convert.ToInt32(Remap(e, minLevel, maxLevel, 0, ParrotsCount));
                             ParrotLevel(level);
                             rawSmeter.Value = e;
                         }));
