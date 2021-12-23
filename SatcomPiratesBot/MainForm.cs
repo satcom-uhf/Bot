@@ -217,12 +217,13 @@ namespace SatcomPiratesBot
                 {
                     BackColor = Color.Black,
                     ForeColor = Color.White,
-                    Font = new Font(FontFamily.GenericSansSerif, 14)
+                    Font = new Font(FontFamily.GenericSansSerif, 12)
                 });
             }
             if (scanList.Items.Count > 0)
             {
                 scanList.Items[0].ForeColor = SQL ? Color.Lime : Color.White;
+                scanList.Items[0].Font = new Font(FontFamily.GenericSansSerif, SQL ? 14 : 12);
             }
             if (!SQL)
             {
