@@ -13,7 +13,7 @@ namespace SatcomPiratesBot
         private Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
 
         public IEnumerable<string> ScanState => scanState
-            .Where((x, i) => !x.Key.ToLower().Contains("скан") && (i==0||x.Value > DateTime.Now.AddMinutes(-5)))
+            .Where((x, i) => !x.Key.ToLower().Contains("скан"))
             .OrderByDescending(x => x.Value)
             .Take(6)
             .Select(x =>
@@ -25,6 +25,7 @@ namespace SatcomPiratesBot
 
 
         public event EventHandler<bool> SquelchUpdate;
+        public event EventHandler<bool> ScanChanged;
         public event EventHandler<int> SMeter;
         public event EventHandler<string> DisplayChange;
         public event EventHandler<string> RawUpdate;
@@ -60,6 +61,14 @@ namespace SatcomPiratesBot
                         scanState[key] = DateTime.Now;
                         DisplayChange?.Invoke(this, key);
                     }
+                    else if (ScanOn(bytesAsString))
+                    {
+                        ScanChanged?.Invoke(this, true);
+                    }
+                    else if (ScanOff(bytesAsString))
+                    {
+                        ScanChanged?.Invoke(this, false);
+                    }
                     var usefulChars = ExcludeSpecificChars(bytes);
                     if (usefulChars.StartsWith("_"))
                     {
@@ -88,6 +97,8 @@ namespace SatcomPiratesBot
         private static bool CloseSquelch(string bytes) => bytes.StartsWith("F5-35-03-FF");
 
         private static bool OpenSquelch(string bytes) => bytes.StartsWith("F5-35-00-3F");
+        private static bool ScanOn(string bytes) => bytes.StartsWith("F4-24-0A-00-00-DD");
+        private static bool ScanOff(string bytes) => bytes.StartsWith("F4-24-0A-01-00-DC");
 
     }
 }

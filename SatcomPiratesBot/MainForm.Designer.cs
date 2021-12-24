@@ -29,7 +29,7 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
@@ -40,6 +40,7 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
+            this.scanLabel = new System.Windows.Forms.Label();
             this.sMeter = new System.Windows.Forms.RichTextBox();
             this.scanList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -175,12 +176,23 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
+            this.screenPanel.Controls.Add(this.scanLabel);
             this.screenPanel.Controls.Add(this.sMeter);
             this.screenPanel.Controls.Add(this.scanList);
             this.screenPanel.Location = new System.Drawing.Point(8, 150);
             this.screenPanel.Name = "screenPanel";
             this.screenPanel.Size = new System.Drawing.Size(320, 200);
             this.screenPanel.TabIndex = 25;
+            // 
+            // scanLabel
+            // 
+            this.scanLabel.AutoSize = true;
+            this.scanLabel.ForeColor = System.Drawing.Color.Lime;
+            this.scanLabel.Location = new System.Drawing.Point(6, 4);
+            this.scanLabel.Name = "scanLabel";
+            this.scanLabel.Size = new System.Drawing.Size(56, 15);
+            this.scanLabel.TabIndex = 2;
+            this.scanLabel.Text = "Scan: ON";
             // 
             // sMeter
             // 
@@ -198,10 +210,10 @@ namespace SatcomPiratesBot
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.scanList.Location = new System.Drawing.Point(6, 15);
+            listViewItem2});
+            this.scanList.Location = new System.Drawing.Point(6, 22);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(308, 151);
+            this.scanList.Size = new System.Drawing.Size(308, 144);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
@@ -475,6 +487,7 @@ namespace SatcomPiratesBot
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).EndInit();
             this.screenPanel.ResumeLayout(false);
+            this.screenPanel.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
@@ -522,6 +535,7 @@ namespace SatcomPiratesBot
         private NAudio.Gui.WaveformPainter waveformPainter1;
         private System.Windows.Forms.ProgressBar rawSmeter;
         private System.Windows.Forms.RichTextBox sMeter;
+        private System.Windows.Forms.Label scanLabel;
     }
 }
 

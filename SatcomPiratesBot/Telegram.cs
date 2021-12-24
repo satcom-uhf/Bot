@@ -177,21 +177,22 @@ namespace SatcomPiratesBot
             //    WithCallbackData(voxActive?"Выключить VOX":"Включить VOX", voxActive?DisableVox:EnableVox)
             //};
             yield return new[]            {
-                        WithCallbackData("P1", $"{GM360}{P1}"),
-                        WithCallbackData("⎋", $"{GM360}{Exit}"),
-                        WithCallbackData("🔼", $"{GM360}{Up}"),
-                        WithCallbackData("✅", $"{GM360}{Ok}"),
-                        WithCallbackData("P3", $"{GM360}{P3}"),
+                        //WithCallbackData("P1", $"{GM360}{P1}"),
+                        //WithCallbackData("⎋", $"{GM360}{Exit}"),
+                        //WithCallbackData("🔼", $"{GM360}{Up}"),
+                        //WithCallbackData("✅", $"{GM360}{Ok}"),
+                        WithCallbackData("Скан Вкл/Выкл", $"{GM360}{P3}"),
+                        WithCallbackData("Снять канал со скана", $"{GM360}{P3.ToUpper()}"),
 
                     };
-            yield return new[]
-                    {
-                        WithCallbackData("P2", $"{GM360}{P1}"),
-                        WithCallbackData("◀️", $"{GM360}{Left}"),
-                        WithCallbackData("🔽", $"{GM360}{Down}"),
-                        WithCallbackData("▶️ ", $"{GM360}{Right}"),
-                        WithCallbackData("P4", $"{GM360}{P4}")
-                    };
+            //yield return new[]
+            //        {
+            //            WithCallbackData("P2", $"{GM360}{P1}"),
+            //            WithCallbackData("◀️", $"{GM360}{Left}"),
+            //            WithCallbackData("🔽", $"{GM360}{Down}"),
+            //            WithCallbackData("▶️ ", $"{GM360}{Right}"),
+            //            WithCallbackData("P4", $"{GM360}{P4}")
+            //        };
             yield return new[]
                    {
                         WithCallbackData("Закрыть управление", Freq),
