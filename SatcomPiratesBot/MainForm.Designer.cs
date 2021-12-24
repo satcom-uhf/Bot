@@ -29,7 +29,7 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
@@ -188,7 +188,7 @@ namespace SatcomPiratesBot
             // 
             this.scanLabel.AutoSize = true;
             this.scanLabel.ForeColor = System.Drawing.Color.Lime;
-            this.scanLabel.Location = new System.Drawing.Point(6, 4);
+            this.scanLabel.Location = new System.Drawing.Point(130, 182);
             this.scanLabel.Name = "scanLabel";
             this.scanLabel.Size = new System.Drawing.Size(56, 15);
             this.scanLabel.TabIndex = 2;
@@ -198,7 +198,7 @@ namespace SatcomPiratesBot
             // 
             this.sMeter.BackColor = System.Drawing.Color.Black;
             this.sMeter.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.sMeter.Location = new System.Drawing.Point(35, 172);
+            this.sMeter.Location = new System.Drawing.Point(22, 154);
             this.sMeter.Name = "sMeter";
             this.sMeter.Size = new System.Drawing.Size(279, 25);
             this.sMeter.TabIndex = 1;
@@ -210,10 +210,10 @@ namespace SatcomPiratesBot
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-            this.scanList.Location = new System.Drawing.Point(6, 22);
+            listViewItem1});
+            this.scanList.Location = new System.Drawing.Point(6, 12);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(308, 144);
+            this.scanList.Size = new System.Drawing.Size(308, 136);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
