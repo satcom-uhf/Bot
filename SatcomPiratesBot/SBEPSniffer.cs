@@ -23,9 +23,9 @@ namespace SatcomPiratesBot
                 return $"{x.Key} {diffstr}";
             });
 
-
+        public bool ScanEnabled { get; set; } = true;
         public event EventHandler<bool> SquelchUpdate;
-        public event EventHandler<bool> ScanChanged;
+        public event EventHandler ScanChanged;
         public event EventHandler<int> SMeter;
         public event EventHandler<string> DisplayChange;
         public event EventHandler<string> RawUpdate;
@@ -63,11 +63,13 @@ namespace SatcomPiratesBot
                     }
                     else if (ScanOn(bytesAsString))
                     {
-                        ScanChanged?.Invoke(this, true);
+                        ScanEnabled = true;
+                        ScanChanged?.Invoke(this, EventArgs.Empty);
                     }
                     else if (ScanOff(bytesAsString))
                     {
-                        ScanChanged?.Invoke(this, false);
+                        ScanEnabled = false;
+                        ScanChanged?.Invoke(this, EventArgs.Empty);
                     }
                     var usefulChars = ExcludeSpecificChars(bytes);
                     if (usefulChars.StartsWith("_"))

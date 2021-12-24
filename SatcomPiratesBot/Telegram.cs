@@ -62,7 +62,7 @@ namespace SatcomPiratesBot
                 Log.Information("Status is {Status}", member.Status);
                 valid = member.Status == ChatMemberStatus.Administrator
                     || member.Status == ChatMemberStatus.Creator
-                    || member.Status == ChatMemberStatus.Member;                
+                    || member.Status == ChatMemberStatus.Member;
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace SatcomPiratesBot
             try
             {
                 var member = await botClient.GetChatMemberAsync(PrimaryGroup, from.Id);
-                valid = member.Status == ChatMemberStatus.Creator 
+                valid = member.Status == ChatMemberStatus.Creator
                     || (member.Status == ChatMemberStatus.Administrator && member.CanRestrictMembers == true);
             }
             catch (Exception ex)
@@ -167,9 +167,10 @@ namespace SatcomPiratesBot
             //}
 
         }
-        
+
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> RadioKeyboard()
         {
+            var scanText = MainForm.Sniffer.ScanEnabled ? "выключить" : "включить";
             // first row
             //var voxActive = Transmitter.Vox.Running;
             //yield return new[]
@@ -181,7 +182,7 @@ namespace SatcomPiratesBot
                         //WithCallbackData("⎋", $"{GM360}{Exit}"),
                         //WithCallbackData("🔼", $"{GM360}{Up}"),
                         //WithCallbackData("✅", $"{GM360}{Ok}"),
-                        WithCallbackData("Скан Вкл/Выкл", $"{GM360}{P3}"),
+                        WithCallbackData($"Скан {scanText}", $"{GM360}{P3}"),
                         WithCallbackData("Снять канал со скана", $"{GM360}{P3.ToUpper()}"),
 
                     };

@@ -295,7 +295,7 @@ namespace SatcomPiratesBot
                 }));
                 Sniffer.ScanChanged += (s, on) => Invoke(new Action(() =>
                 {
-                    var state = on ? "ON" : "OFF";
+                    var state = Sniffer.ScanEnabled ? "ON" : "OFF";
                     scanLabel.Text = $"Scan: {state}";
                 }));
                 Transmitter.ComPort = new SerialPort(portName, 115200);
