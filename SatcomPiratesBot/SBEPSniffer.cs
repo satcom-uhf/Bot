@@ -13,12 +13,13 @@ namespace SatcomPiratesBot
         private Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
 
         public IEnumerable<string> ScanState => scanState
-            .Where(x=>!x.Key.ToLower().Contains("скан"))
+            .Where((x, i) => !x.Key.ToLower().Contains("скан") && (i==0||x.Value > DateTime.Now.AddMinutes(-5)))
             .OrderByDescending(x => x.Value)
-            .Take(6)            
-            .Select(x => {
+            .Take(6)
+            .Select(x =>
+            {
                 var diff = DateTime.Now - x.Value;
-                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "active";
+                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "       ";
                 return $"{x.Key} {diffstr}";
             });
 

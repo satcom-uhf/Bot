@@ -186,9 +186,9 @@ namespace SatcomPiratesBot
             // 
             this.sMeter.BackColor = System.Drawing.Color.Black;
             this.sMeter.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.sMeter.Location = new System.Drawing.Point(6, 172);
+            this.sMeter.Location = new System.Drawing.Point(35, 172);
             this.sMeter.Name = "sMeter";
-            this.sMeter.Size = new System.Drawing.Size(308, 25);
+            this.sMeter.Size = new System.Drawing.Size(279, 25);
             this.sMeter.TabIndex = 1;
             this.sMeter.Text = "";
             // 

@@ -22,7 +22,7 @@ namespace SatcomPiratesBot
         public static DateTime LastActivity;
         private DateTime dtmfDetected = DateTime.Now;
         PrivateFontCollection pfc = new PrivateFontCollection();
-        private const int ParrotsCount = 30;
+        private const int ParrotsCount = 25;
 
         public static int PttClickCounter { get; set; }
         public MainForm()
@@ -62,9 +62,9 @@ namespace SatcomPiratesBot
 
         private Color GetColor(float level) => level switch
         {
-            < ParrotsCount * 0.25f => Color.Aquamarine,
-            <= ParrotsCount * 0.65f => Color.Green,
-            <= ParrotsCount * 0.85f => Color.Orange,
+            < ParrotsCount * 0.2f => Color.Green,
+            <= ParrotsCount * 0.5f => Color.Lime,
+            <= ParrotsCount * 0.75f => Color.YellowGreen,
             _ => Color.Red
         };
 
