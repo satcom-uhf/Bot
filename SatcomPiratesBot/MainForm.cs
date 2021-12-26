@@ -338,12 +338,15 @@ namespace SatcomPiratesBot
             {
                 var b = port.BaseStream.ReadByte();
                 var byteVal = (byte)b;
-                batch.Add(byteVal);
                 if (b == -1) { yield break; }
                 if (byteVal == 0x50)
                 {
                     yield return batch.ToArray();
                     batch.Clear();
+                }
+                else
+                {
+                    batch.Add(byteVal);
                 }
             }
         }

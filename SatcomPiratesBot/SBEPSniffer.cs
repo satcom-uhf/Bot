@@ -35,8 +35,15 @@ namespace SatcomPiratesBot
             {
                 foreach (var bytes in bytesSeq)
                 {
-                    var bytesAsString = BitConverter.ToString(bytes);
-                    if (OpenSquelch(bytesAsString))
+                    if (bytes.Length == 3 && bytes[0] == 0x16)
+                    {
+                        var lowByte = bytes[2];
+                        var highByte = bytes[1];
+                        var sMeter = (highByte << 8) + lowByte;
+                        SMeter?.Invoke(this, sMeter);
+                        continue;
+                    }
+                    if (Find(bytes, OpenSquelch, out var pos))
                     {
                         if (scanState.Count > 0)
                         {
@@ -46,37 +53,31 @@ namespace SatcomPiratesBot
 
                         SquelchUpdate?.Invoke(this, true);
                     }
-                    else if (CloseSquelch(bytesAsString))
+                    else if (Find(bytes, CloseSquelch, out pos))
                     {
                         SquelchUpdate?.Invoke(this, false);
                     }
-                    else if (DisplayUpdate(bytesAsString))
+                    else if (Find(bytes, DisplayPrefix, out pos))
                     {
-                        var startIndex = bytesAsString.IndexOf(DisplayPrefix);
-                        var addr = bytesAsString.Substring(startIndex + DisplayPrefix.Length - 1, 5);
+                        var addr = bytes.Skip(pos + DisplayPrefix.Length).Take(2).ToArray();
                         var subArray = bytes.Skip(6).Take(bytes.Length - 8).ToArray();
-                        lines[addr] = ExcludeSpecificChars(subArray);
-                        var key = string.Join("\r\n", lines.Values).Trim().TrimStart('4')
-                            .Split('_')[0].Trim();// <-sometimes RSSI is mixed with display data
+                        lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
+                        var key = string.Join("\r\n", lines.Values).Trim();// <-sometimes RSSI is mixed with display data
                         scanState[key] = DateTime.Now;
                         DisplayChange?.Invoke(this, key);
                     }
-                    else if (ScanOn(bytesAsString))
+                    else if (Find(bytes, ScanOn, out pos))
                     {
                         ScanEnabled = true;
                         ScanChanged?.Invoke(this, EventArgs.Empty);
                     }
-                    else if (ScanOff(bytesAsString))
+                    else if (Find(bytes, ScanOff, out pos))
                     {
                         ScanEnabled = false;
                         ScanChanged?.Invoke(this, EventArgs.Empty);
                     }
                     var usefulChars = ExcludeSpecificChars(bytes);
-                    if (usefulChars.StartsWith("_"))
-                    {
-                        SMeter?.Invoke(this, int.Parse(usefulChars.TrimStart('_').TrimEnd('P')));
-                        continue;
-                    }
+                    var bytesAsString = BitConverter.ToString(bytes);
                     RawUpdate?.Invoke(this, $"{bytesAsString} [{usefulChars}]");
                 }
 
@@ -92,15 +93,31 @@ namespace SatcomPiratesBot
             new string(Encoding.GetEncoding(866).GetString(bytes)
                                   .Where(x => char.IsLetterOrDigit(x) || char.IsSeparator(x) || char.IsPunctuation(x)).ToArray());
 
-
-        private const string DisplayPrefix = "FF-34-00-";
-        private static bool DisplayUpdate(string bytes) => bytes.Contains(DisplayPrefix);
-
-        private static bool CloseSquelch(string bytes) => bytes.StartsWith("F5-35-03-FF");
-
-        private static bool OpenSquelch(string bytes) => bytes.StartsWith("F5-35-00-3F");
-        private static bool ScanOn(string bytes) => bytes.StartsWith("F4-24-0A-00-00-DD");
-        private static bool ScanOff(string bytes) => bytes.StartsWith("F4-24-0A-01-00-DC");
+        private static byte[] DisplayPrefix = new byte[] { 0xFF, 0x34, 0x00 };
+        private static byte[] CloseSquelch = new byte[] { 0xF5, 0x35, 0x03, 0xFF };
+        private static byte[] OpenSquelch = new byte[] { 0xF5, 0x35, 0x00, 0x3F };
+        private static byte[] ScanOn = new byte[] { 0xF4, 0x24, 0x0A, 0x00, 0x00, 0xDD };
+        private static byte[] ScanOff = new byte[] { 0xF4, 0x24, 0x0A, 0x01, 0x00, 0xDC };
+        private static bool Find(byte[] bytes, byte[] pattern, out int pos)
+        {
+            pos = SearchBytes(bytes, pattern);
+            return pos >= 0;
+        }
+        static int SearchBytes(byte[] haystack, byte[] needle)
+        {
+            var len = needle.Length;
+            var limit = haystack.Length - len;
+            for (var i = 0; i <= limit; i++)
+            {
+                var k = 0;
+                for (; k < len; k++)
+                {
+                    if (needle[k] != haystack[i + k]) break;
+                }
+                if (k == len) return i;
+            }
+            return -1;
+        }
 
     }
 }

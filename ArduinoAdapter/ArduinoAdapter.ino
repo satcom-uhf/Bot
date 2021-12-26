@@ -43,10 +43,14 @@ void Check(String expected, String received, int row, int col)
 unsigned long time;
 void loop()
 {
-  if (millis()-time>500){
-    Serial.print("_");
-    Serial.print(analogRead(A0));
-    Serial.write(0x50);
+  if (millis()-time>750){
+    int sMeter=analogRead(A0);
+    byte msg[4];
+    msg[0]= 0x16;//smeter mark
+    msg[1] = ((sMeter >> 8) & 0xff);//high byte
+    msg[2]  = (sMeter & 0xff);//low byte
+    msg[3]=0x50;
+    Serial.write(msg, 4);
     time=millis();
     }
    while (bus.available()) {
