@@ -29,8 +29,11 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "255.550"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "072 255.550 active"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            "172 234.567 00:00:00 ago"}, -1, System.Drawing.SystemColors.Info, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
             this.waveformPainter1 = new NAudio.Gui.WaveformPainter();
@@ -40,9 +43,11 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
+            this.colorTv = new System.Windows.Forms.PictureBox();
             this.scanLabel = new System.Windows.Forms.Label();
             this.sMeter = new System.Windows.Forms.RichTextBox();
             this.scanList = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comPortsBox = new System.Windows.Forms.ComboBox();
             this.refreshPortsButton = new System.Windows.Forms.Button();
@@ -70,11 +75,13 @@ namespace SatcomPiratesBot
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.rawSmeter = new System.Windows.Forms.ProgressBar();
+            this.clickCounterLabel = new System.Windows.Forms.Label();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).BeginInit();
             this.screenPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.colorTv)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
             this.logTab.SuspendLayout();
@@ -176,6 +183,8 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
+            this.screenPanel.Controls.Add(this.clickCounterLabel);
+            this.screenPanel.Controls.Add(this.colorTv);
             this.screenPanel.Controls.Add(this.scanLabel);
             this.screenPanel.Controls.Add(this.sMeter);
             this.screenPanel.Controls.Add(this.scanList);
@@ -184,13 +193,24 @@ namespace SatcomPiratesBot
             this.screenPanel.Size = new System.Drawing.Size(320, 200);
             this.screenPanel.TabIndex = 25;
             // 
+            // colorTv
+            // 
+            this.colorTv.Image = ((System.Drawing.Image)(resources.GetObject("colorTv.Image")));
+            this.colorTv.Location = new System.Drawing.Point(264, 145);
+            this.colorTv.Name = "colorTv";
+            this.colorTv.Size = new System.Drawing.Size(47, 52);
+            this.colorTv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.colorTv.TabIndex = 3;
+            this.colorTv.TabStop = false;
+            // 
             // scanLabel
             // 
             this.scanLabel.AutoSize = true;
+            this.scanLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.scanLabel.ForeColor = System.Drawing.Color.Lime;
-            this.scanLabel.Location = new System.Drawing.Point(130, 182);
+            this.scanLabel.Location = new System.Drawing.Point(237, 12);
             this.scanLabel.Name = "scanLabel";
-            this.scanLabel.Size = new System.Drawing.Size(56, 15);
+            this.scanLabel.Size = new System.Drawing.Size(74, 21);
             this.scanLabel.TabIndex = 2;
             this.scanLabel.Text = "Scan: ON";
             // 
@@ -198,9 +218,9 @@ namespace SatcomPiratesBot
             // 
             this.sMeter.BackColor = System.Drawing.Color.Black;
             this.sMeter.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.sMeter.Location = new System.Drawing.Point(22, 154);
+            this.sMeter.Location = new System.Drawing.Point(45, 154);
             this.sMeter.Name = "sMeter";
-            this.sMeter.Size = new System.Drawing.Size(279, 25);
+            this.sMeter.Size = new System.Drawing.Size(213, 25);
             this.sMeter.TabIndex = 1;
             this.sMeter.Text = "";
             // 
@@ -208,15 +228,22 @@ namespace SatcomPiratesBot
             // 
             this.scanList.BackColor = System.Drawing.Color.Black;
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.scanList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
             this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.scanList.Location = new System.Drawing.Point(6, 12);
+            listViewItem3,
+            listViewItem4});
+            this.scanList.Location = new System.Drawing.Point(5, 12);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(308, 136);
+            this.scanList.Size = new System.Drawing.Size(228, 136);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 280;
             // 
             // groupBox2
             // 
@@ -466,6 +493,17 @@ namespace SatcomPiratesBot
             this.rawSmeter.Step = 1;
             this.rawSmeter.TabIndex = 3;
             // 
+            // clickCounterLabel
+            // 
+            this.clickCounterLabel.AutoSize = true;
+            this.clickCounterLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.clickCounterLabel.ForeColor = System.Drawing.Color.Lime;
+            this.clickCounterLabel.Location = new System.Drawing.Point(237, 36);
+            this.clickCounterLabel.Name = "clickCounterLabel";
+            this.clickCounterLabel.Size = new System.Drawing.Size(73, 21);
+            this.clickCounterLabel.TabIndex = 4;
+            this.clickCounterLabel.Text = "0000000";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -488,6 +526,7 @@ namespace SatcomPiratesBot
             ((System.ComponentModel.ISupportInitialize)(this.httpPortNumberBox)).EndInit();
             this.screenPanel.ResumeLayout(false);
             this.screenPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.colorTv)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
@@ -536,6 +575,9 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.ProgressBar rawSmeter;
         private System.Windows.Forms.RichTextBox sMeter;
         private System.Windows.Forms.Label scanLabel;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.PictureBox colorTv;
+        private System.Windows.Forms.Label clickCounterLabel;
     }
 }
 

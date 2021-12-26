@@ -59,8 +59,9 @@ namespace SatcomPiratesBot
                     }
                     else if (Find(bytes, DisplayPrefix, out pos))
                     {
-                        var addr = bytes.Skip(pos + DisplayPrefix.Length).Take(2).ToArray();
-                        var subArray = bytes.Skip(6).Take(bytes.Length - 8).ToArray();
+                        var x = bytes.Skip(pos + DisplayPrefix.Length);
+                        var addr = x.Take(2).ToArray();
+                        var subArray = x.ToArray();
                         lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
                         var key = string.Join("\r\n", lines.Values).Trim();// <-sometimes RSSI is mixed with display data
                         scanState[key] = DateTime.Now;

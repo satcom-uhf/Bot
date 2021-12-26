@@ -22,7 +22,7 @@ namespace SatcomPiratesBot
         public static DateTime LastActivity;
         private DateTime dtmfDetected = DateTime.Now;
         PrivateFontCollection pfc = new PrivateFontCollection();
-        private const int ParrotsCount = 25;
+        private const int ParrotsCount = 20;
 
         public static int PttClickCounter { get; set; }
         public MainForm()
@@ -36,6 +36,7 @@ namespace SatcomPiratesBot
             LoadPorts();
             LoadSettings();
             ParrotLevel(0);
+            colorTv.Visible = false;
         }
 
         public static void AppendText(RichTextBox box, string text, Color color, Font font)
@@ -58,6 +59,7 @@ namespace SatcomPiratesBot
             {
                 AppendText(sMeter, "E", level > i ? GetColor(i) : Color.Gray, new Font(pfc.Families[0], 14, FontStyle.Bold));
             }
+            colorTv.Visible = (level == ParrotsCount);
         }
 
         private Color GetColor(float level) => level switch
