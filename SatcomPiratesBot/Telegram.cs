@@ -151,10 +151,6 @@ namespace SatcomPiratesBot
                     {
                         WithUrl("☠️ Satcom Pirates", "https://t.me/SATCOM_UHF")
                     };
-            yield return new[]
-                    {
-                        WithUrl("📻 WebSDR от @Nano_VHF", "http://sdr.rlspb.ru:3000/")
-                    };
             if (isAdmin)
             {
                 yield return new[] {
@@ -170,7 +166,6 @@ namespace SatcomPiratesBot
 
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> RadioKeyboard()
         {
-            var scanText = MainForm.Sniffer.ScanEnabled ? "выключить" : "включить";
             // first row
             //var voxActive = Transmitter.Vox.Running;
             //yield return new[]
@@ -179,21 +174,21 @@ namespace SatcomPiratesBot
             //};
             yield return new[]            {
                         //WithCallbackData("P1", $"{GM360}{P1}"),
-                        //WithCallbackData("⎋", $"{GM360}{Exit}"),
-                        //WithCallbackData("🔼", $"{GM360}{Up}"),
-                        //WithCallbackData("✅", $"{GM360}{Ok}"),
-                        WithCallbackData($"Скан {scanText}", $"{GM360}{P3}"),
-                        WithCallbackData("Снять канал со скана", $"{GM360}{P3.ToUpper()}"),
+                        WithCallbackData("SKIP", $"{GM360}{P3.ToUpper()}"),
+                        WithCallbackData("⎋", $"{GM360}{Exit}"),
+                        WithCallbackData("🔼", $"{GM360}{Up}"),
+                        WithCallbackData("✅", $"{GM360}{Ok}"),
+                        WithCallbackData($"SCAN", $"{GM360}{P3}"),                      
 
                     };
-            //yield return new[]
-            //        {
-            //            WithCallbackData("P2", $"{GM360}{P1}"),
-            //            WithCallbackData("◀️", $"{GM360}{Left}"),
-            //            WithCallbackData("🔽", $"{GM360}{Down}"),
-            //            WithCallbackData("▶️ ", $"{GM360}{Right}"),
-            //            WithCallbackData("P4", $"{GM360}{P4}")
-            //        };
+            yield return new[]
+                    {
+                        WithCallbackData("МОЩА", $"{GM360}{P1}"),
+                        WithCallbackData("◀️", $"{GM360}{Left}"),
+                        WithCallbackData("🔽", $"{GM360}{Down}"),
+                        WithCallbackData("▶️ ", $"{GM360}{Right}"),
+                        WithCallbackData("P4", $"{GM360}{P4}")
+                    };
             yield return new[]
                    {
                         WithCallbackData("Закрыть управление", Freq),

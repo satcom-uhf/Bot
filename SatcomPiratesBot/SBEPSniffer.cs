@@ -13,14 +13,18 @@ namespace SatcomPiratesBot
         private Dictionary<string, DateTime> scanState = new Dictionary<string, DateTime>();
 
         public IEnumerable<string> ScanState => scanState
-            .Where((x, i) => !x.Key.ToLower().Contains("скан"))
             .OrderByDescending(x => x.Value)
             .Take(6)
             .Select(x =>
             {
-                var diff = DateTime.Now - x.Value;
-                var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "       ";
-                return $"{x.Key} {diffstr}";
+                var parts = x.Key.Split(' ');
+                if (int.TryParse(parts[0], out var chNumber))
+                {
+                    var diff = DateTime.Now - x.Value;
+                    var diffstr = diff.TotalSeconds > 5 ? $"{diff:hh\\:mm\\:ss} ago" : "       ";
+                    return $"{x.Key} {diffstr}";
+                }
+                return x.Key;
             });
 
         public bool ScanEnabled { get; set; } = true;
@@ -63,7 +67,7 @@ namespace SatcomPiratesBot
                         var addr = x.Take(2).ToArray();
                         var subArray = x.ToArray();
                         lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
-                        var key = string.Join("\r\n", lines.Values).Trim();// <-sometimes RSSI is mixed with display data
+                        var key = string.Join("", lines.Values).Trim();
                         scanState[key] = DateTime.Now;
                         DisplayChange?.Invoke(this, key);
                     }

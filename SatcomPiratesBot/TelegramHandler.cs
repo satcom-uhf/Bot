@@ -118,18 +118,6 @@ namespace SatcomPiratesBot
                     new InlineKeyboardMarkup(Telegram.RadioKeyboard())
                     );
             }
-            catch (MessageIsNotModifiedException notModified)
-            {
-                Log.Error(notModified, "Screen was not updated");
-                try
-                {
-                    await SendRadioScreen(botClient,
-                        callbackQuery.Message,
-                        new InlineKeyboardMarkup(Telegram.RadioKeyboard())
-                        );
-                }
-                catch { }
-            }
             catch (Exception ex)
             {
                 Log.Error(ex, "Cannot handle command");
@@ -158,7 +146,7 @@ namespace SatcomPiratesBot
         {
             await botClient.SendTextMessageAsync(
                 msg.Chat,
-                string.Join("\r\n", MainForm.Sniffer.ScanState),
+                MainForm.Sniffer.ScanState.FirstOrDefault()??"____",
                 disableNotification: true,
                 replyMarkup: replyMarkup
                 );

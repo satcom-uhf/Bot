@@ -27,7 +27,7 @@ void click(int rowV, int colV, bool longClick)
     }
     else
     {
-        delay(500);
+        delay(250);
     }
     digitalWrite(rowV, !levelR);
     digitalWrite(colV, HIGH);
