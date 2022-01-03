@@ -31,7 +31,7 @@ namespace SatcomPiratesBot
         public event EventHandler<bool> SquelchUpdate;
         public event EventHandler ScanChanged;
         public event EventHandler<int> SMeter;
-        public event EventHandler<string> DisplayChange;
+        public event EventHandler<string> HistoryChanged;
         public event EventHandler<string> RawUpdate;
         public void Subscribe(IEnumerable<byte[]> bytesSeq)
         {
@@ -47,7 +47,11 @@ namespace SatcomPiratesBot
                         SMeter?.Invoke(this, sMeter);
                         continue;
                     }
-                    if (Find(bytes, OpenSquelch, out var pos))
+                    if(Find(bytes, Confirmation, out var _))
+                    {
+                        continue;
+                    }
+                    else if (Find(bytes, OpenSquelch, out var pos))
                     {
                         if (scanState.Count > 0)
                         {
@@ -64,14 +68,18 @@ namespace SatcomPiratesBot
                     else if (Find(bytes, DisplayPrefix, out pos))
                     {
                         var x = bytes.Skip(pos + DisplayPrefix.Length);
-                        var addr = x.Take(2).ToArray();
                         var subArray = x.ToArray();
+                        //var addr = x.Take(2).ToArray();
+                        if (Find(subArray, DisplayPrefix, out var duplicatePos))
+                        {
+                            subArray = subArray.Skip(duplicatePos + DisplayPrefix.Length).ToArray();
+                        }
                         //lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
                         var singleLine = ExcludeSpecificChars(subArray);
                         var parts = singleLine.Split(' ');
                         var key = string.Join(" ", parts.Take(2)).Trim();
                         scanState[key] = DateTime.Now;
-                        DisplayChange?.Invoke(this, key);
+                        HistoryChanged?.Invoke(this, key);
                     }
                     else if (Find(bytes, ScanOn, out pos))
                     {
@@ -105,6 +113,7 @@ namespace SatcomPiratesBot
         private static byte[] OpenSquelch = new byte[] { 0xF5, 0x35, 0x00, 0x3F };
         private static byte[] ScanOn = new byte[] { 0xF4, 0x24, 0x0A, 0x00, 0x00, 0xDD };
         private static byte[] ScanOff = new byte[] { 0xF4, 0x24, 0x0A, 0x01, 0x00, 0xDC };
+        private static byte[] Confirmation = new byte[] { 0xF2, 0x36, 0x00, 0xD7 };
         private static bool Find(byte[] bytes, byte[] pattern, out int pos)
         {
             pos = SearchBytes(bytes, pattern);

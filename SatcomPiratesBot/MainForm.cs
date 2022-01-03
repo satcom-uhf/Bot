@@ -285,7 +285,7 @@ namespace SatcomPiratesBot
                         rawLog.Text = rawLog.Text.Substring(0, 4000);
                     }
                 }));
-                Sniffer.DisplayChange += (s, e) => Invoke(new Action(() =>
+                Sniffer.HistoryChanged += (s, e) => Invoke(new Action(() =>
                 {
                     RedrawScanState();
                 }));
