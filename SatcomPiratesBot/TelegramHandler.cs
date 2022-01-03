@@ -41,11 +41,11 @@ namespace SatcomPiratesBot
                     var isAdmin = await from.IsAdmin(botClient);
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                     await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
-                    try
-                    {
-                        await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message                        
-                    }
-                    catch { }
+                    //try
+                    //{
+                    //    await botClient.DeleteMessageAsync(message.Chat, message.MessageId); // try to delete previous message                        
+                    //}
+                    //catch { }
                     Log.Information("Callback {Data} from {User} ({FirstName},{LastName})", callbackQuery.Data, from, from.FirstName, from.LastName);
                     if (callbackQuery.Data == TelegramCommands.Freq)
                     {
@@ -144,10 +144,10 @@ namespace SatcomPiratesBot
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Message msg, InlineKeyboardMarkup replyMarkup)
         {
-            await botClient.SendTextMessageAsync(
+            await botClient.EditMessageTextAsync(
                 msg.Chat,
+                msg.MessageId,
                 MainForm.Sniffer.ScanState.FirstOrDefault()??"____",
-                disableNotification: true,
                 replyMarkup: replyMarkup
                 );
         }
