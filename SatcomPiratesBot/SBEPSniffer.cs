@@ -66,8 +66,10 @@ namespace SatcomPiratesBot
                         var x = bytes.Skip(pos + DisplayPrefix.Length);
                         var addr = x.Take(2).ToArray();
                         var subArray = x.ToArray();
-                        lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
-                        var key = string.Join("", lines.Values).Trim();
+                        //lines[Convert.ToHexString(addr)] = ExcludeSpecificChars(subArray);
+                        var singleLine = ExcludeSpecificChars(subArray);
+                        var parts = singleLine.Split(' ');
+                        var key = string.Join(" ", parts.Take(2)).Trim();
                         scanState[key] = DateTime.Now;
                         DisplayChange?.Invoke(this, key);
                     }

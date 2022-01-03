@@ -187,7 +187,7 @@ namespace SatcomPiratesBot
                         WithCallbackData("◀️", $"{GM360}{Left}"),
                         WithCallbackData("🔽", $"{GM360}{Down}"),
                         WithCallbackData("▶️ ", $"{GM360}{Right}"),
-                        WithCallbackData("P4", $"{GM360}{P4}")
+                        WithCallbackData("HOME", $"{GM360}{P2.ToUpper()}")
                     };
             yield return new[]
                    {

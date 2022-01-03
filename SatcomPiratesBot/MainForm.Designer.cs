@@ -30,9 +30,9 @@ namespace SatcomPiratesBot
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "072 255.550 active"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "172 234.567 00:00:00 ago"}, -1, System.Drawing.SystemColors.Info, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
@@ -43,6 +43,7 @@ namespace SatcomPiratesBot
             this.startWebCamServerButton = new System.Windows.Forms.Button();
             this.httpPortNumberBox = new System.Windows.Forms.NumericUpDown();
             this.screenPanel = new System.Windows.Forms.Panel();
+            this.clickCounterLabel = new System.Windows.Forms.Label();
             this.colorTv = new System.Windows.Forms.PictureBox();
             this.scanLabel = new System.Windows.Forms.Label();
             this.sMeter = new System.Windows.Forms.RichTextBox();
@@ -75,7 +76,6 @@ namespace SatcomPiratesBot
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.rawSmeter = new System.Windows.Forms.ProgressBar();
-            this.clickCounterLabel = new System.Windows.Forms.Label();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -193,6 +193,17 @@ namespace SatcomPiratesBot
             this.screenPanel.Size = new System.Drawing.Size(320, 200);
             this.screenPanel.TabIndex = 25;
             // 
+            // clickCounterLabel
+            // 
+            this.clickCounterLabel.AutoSize = true;
+            this.clickCounterLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.clickCounterLabel.ForeColor = System.Drawing.Color.Lime;
+            this.clickCounterLabel.Location = new System.Drawing.Point(237, 36);
+            this.clickCounterLabel.Name = "clickCounterLabel";
+            this.clickCounterLabel.Size = new System.Drawing.Size(73, 21);
+            this.clickCounterLabel.TabIndex = 4;
+            this.clickCounterLabel.Text = "0000000";
+            // 
             // colorTv
             // 
             this.colorTv.Image = ((System.Drawing.Image)(resources.GetObject("colorTv.Image")));
@@ -232,8 +243,8 @@ namespace SatcomPiratesBot
             this.columnHeader1});
             this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3,
-            listViewItem4});
+            listViewItem1,
+            listViewItem2});
             this.scanList.Location = new System.Drawing.Point(5, 12);
             this.scanList.Name = "scanList";
             this.scanList.Size = new System.Drawing.Size(228, 136);
@@ -492,17 +503,6 @@ namespace SatcomPiratesBot
             this.rawSmeter.Size = new System.Drawing.Size(280, 23);
             this.rawSmeter.Step = 1;
             this.rawSmeter.TabIndex = 3;
-            // 
-            // clickCounterLabel
-            // 
-            this.clickCounterLabel.AutoSize = true;
-            this.clickCounterLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.clickCounterLabel.ForeColor = System.Drawing.Color.Lime;
-            this.clickCounterLabel.Location = new System.Drawing.Point(237, 36);
-            this.clickCounterLabel.Name = "clickCounterLabel";
-            this.clickCounterLabel.Size = new System.Drawing.Size(73, 21);
-            this.clickCounterLabel.TabIndex = 4;
-            this.clickCounterLabel.Text = "0000000";
             // 
             // MainForm
             // 

@@ -209,7 +209,7 @@ namespace SatcomPiratesBot
         private const string SQUELCH_OPEN = "Squelch opened";
         private const string ACTIVITY = "Activity";
         private const string SILENCE = "Silence";
-        private bool SQL = false;
+        private volatile bool SQL = false;
         private void RedrawScanState()
         {
             scanList.Items.Clear();
@@ -276,7 +276,6 @@ namespace SatcomPiratesBot
                             rawSmeter.Value = e;
                         }));
                     }
-
                 };
                 Sniffer.RawUpdate += (s, e) => Invoke(new Action(() =>
                 {
@@ -290,11 +289,15 @@ namespace SatcomPiratesBot
                 {
                     RedrawScanState();
                 }));
-                Sniffer.SquelchUpdate += (s, busy) => Invoke(new Action(() =>
+                Sniffer.SquelchUpdate += (s, busy) =>
                 {
                     SQL = busy;
-                    RedrawScanState();
-                }));
+                    Invoke(new Action(() =>
+                    {
+                        RedrawScanState();
+                    }));
+
+                };
                 Sniffer.ScanChanged += (s, on) => Invoke(new Action(() =>
                 {
                     var state = Sniffer.ScanEnabled ? "ON" : "OFF";
@@ -404,5 +407,6 @@ namespace SatcomPiratesBot
         {
             Transmitter.ComPort?.Write("p3");
         }
+
     }
 }

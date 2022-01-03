@@ -33,12 +33,14 @@ void click(int rowV, int colV, bool longClick)
     digitalWrite(colV, HIGH);
 }
 
-void Check(String expected, String received, int row, int col)
+bool Check(String expected, String received, int row, int col)
 {
     if (received.equalsIgnoreCase(expected))
     {
         click(row, col, received == expected);
+        return true;
     }
+    return false;
 }
 unsigned long time;
 void loop()
@@ -60,15 +62,15 @@ void loop()
     if (Serial.available())
     {
         String cmd = Serial.readString();
-        Check("P2", cmd, 8, 5);
-        Check("UP", cmd, 8, 6);
-        Check("LEFT", cmd, 8, 7);
-        Check("P1", cmd, 9, 5);
-        Check("DOWN", cmd, 9, 6);
-        Check("EXIT", cmd, 9, 7);
-        Check("P4", cmd, 10, 5);
-        Check("RIGHT", cmd, 10, 7);
-        Check("P3", cmd, 11, 5);
-        Check("OK", cmd, 11, 7);
+        Check("P2", cmd, 8, 5)
+        || Check("UP", cmd, 8, 6)
+        || Check("LEFT", cmd, 8, 7)
+        || Check("P1", cmd, 9, 5)
+        || Check("DOWN", cmd, 9, 6)
+        || Check("EXIT", cmd, 9, 7)
+        || Check("P4", cmd, 10, 5)
+        || Check("RIGHT", cmd, 10, 7)
+        || Check("P3", cmd, 11, 5)
+        || Check("OK", cmd, 11, 7);
     }
 }
