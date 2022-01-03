@@ -129,7 +129,15 @@ namespace SatcomPiratesBot
         {
             await botClient.SendChatActionAsync(message.Chat, ChatAction.Typing);
             var isAdmin = await from.IsAdmin(botClient);
-            await SendRadioScreen(botClient, message.Chat, new InlineKeyboardMarkup(Telegram.InlineKeyboard(from, isAdmin)));
+            var markup = new InlineKeyboardMarkup(Telegram.InlineKeyboard(from, isAdmin));
+            try
+            {
+                await SendRadioScreen(botClient, message, markup);
+            }
+            catch
+            {
+                await SendRadioScreen(botClient, message.Chat, markup);
+            }
         }
 
         private async Task SendRadioScreen(ITelegramBotClient botClient, Chat chat, InlineKeyboardMarkup replyMarkup)
