@@ -29,6 +29,7 @@ namespace SatcomPiratesBot
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "072 255.550 active"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
@@ -76,6 +77,9 @@ namespace SatcomPiratesBot
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.rawSmeter = new System.Windows.Forms.ProgressBar();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.helloBox = new System.Windows.Forms.RichTextBox();
+            this.helloTimer = new System.Windows.Forms.Timer(this.components);
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -85,6 +89,7 @@ namespace SatcomPiratesBot
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
             this.logTab.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabs
@@ -92,6 +97,7 @@ namespace SatcomPiratesBot
             this.tabs.Controls.Add(this.radioPage);
             this.tabs.Controls.Add(this.settingsPage);
             this.tabs.Controls.Add(this.logTab);
+            this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
@@ -241,7 +247,6 @@ namespace SatcomPiratesBot
             this.scanList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.scanList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-            this.scanList.HideSelection = false;
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2});
@@ -504,6 +509,30 @@ namespace SatcomPiratesBot
             this.rawSmeter.Step = 1;
             this.rawSmeter.TabIndex = 3;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.helloBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(616, 371);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "sayHello";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // helloBox
+            // 
+            this.helloBox.Location = new System.Drawing.Point(30, 12);
+            this.helloBox.Name = "helloBox";
+            this.helloBox.Size = new System.Drawing.Size(360, 162);
+            this.helloBox.TabIndex = 0;
+            this.helloBox.Text = "";
+            // 
+            // helloTimer
+            // 
+            this.helloTimer.Interval = 1000;
+            this.helloTimer.Tick += new System.EventHandler(this.helloTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -531,6 +560,7 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logTab.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -578,6 +608,9 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.PictureBox colorTv;
         private System.Windows.Forms.Label clickCounterLabel;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.RichTextBox helloBox;
+        private System.Windows.Forms.Timer helloTimer;
     }
 }
 

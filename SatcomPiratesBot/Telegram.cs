@@ -130,7 +130,10 @@ namespace SatcomPiratesBot
                 await Bot.SendPhotoAsync(channel, new InputOnlineFile(fs));
             }
         }
-
+        public static async Task SendHello(ConfigModel config, string hello, string freq)
+        {
+            await Bot.SendTextMessageAsync(new ChatId(config.SSTVChannel), $"[{freq}] \r\n{hello}");
+        }
         public static IEnumerable<IEnumerable<InlineKeyboardButton>> InlineKeyboard(User user, bool isAdmin)
         {
             // first row
@@ -178,7 +181,7 @@ namespace SatcomPiratesBot
                         WithCallbackData("⎋", $"{GM360}{Exit}"),
                         WithCallbackData("🔼", $"{GM360}{Up}"),
                         WithCallbackData("✅", $"{GM360}{Ok}"),
-                        WithCallbackData($"SCAN", $"{GM360}{P3}"),                      
+                        WithCallbackData($"SCAN", $"{GM360}{P3}"),
 
                     };
             yield return new[]

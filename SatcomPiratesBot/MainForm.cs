@@ -179,6 +179,7 @@ namespace SatcomPiratesBot
             // DTMF.StartDetection(Config);
             runTelegramButton.Text = "Started";
             runTelegramButton.Enabled = false;
+            helloTimer.Enabled = true;
         }
 
         private void refreshPortsButton_Click(object sender, EventArgs e)
@@ -408,5 +409,38 @@ namespace SatcomPiratesBot
             Transmitter.ComPort?.Write("p3");
         }
 
+        DateTime? helloDetectedTime = null;
+        int helloIndex = -1;
+        private async void helloTimer_Tick(object sender, EventArgs e)
+        {
+            var text = helloBox.Text.ToLower();
+
+            var i = text.IndexOf("телеграмма");
+            if (helloDetectedTime.HasValue)
+            {
+                if ((DateTime.Now - helloDetectedTime.Value).TotalSeconds > 5)
+                {
+                    helloBox.Text = "";
+                    helloDetectedTime = null;
+                    try
+                    {
+                        await Telegram.SendHello(Config, text.Substring(helloIndex), scanList.Items[0].Text);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "cannot send hello");
+                    }
+                }
+            }
+            else if (i != -1)
+            {
+                helloDetectedTime = DateTime.Now;
+                helloIndex = i;
+            }
+            else if (text.Length > 1000)
+            {
+                helloBox.Text = "";
+            }
+        }
     }
 }
