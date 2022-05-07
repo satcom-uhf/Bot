@@ -31,9 +31,9 @@ namespace SatcomPiratesBot
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
             "072 255.550 active"}, -1, System.Drawing.Color.Lime, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
             "172 234.567 00:00:00 ago"}, -1, System.Drawing.SystemColors.Info, System.Drawing.Color.Empty, new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point));
             this.tabs = new System.Windows.Forms.TabControl();
             this.radioPage = new System.Windows.Forms.TabPage();
@@ -74,12 +74,12 @@ namespace SatcomPiratesBot
             this.label1 = new System.Windows.Forms.Label();
             this.logTab = new System.Windows.Forms.TabPage();
             this.gridLog1 = new Serilog.Sinks.WinForms.GridLog();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.runTelegramButton = new System.Windows.Forms.Button();
             this.rawSmeter = new System.Windows.Forms.ProgressBar();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.helloBox = new System.Windows.Forms.RichTextBox();
             this.helloTimer = new System.Windows.Forms.Timer(this.components);
+            this.helloBox = new System.Windows.Forms.TextBox();
             this.tabs.SuspendLayout();
             this.radioPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -89,7 +89,6 @@ namespace SatcomPiratesBot
             this.groupBox2.SuspendLayout();
             this.settingsPage.SuspendLayout();
             this.logTab.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabs
@@ -189,6 +188,7 @@ namespace SatcomPiratesBot
             // screenPanel
             // 
             this.screenPanel.BackColor = System.Drawing.Color.Black;
+            this.screenPanel.Controls.Add(this.helloBox);
             this.screenPanel.Controls.Add(this.clickCounterLabel);
             this.screenPanel.Controls.Add(this.colorTv);
             this.screenPanel.Controls.Add(this.scanLabel);
@@ -248,11 +248,11 @@ namespace SatcomPiratesBot
             this.scanList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.scanList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
+            listViewItem7,
+            listViewItem8});
             this.scanList.Location = new System.Drawing.Point(5, 12);
             this.scanList.Name = "scanList";
-            this.scanList.Size = new System.Drawing.Size(228, 136);
+            this.scanList.Size = new System.Drawing.Size(228, 106);
             this.scanList.TabIndex = 0;
             this.scanList.UseCompatibleStateImageBehavior = false;
             this.scanList.View = System.Windows.Forms.View.List;
@@ -490,6 +490,16 @@ namespace SatcomPiratesBot
             this.gridLog1.Size = new System.Drawing.Size(605, 248);
             this.gridLog1.TabIndex = 0;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(616, 371);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "sayHello";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
             // runTelegramButton
             // 
             this.runTelegramButton.Location = new System.Drawing.Point(448, 406);
@@ -509,29 +519,20 @@ namespace SatcomPiratesBot
             this.rawSmeter.Step = 1;
             this.rawSmeter.TabIndex = 3;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.helloBox);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(616, 371);
-            this.tabPage1.TabIndex = 3;
-            this.tabPage1.Text = "sayHello";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // helloBox
-            // 
-            this.helloBox.Location = new System.Drawing.Point(30, 12);
-            this.helloBox.Name = "helloBox";
-            this.helloBox.Size = new System.Drawing.Size(360, 162);
-            this.helloBox.TabIndex = 0;
-            this.helloBox.Text = "";
-            // 
             // helloTimer
             // 
             this.helloTimer.Interval = 1000;
             this.helloTimer.Tick += new System.EventHandler(this.helloTimer_Tick);
+            // 
+            // helloBox
+            // 
+            this.helloBox.BackColor = System.Drawing.SystemColors.Desktop;
+            this.helloBox.ForeColor = System.Drawing.Color.Lime;
+            this.helloBox.Location = new System.Drawing.Point(6, 126);
+            this.helloBox.Name = "helloBox";
+            this.helloBox.Size = new System.Drawing.Size(180, 23);
+            this.helloBox.TabIndex = 5;
+            this.helloBox.Text = "Text";
             // 
             // MainForm
             // 
@@ -560,7 +561,6 @@ namespace SatcomPiratesBot
             this.settingsPage.ResumeLayout(false);
             this.settingsPage.PerformLayout();
             this.logTab.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -609,8 +609,8 @@ namespace SatcomPiratesBot
         private System.Windows.Forms.PictureBox colorTv;
         private System.Windows.Forms.Label clickCounterLabel;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.RichTextBox helloBox;
         private System.Windows.Forms.Timer helloTimer;
+        private System.Windows.Forms.TextBox helloBox;
     }
 }
 

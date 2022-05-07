@@ -266,8 +266,8 @@ namespace SatcomPiratesBot
 
                 Sniffer.SMeter += (s, e) =>
                 {
-                    minLevel = Math.Min(minLevel, e);
-                    maxLevel = Math.Max(maxLevel, e);
+                    //minLevel = Math.Min(minLevel, e);
+                    //maxLevel = Math.Max(maxLevel, e);
                     if (SQL)
                     {
                         Invoke(new Action(() =>
@@ -414,7 +414,6 @@ namespace SatcomPiratesBot
         private async void helloTimer_Tick(object sender, EventArgs e)
         {
             var text = helloBox.Text.ToLower();
-
             var i = text.IndexOf("телеграмма");
             if (helloDetectedTime.HasValue)
             {
@@ -426,7 +425,7 @@ namespace SatcomPiratesBot
                     {
                         await Telegram.SendHello(Config, text.Substring(helloIndex), scanList.Items[0].Text);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Log.Error(ex, "cannot send hello");
                     }
@@ -437,7 +436,7 @@ namespace SatcomPiratesBot
                 helloDetectedTime = DateTime.Now;
                 helloIndex = i;
             }
-            else if (text.Length > 1000)
+            else if (text.Length > 200)
             {
                 helloBox.Text = "";
             }

@@ -155,7 +155,7 @@ namespace SatcomPiratesBot
             await botClient.EditMessageTextAsync(
                 msg.Chat,
                 msg.MessageId,
-                MainForm.Sniffer.ScanState.FirstOrDefault()??"____",
+                $"[{DateTime.UtcNow.ToString("T")}] {MainForm.Sniffer.ScanState.FirstOrDefault()}",
                 replyMarkup: replyMarkup
                 );
         }

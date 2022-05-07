@@ -125,6 +125,12 @@ namespace SatcomPiratesBot
         }
         private static async Task SendPhotoToChannel(ChatId channel, string path)
         {
+            var lastFreq = MainForm.Sniffer.ScanState.FirstOrDefault();
+            if (lastFreq?.Contains("255.55") == true || lastFreq?.Contains("072") == true)
+            {
+                await Bot.SendTextMessageAsync(channel, "Мутный detected");
+                return;
+            }
             using (var fs = System.IO.File.OpenRead(path))
             {
                 await Bot.SendPhotoAsync(channel, new InputOnlineFile(fs));

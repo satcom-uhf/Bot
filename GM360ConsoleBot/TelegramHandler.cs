@@ -1,7 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 class TelegramHandler : IUpdateHandler
@@ -52,24 +54,6 @@ class TelegramHandler : IUpdateHandler
                 {
                     await HandleGM360(botClient, callbackQuery);
                 }
-                else if (callbackQuery.Data == TelegramCommands.Tle)
-                {
-                    var n2yo = new N2YO(MainForm.Config);
-                    var tle = await n2yo.PrepareTLE();
-                    if (!string.IsNullOrEmpty(tle))
-                    {
-                        using var stream = new MemoryStream();
-                        var writer = new StreamWriter(stream);
-                        writer.Write(tle);
-                        writer.Flush();
-                        stream.Position = 0;
-                        await botClient.SendDocumentAsync(message.Chat,
-                            new InputOnlineFile(stream, $"{DateTime.Now.ToString("yyyy-MM-dd")}.txt"),
-                            disableNotification: true
-                            );
-                    }
-                }
-
             }
             else if (update.Message is Message message)
             {
