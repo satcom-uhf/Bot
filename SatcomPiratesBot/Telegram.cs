@@ -128,7 +128,7 @@ namespace SatcomPiratesBot
             var lastFreq = MainForm.Sniffer.ScanState.FirstOrDefault();
             if (lastFreq?.Contains("255.55") == true || lastFreq?.Contains("072") == true)
             {
-                await Bot.SendTextMessageAsync(channel, "Мутный detected");
+                await Bot.SendTextMessageAsync(channel, "Мутный detected", disableNotification: true);
                 return;
             }
             using (var fs = System.IO.File.OpenRead(path))
@@ -192,7 +192,7 @@ namespace SatcomPiratesBot
                     };
             yield return new[]
                     {
-                        WithCallbackData("МОЩА", $"{GM360}{P1}"),
+                        WithCallbackData("МОЩА", $"{GM360}{P2}"),
                         WithCallbackData("◀️", $"{GM360}{Left}"),
                         WithCallbackData("🔽", $"{GM360}{Down}"),
                         WithCallbackData("▶️ ", $"{GM360}{Right}"),

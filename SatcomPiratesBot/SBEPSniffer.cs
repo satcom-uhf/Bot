@@ -14,7 +14,7 @@ namespace SatcomPiratesBot
 
         public IEnumerable<string> ScanState => scanState
             .OrderByDescending(x => x.Value)
-            .Take(3)
+            .Take(4)
             .Select(x =>
             {
                 var parts = x.Key.Split(' ');
